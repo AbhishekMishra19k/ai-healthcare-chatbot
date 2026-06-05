@@ -56,12 +56,10 @@ def book_appointment(request, doctor_id):
 
         # User ko email
         if patient_email and default_from_email:
-            # Ensure at least one real sender address exists (optional safety)
-            # (Gmail sender can be added via env var; this prevents None/empty crashes.)
-
-            send_mail(
-                subject='Appointment Confirmed — AIHealthCare',
-                message=f'''Namaste {patient_name}!
+            try:
+                send_mail(
+                    subject='Appointment Confirmed — AIHealthCare',
+                    message=f'''Namaste {patient_name}!
 
 Aapka appointment confirm ho gaya hai.
 
@@ -72,16 +70,19 @@ Time: {time}
 Reason: {reason}
 
 AIHealthCare Team''',
-                from_email=default_from_email,
-                recipient_list=[patient_email],
-                fail_silently=True,
-            )
+                    from_email=default_from_email,
+                    recipient_list=[patient_email],
+                    fail_silently=True,
+                )
+            except TypeError:
+                pass
 
         # Admin ko email
         if admin_email and default_from_email:
-            send_mail(
-                subject=f'New Appointment — {patient_name}',
-                message=f'''Naya appointment booking hua hai!
+            try:
+                send_mail(
+                    subject=f'New Appointment — {patient_name}',
+                    message=f'''Naya appointment booking hua hai!
 
 Patient: {patient_name}
 Phone: {patient_phone}
@@ -91,10 +92,12 @@ Specialization: {doctor.specialization}
 Date: {date}
 Time: {time}
 Reason: {reason}''',
-                from_email=default_from_email,
-                recipient_list=[admin_email],
-                fail_silently=True,
-            )
+                    from_email=default_from_email,
+                    recipient_list=[admin_email],
+                    fail_silently=True,
+                )
+            except TypeError:
+                pass
 
 
 

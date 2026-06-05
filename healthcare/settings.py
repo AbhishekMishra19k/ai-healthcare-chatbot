@@ -110,7 +110,11 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
-DEFAULT_FROM_EMAIL = f'AIHealthCare <{os.environ.get("EMAIL_HOST_USER", "")}> '
+
+
+# DEFAULT_FROM_EMAIL must be a valid sender address. If EMAIL_HOST_USER is not set,
+# keep it empty so send_mail guards can prevent 500 errors.
+DEFAULT_FROM_EMAIL = f'AIHealthCare <{EMAIL_HOST_USER}>' if EMAIL_HOST_USER else ''
 
 ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', '')
 # Fallback to allow appointment/order emails even if ADMIN_EMAIL isn't provided.
