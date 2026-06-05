@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% block title %}Find Doctors — AIHealthCare{% endblock %}
+
+{% block extra_css %}
+<style>
+.page-hero{background:linear-gradient(135deg,#1a0000,#0a0a0a);border-bottom:2px solid var(--red);padding:50px 0;text-align:center;position:relative;overflow:hidden}
+.page-hero::before{content:'';position:absolute;width:500px;height:500px;background:radial-gradient(circle,rgba(230,57,70,.1) 0%,transparent 70%);top:-200px;right:-100px;border-radius:50%}
+.doctors-section{background:var(--black);min-height:80vh;padding:40px 0}
+.search-bar{background:var(--card);border:1px solid var(--border);border-radius:50px;padding:8px 8px 8px 20px;display:flex;align-items:center;gap:10px;margin-bottom:30px;transition:all .3s}
+.search-bar:focus-within{border-color:var(--red);box-shadow:0 0 0 3px rgba(230,57,70,.15)}
+.search-input{background:transparent!important;border:none!important;color:var(--text)!important;font-size:15px;flex:1;outline:none;box-shadow:none!important}
+.search-input::placeholder{color:var(--text-muted)!important}
+.search-btn{background:var(--red);border:none;color:white;padding:10px 20px;border-radius:40px;cursor:pointer;font-weight:700;font-size:14px;transition:all .3s}
+.search-btn:hover{background:var(--red-dark)}
+.filter-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:30px}
+.filter-btn{background:var(--card);border:1px solid var(--border);color:var(--text-muted);padding:7px 16px;border-radius:25px;font-size:12px;cursor:pointer;transition:all .3s;text-decoration:none;white-space:nowrap}
+.filter-btn:hover,.filter-btn.active{background:var(--red);color:white;border-color:var(--red);text-decoration:none}
+.doctor-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:22px;text-align:center;transition:all .3s;height:100%}
+.doctor-card:hover{border-color:var(--red);transform:translateY(-6px);box-shadow:0 15px 35px rgba(230,57,70,.15)}
+.doctor-avatar{width:80px;height:80px;background:linear-gradient(135deg,var(--red-dark),var(--red));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 12px;box-shadow:0 6px 20px rgba(230,57,70,.3)}
+.doctor-name{font-size:17px;font-weight:700;color:var(--text);margin-bottom:8px}
+.spec-badge{background:rgba(230,57,70,.15);color:var(--red);border:1px solid rgba(230,57,70,.3);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600}
+.doctor-info{background:var(--dark);border-radius:10px;padding:12px;margin:12px 0;text-align:left}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:12px;color:var(--text-muted);border-bottom:1px solid rgba(255,255,255,.04)}
+.info-row:last-child{border-bottom:none}
+.info-val{color:var(--text);font-weight:600}
+.fee-val{color:var(--gold);font-weight:700}
+.pagination-wrap{display:flex;justify-content:center;align-items:center;gap:6px;margin-top:40px;flex-wrap:wrap}
+.page-btn{background:var(--card);border:1px solid var(--border);color:var(--text-muted);padding:8px 14px;border-radius:10px;text-decoration:none;font-size:13px;transition:all .3s}
+.page-btn:hover,.page-btn.active{background:var(--red);color:white;border-color:var(--red);text-decoration:none}
+.results-info{color:var(--text-muted);font-size:14px;margin-bottom:20px}
+.results-info span{color:var(--gold);font-weight:700}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="page-hero">
+  <div class="container position-relative">
+    <div style="background:rgba(230,57,70,.15);color:var(--red);border:1px solid rgba(230,57,70,.3);padding:6px 18px;border-radius:25px;font-size:12px;font-weight:600;letter-spacing:1px;display:inline-block;margin-bottom:15px;">👨‍⚕️ FIND DOCTORS</div>
+    <h2 style="font-size:42px;font-weight:900;color:var(--text);margin:10px 0;">Our <span style="color:var(--red);">Specialist</span> Doctors</h2>
+    <p style="color:var(--text-muted);font-size:16px;">MP ke best doctors — online appointment book karo</p>
+    <div style="color:var(--gold);font-size:14px;font-weight:600;margin-top:10px;">✅ {{ total }}+ Doctors Available</div>
+  </div>
+</div>
+
+<div class="doctors-section">
+  <div class="container">
+
+    <!-- Search -->
+    <form method="GET" action="/appointments/">
+      <div class="search-bar">
+        <i class="fas fa-search" style="color:var(--text-muted);"></i>
+        <input type="text" name="search" class="search-input form-control" placeholder="Doctor ka naam search karo..." value="{{ search }}">
+        {% if selected_spec %}<input type="hidden" name="spec" value="{{ selected_spec }}">{% endif %}
+        <button type="submit" class="search-btn"><i class="fas fa-search me-1"></i> Search</button>
+      </div>
+    </form>
+
+    <!-- Filters -->
+    <div class="filter-bar">
+      <a href="/appointments/?{% if search %}search={{ search }}{% endif %}" class="filter-btn {% if not selected_spec %}active{% endif %}">All</a>
+      {% for spec in specializations %}
+      <a href="/appointments/?spec={{ spec }}{% if search %}&search={{ search }}{% endif %}" class="filter-btn {% if selected_spec == spec %}active{% endif %}">{{ spec }}</a>
+      {% endfor %}
+    </div>
+
+    <!-- Results info -->
+    <div class="results-info">
+      <span>{{ total }}</span> doctors mile
+      {% if selected_spec %} — <span>{{ selected_spec }}</span>{% endif %}
+      {% if search %} — "{{ search }}"{% endif %}
+    </div>
+
+    <!-- Doctors Grid -->
+    <div class="row g-4">
+      {% for doctor in doctors %}
+      <div class="col-lg-3 col-md-4 col-sm-6">
+        <div class="doctor-card">
+          <div class="doctor-avatar">👨‍⚕️</div>
+          <div class="doctor-name">Dr. {{ doctor.name }}</div>
+          <span class="spec-badge">{{ doctor.specialization }}</span>
+          <div class="doctor-info">
+            <div class="info-row"><span>⭐ Experience</span><span class="info-val">{{ doctor.experience }} Yrs</span></div>
+            <div class="info-row"><span>📅 Available</span><span class="info-val">{{ doctor.available_days }}</span></div>
+            <div class="info-row"><span>💰 Fee</span><span class="fee-val">₹{{ doctor.fee }}</span></div>
+          </div>
+          <a href="/appointments/book/{{ doctor.id }}/" class="btn-red" style="width:100%;padding:9px;font-size:13px;font-weight:700;border-radius:10px;text-align:center;display:block;">
+            📅 Book Appointment
+          </a>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center py-5">
+        <div style="font-size:60px;margin-bottom:20px;">🔍</div>
+        <h4 style="color:var(--text);">Koi doctor nahi mila</h4>
+        <p style="color:var(--text-muted);">Alag keyword ya filter try karo</p>
+        <a href="/appointments/" class="btn-red" style="padding:10px 30px;">All Doctors Dekho</a>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if doctors.paginator.num_pages > 1 %}
+    <div class="pagination-wrap">
+      {% if doctors.has_previous %}
+      <a href="?page={{ doctors.previous_page_number }}{% if selected_spec %}&spec={{ selected_spec }}{% endif %}{% if search %}&search={{ search }}{% endif %}" class="page-btn">← Prev</a>
+      {% endif %}
+
+      {% for num in doctors.paginator.page_range %}
+        {% if doctors.number == num %}
+        <span class="page-btn active">{{ num }}</span>
+        {% elif num > doctors.number|add:'-3' and num < doctors.number|add:'3' %}
+        <a href="?page={{ num }}{% if selected_spec %}&spec={{ selected_spec }}{% endif %}{% if search %}&search={{ search }}{% endif %}" class="page-btn">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if doctors.has_next %}
+      <a href="?page={{ doctors.next_page_number }}{% if selected_spec %}&spec={{ selected_spec }}{% endif %}{% if search %}&search={{ search }}{% endif %}" class="page-btn">Next →</a>
+      {% endif %}
+
+      <span style="color:var(--text-muted);font-size:13px;margin-left:10px;">
+        Page {{ doctors.number }} of {{ doctors.paginator.num_pages }}
+      </span>
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

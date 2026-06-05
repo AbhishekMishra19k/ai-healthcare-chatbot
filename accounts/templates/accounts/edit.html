@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block title %}Edit Profile — AIHealthCare{% endblock %}
+
+{% block extra_css %}
+<style>
+.edit-wrapper { background: var(--black); min-height: 90vh; padding: 40px 0; }
+.edit-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 35px;
+    max-width: 600px;
+    margin: 0 auto;
+    border-top: 3px solid var(--gold);
+}
+.form-label { color: var(--text-muted) !important; font-size: 13px; font-weight: 600; }
+.dark-input {
+    background: var(--dark) !important;
+    border: 1px solid var(--border) !important;
+    color: var(--text) !important;
+    border-radius: 10px !important;
+    padding: 12px 15px !important;
+    width: 100%;
+}
+.dark-input:focus {
+    border-color: var(--gold) !important;
+    box-shadow: none !important;
+    outline: none;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="edit-wrapper">
+    <div class="container">
+        <div class="edit-card">
+            <div class="text-center mb-4">
+                <h4 style="color:var(--gold);font-weight:800;">✏️ Edit Profile</h4>
+                <p style="color:var(--text-muted);font-size:14px;">Update your personal information</p>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">FIRST NAME</label>
+                        <input type="text" name="first_name" class="dark-input" value="{{ request.user.first_name }}">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">LAST NAME</label>
+                        <input type="text" name="last_name" class="dark-input" value="{{ request.user.last_name }}">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">PHONE NUMBER</label>
+                    <input type="tel" name="phone" class="dark-input" value="{{ profile.phone }}" placeholder="Your phone number">
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">AGE</label>
+                        <input type="number" name="age" class="dark-input" value="{{ profile.age }}">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">BLOOD GROUP</label>
+                        <select name="blood_group" class="dark-input">
+                            <option value="">Select</option>
+                            <option value="A+" {% if profile.blood_group == "A+" %}selected{% endif %}>A+</option>
+                            <option value="A-" {% if profile.blood_group == "A-" %}selected{% endif %}>A-</option>
+                            <option value="B+" {% if profile.blood_group == "B+" %}selected{% endif %}>B+</option>
+                            <option value="B-" {% if profile.blood_group == "B-" %}selected{% endif %}>B-</option>
+                            <option value="AB+" {% if profile.blood_group == "AB+" %}selected{% endif %}>AB+</option>
+                            <option value="AB-" {% if profile.blood_group == "AB-" %}selected{% endif %}>AB-</option>
+                            <option value="O+" {% if profile.blood_group == "O+" %}selected{% endif %}>O+</option>
+                            <option value="O-" {% if profile.blood_group == "O-" %}selected{% endif %}>O-</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">ADDRESS</label>
+                    <textarea name="address" class="dark-input" rows="3" placeholder="Your address">{{ profile.address }}</textarea>
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn-gold" style="padding:14px;font-size:16px;font-weight:700;border-radius:12px;cursor:pointer;">
+                        💾 Save Changes
+                    </button>
+                    <a href="/accounts/profile/" class="btn-outline-red" style="padding:14px;font-size:15px;text-align:center;border-radius:12px;">
+                        ← Back to Profile
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% block title %}Login — AIHealthCare{% endblock %}
+
+{% block extra_css %}
+<style>
+.auth-wrapper {
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    background: var(--black);
+    padding: 40px 0;
+}
+.auth-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 20px 60px rgba(230,57,70,0.15);
+    border-top: 3px solid var(--red);
+}
+.auth-logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+.auth-logo .icon {
+    width: 70px; height: 70px;
+    background: rgba(230,57,70,0.15);
+    border: 2px solid var(--red);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    margin: 0 auto 15px;
+}
+.auth-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text);
+    text-align: center;
+    margin-bottom: 5px;
+}
+.auth-subtitle {
+    color: var(--text-muted);
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+.form-label {
+    color: var(--text-muted) !important;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+.input-group-text {
+    background: var(--dark) !important;
+    border: 1px solid var(--border) !important;
+    color: var(--text-muted) !important;
+    border-right: none !important;
+}
+.dark-input {
+    background: var(--dark) !important;
+    border: 1px solid var(--border) !important;
+    color: var(--text) !important;
+    border-radius: 0 10px 10px 0 !important;
+    padding: 12px 15px !important;
+}
+.dark-input:focus {
+    border-color: var(--red) !important;
+    box-shadow: none !important;
+    color: var(--text) !important;
+}
+.dark-input::placeholder { color: var(--text-muted) !important; }
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 20px 0;
+}
+.divider hr { flex: 1; border-color: var(--border); }
+.divider span { color: var(--text-muted); font-size: 13px; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="auth-card">
+                    <div class="auth-logo">
+                        <div class="icon">🔐</div>
+                        <h2 class="auth-title">Welcome Back!</h2>
+                        <p class="auth-subtitle">Login to your AIHealthCare account</p>
+                    </div>
+
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %} border-0" style="background:rgba(230,57,70,0.1);color:var(--red);border-left:3px solid var(--red) !important;border-radius:8px;">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">USERNAME</label>
+                            <div class="input-group">
+                                <span class="input-group-text" style="border-radius:10px 0 0 10px;">👤</span>
+                                <input type="text" name="username" class="form-control dark-input" placeholder="Enter username" required>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">PASSWORD</label>
+                            <div class="input-group">
+                                <span class="input-group-text" style="border-radius:10px 0 0 10px;">🔒</span>
+                                <input type="password" name="password" class="form-control dark-input" placeholder="Enter password" required>
+                            </div>
+                        </div>
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn-red" style="padding:14px;font-size:16px;font-weight:700;border-radius:12px;text-align:center;">
+                                🚀 Login
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="divider">
+                        <hr><span>OR</span><hr>
+                    </div>
+
+                    <div class="text-center">
+                        <p style="color:var(--text-muted);font-size:14px;">
+                            Don't have an account?
+                            <a href="/accounts/register/" style="color:var(--gold);font-weight:700;text-decoration:none;">
+                                Register Here →
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

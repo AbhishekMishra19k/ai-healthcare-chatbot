@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% block title %}My Profile — AIHealthCare{% endblock %}
+
+{% block extra_css %}
+<style>
+.profile-wrapper { background: var(--black); min-height: 90vh; padding: 40px 0; }
+.profile-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 35px;
+    text-align: center;
+    border-top: 3px solid var(--red);
+    max-width: 500px;
+    margin: 0 auto;
+}
+.profile-avatar {
+    width: 110px; height: 110px;
+    background: linear-gradient(135deg, var(--red), var(--gold));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 50px;
+    margin: 0 auto 20px;
+    box-shadow: 0 10px 30px rgba(230,57,70,0.3);
+}
+.stat-box {
+    background: var(--dark);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+}
+.stat-box .num { font-size: 24px; font-weight: 800; color: var(--gold); }
+.stat-box .label { font-size: 12px; color: var(--text-muted); }
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+}
+.info-row:last-child { border-bottom: none; }
+.info-label { color: var(--text-muted); }
+.info-value { color: var(--text); font-weight: 600; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="profile-wrapper">
+    <div class="container">
+
+        {% if messages %}
+        {% for message in messages %}
+        <div class="mb-3 p-3 text-center" style="background:rgba(40,167,69,0.1);color:#28a745;border-left:3px solid #28a745;border-radius:8px;max-width:500px;margin:0 auto 20px;">
+            ✅ {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <div class="profile-card">
+            <!-- Avatar -->
+            <div class="profile-avatar">👤</div>
+
+            <!-- Name & Email -->
+            <h3 style="color:var(--text);font-weight:800;margin-bottom:5px;">
+                {{ request.user.get_full_name|default:request.user.username }}
+            </h3>
+            <p style="color:var(--text-muted);font-size:14px;margin-bottom:15px;">
+                {{ request.user.email }}
+            </p>
+            <span class="badge-gold">Member</span>
+
+            <hr style="border-color:var(--border);margin:20px 0;">
+
+            <!-- Stats -->
+            <div class="row g-3 mb-4">
+                <div class="col-6">
+                    <div class="stat-box">
+                        <div class="num">{{ profile.age|default:"—" }}</div>
+                        <div class="label">Age</div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="stat-box">
+                        <div class="num">{{ profile.blood_group|default:"—" }}</div>
+                        <div class="label">Blood Group</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info -->
+            <div class="text-start mb-4">
+                <div class="info-row">
+                    <span class="info-label">📞 Phone</span>
+                    <span class="info-value">{{ profile.phone|default:"Not set" }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">🏠 Address</span>
+                    <span class="info-value">{{ profile.address|default:"Not set" }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">👤 Username</span>
+                    <span class="info-value">{{ request.user.username }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">📅 Joined</span>
+                    <span class="info-value">{{ request.user.date_joined|date:"d M Y" }}</span>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="d-grid gap-2">
+                <a href="/accounts/edit/" class="btn-red" style="padding:12px;font-size:15px;font-weight:700;border-radius:12px;text-align:center;">
+                    ✏️ Edit Profile
+                </a>
+                <a href="/accounts/logout/" class="btn-outline-red" style="padding:12px;font-size:15px;text-align:center;border-radius:12px;">
+                    🚪 Logout
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

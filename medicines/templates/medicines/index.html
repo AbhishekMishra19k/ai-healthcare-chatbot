@@ -1,0 +1,235 @@
+{% extends 'base.html' %}
+{% block title %}Medicine Shop — AIHealthCare{% endblock %}
+
+{% block extra_css %}
+<style>
+.medicines-wrapper { background: var(--black); min-height: 90vh; padding: 40px 0; }
+.page-hero {
+    background: linear-gradient(135deg, #000a1a, #0a0a0a);
+    border-bottom: 2px solid var(--gold);
+    padding: 50px 0;
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+}
+.page-hero::before {
+    content: '';
+    position: absolute;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(255,214,10,0.08) 0%, transparent 70%);
+    top: -200px; left: -100px;
+    border-radius: 50%;
+}
+.page-tag {
+    background: rgba(255,214,10,0.15);
+    color: var(--gold);
+    border: 1px solid rgba(255,214,10,0.3);
+    padding: 6px 18px;
+    border-radius: 25px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 35px;
+}
+.filter-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 8px 20px;
+    border-radius: 25px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+}
+.filter-btn:hover { background: var(--gold); color: var(--black); border-color: var(--gold); }
+.filter-btn.active { background: var(--gold); color: var(--black); border-color: var(--gold); font-weight: 700; }
+.medicine-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.3s;
+    height: 100%;
+}
+.medicine-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(255,214,10,0.1);
+}
+.medicine-img {
+    background: linear-gradient(135deg, #1a1a00, #1a1000);
+    padding: 30px;
+    text-align: center;
+    font-size: 60px;
+    border-bottom: 1px solid var(--border);
+}
+.medicine-body { padding: 20px; }
+.medicine-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+}
+.category-badge {
+    background: rgba(255,214,10,0.15);
+    color: var(--gold);
+    border: 1px solid rgba(255,214,10,0.3);
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+}
+.medicine-desc {
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.6;
+    margin: 10px 0;
+}
+.medicine-dosage {
+    background: var(--dark);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin: 10px 0;
+}
+.medicine-footer {
+    padding: 15px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.price { font-size: 22px; font-weight: 800; color: var(--gold); }
+.stock-badge {
+    font-size: 12px;
+    color: #28a745;
+    background: rgba(40,167,69,0.1);
+    padding: 3px 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(40,167,69,0.3);
+}
+.search-bar {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 12px 20px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    max-width: 500px;
+    margin: 0 auto 30px;
+    transition: all 0.3s;
+}
+.search-bar:focus-within {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(255,214,10,0.1);
+}
+.search-input {
+    background: transparent !important;
+    border: none !important;
+    color: var(--text) !important;
+    font-size: 14px;
+    flex: 1;
+    outline: none;
+}
+.search-input::placeholder { color: var(--text-muted) !important; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<div class="page-hero">
+    <div class="container position-relative">
+        <div class="page-tag">💊 MEDICINE SHOP</div>
+        <h2 style="font-size:42px;font-weight:900;color:var(--text);margin:10px 0;">
+            Order <span style="color:var(--gold);">Medicines</span> Online
+        </h2>
+        <p style="color:var(--text-muted);font-size:16px;">
+            Genuine medicines — Fast delivery — Cash on Delivery available
+        </p>
+    </div>
+</div>
+
+<div class="medicines-wrapper">
+    <div class="container">
+
+        <!-- Search -->
+        <div class="search-bar">
+            <span style="color:var(--text-muted);">🔍</span>
+            <input type="text" class="search-input" id="searchInput" placeholder="Search medicines..." onkeyup="searchMedicines()">
+        </div>
+
+        <!-- Category Filter -->
+        <div class="filter-bar">
+            <a href="/medicines/" class="filter-btn {% if not selected_category %}active{% endif %}">
+                All
+            </a>
+            {% for value, label in categories %}
+            <a href="/medicines/?category={{ value }}" class="filter-btn {% if selected_category == value %}active{% endif %}">
+                {{ label }}
+            </a>
+            {% endfor %}
+        </div>
+
+        <!-- Medicines Grid -->
+        <div class="row g-4" id="medicineGrid">
+            {% for medicine in medicines %}
+            <div class="col-lg-3 col-md-4 col-sm-6 medicine-item">
+                <div class="medicine-card">
+                    <div class="medicine-img">💊</div>
+                    <div class="medicine-body">
+                        <div class="medicine-name">{{ medicine.name }}</div>
+                        <span class="category-badge">{{ medicine.category }}</span>
+                        <div class="medicine-desc">{{ medicine.description|truncatechars:70 }}</div>
+                        <div class="medicine-dosage">
+                            📋 {{ medicine.dosage }}
+                        </div>
+                    </div>
+                    <div class="medicine-footer">
+                        <div>
+                            <div class="price">₹{{ medicine.price }}</div>
+                            <span class="stock-badge">✅ In Stock</span>
+                        </div>
+                        <a href="/medicines/order/{{ medicine.id }}/" class="btn-gold" style="padding:8px 18px;font-size:13px;font-weight:700;border-radius:12px;">
+                            🛒 Order
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <div style="font-size:60px;margin-bottom:20px;">💊</div>
+                <h4 style="color:var(--text);">No medicines available yet</h4>
+                <p style="color:var(--text-muted);">Admin se medicines add karwao!</p>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function searchMedicines() {
+    const input = document.getElementById('searchInput').value.toLowerCase();
+    const items = document.querySelectorAll('.medicine-item');
+    items.forEach(item => {
+        const name = item.querySelector('.medicine-name').textContent.toLowerCase();
+        item.style.display = name.includes(input) ? 'block' : 'none';
+    });
+}
+</script>
+{% endblock %}

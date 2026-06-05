@@ -1,0 +1,359 @@
+{% extends 'base.html' %}
+{% block title %}AIHealthCare — Your AI Doctor 24/7{% endblock %}
+
+{% block extra_css %}
+<style>
+.hero{min-height:92vh;background:var(--black);display:flex;align-items:center;position:relative;overflow:hidden}
+.hero-bg{position:absolute;width:700px;height:700px;background:radial-gradient(circle,rgba(230,57,70,.12) 0%,transparent 70%);top:-200px;right:-200px;border-radius:50%}
+.hero-bg2{position:absolute;width:500px;height:500px;background:radial-gradient(circle,rgba(255,214,10,.08) 0%,transparent 70%);bottom:-150px;left:-150px;border-radius:50%}
+.hero-tag{background:rgba(230,57,70,.15);color:var(--red);border:1px solid rgba(230,57,70,.3);padding:6px 18px;border-radius:25px;font-size:13px;font-weight:600;letter-spacing:1px;display:inline-block;margin-bottom:20px}
+.hero-title{font-size:58px;font-weight:900;color:#fff;line-height:1.15;margin-bottom:20px}
+.hero-title .red{color:var(--red)}.hero-title .gold{color:var(--gold)}
+.hero-subtitle{font-size:18px;color:var(--text-muted);line-height:1.8;margin-bottom:35px;max-width:500px}
+.hero-btns{display:flex;gap:15px;flex-wrap:wrap}
+.hero-stats{display:flex;gap:30px;margin-top:50px;flex-wrap:wrap}
+.hero-stat .num{font-size:28px;font-weight:800;color:var(--gold);display:block}
+.hero-stat .label{font-size:13px;color:var(--text-muted)}
+.hero-emoji{font-size:160px;animation:floatY 3s ease-in-out infinite;display:block;filter:drop-shadow(0 20px 40px rgba(230,57,70,.3))}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+.floating-card{position:absolute;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 18px;font-size:13px;color:var(--text);animation:floatY2 4s ease-in-out infinite;white-space:nowrap}
+.floating-card.c1{top:10%;left:-5%;border-left:3px solid var(--red)}
+.floating-card.c2{top:42%;right:-5%;border-left:3px solid var(--gold);animation-delay:1s}
+.floating-card.c3{bottom:15%;left:5%;border-left:3px solid #28a745;animation-delay:2s}
+@keyframes floatY2{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.slogan-bar{background:linear-gradient(135deg,var(--red-dark),#8b0000);padding:16px 0;border-bottom:1px solid rgba(255,214,10,.2)}
+.slogan-inner{display:flex;align-items:center;gap:15px;justify-content:center;flex-wrap:wrap;text-align:center}
+.slogan-icon{font-size:26px;animation:bounceIcon 2s infinite}
+@keyframes bounceIcon{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.slogan-text{font-size:16px;font-weight:600;color:#fff}
+.slogan-hindi{font-size:13px;color:rgba(255,255,255,.7)}
+.slogan-date{background:rgba(255,214,10,.2);color:var(--gold);padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap}
+.services-section{padding:80px 0;background:var(--dark)}
+.service-card{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:0;overflow:hidden;transition:all .4s cubic-bezier(.175,.885,.32,1.275);height:100%;display:flex;flex-direction:column;position:relative}
+.service-card::after{content:'';position:absolute;inset:0;border-radius:24px;border:2px solid transparent;transition:border-color .3s;pointer-events:none}
+.service-card:hover{transform:translateY(-12px);box-shadow:0 25px 60px rgba(0,0,0,.4)}
+.service-card:hover::after{border-color:var(--card-accent)}
+.service-card[data-accent="red"]{--card-accent:var(--red)}
+.service-card[data-accent="blue"]{--card-accent:#4361ee}
+.service-card[data-accent="green"]{--card-accent:#2ec4b6}
+.service-card[data-accent="gold"]{--card-accent:var(--gold)}
+.service-card:hover .service-icon-wrap{transform:scale(1.1) rotate(-5deg)}
+.service-card-header{padding:30px 28px 20px;position:relative}
+.service-icon-wrap{width:72px;height:72px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:32px;margin-bottom:20px;transition:transform .4s}
+.service-icon-wrap.red{background:rgba(230,57,70,.15);border:1px solid rgba(230,57,70,.3)}
+.service-icon-wrap.blue{background:rgba(67,97,238,.15);border:1px solid rgba(67,97,238,.3)}
+.service-icon-wrap.green{background:rgba(46,196,182,.15);border:1px solid rgba(46,196,182,.3)}
+.service-icon-wrap.gold{background:rgba(255,214,10,.15);border:1px solid rgba(255,214,10,.3)}
+.service-badge{position:absolute;top:20px;right:20px;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.5px}
+.service-badge.live{background:rgba(40,167,69,.2);color:#28a745;border:1px solid rgba(40,167,69,.3)}
+.service-badge.hot{background:rgba(230,57,70,.2);color:var(--red);border:1px solid rgba(230,57,70,.3)}
+.service-badge.new{background:rgba(67,97,238,.2);color:#4361ee;border:1px solid rgba(67,97,238,.3)}
+.service-badge.fast{background:rgba(255,214,10,.2);color:var(--gold);border:1px solid rgba(255,214,10,.3)}
+.service-title{font-size:22px;font-weight:800;color:var(--text);margin-bottom:10px}
+.service-desc{color:var(--text-muted);font-size:14px;line-height:1.75}
+.service-card-body{padding:0 28px;flex:1}
+.service-features{list-style:none;padding:0;margin:0 0 20px}
+.service-features li{color:var(--text-muted);font-size:13px;padding:6px 0;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,.04)}
+.service-features li:last-child{border-bottom:none}
+.service-card-footer{padding:20px 28px 28px}
+.service-cta{display:flex;align-items:center;justify-content:space-between;padding:13px 20px;border-radius:14px;text-decoration:none;font-weight:700;font-size:14px;transition:all .3s;border:2px solid transparent}
+.service-cta.red{background:var(--red);color:#fff}
+.service-cta.red:hover{background:var(--red-dark);color:#fff;box-shadow:0 8px 20px rgba(230,57,70,.4);transform:translateY(-2px)}
+.service-cta.blue{background:#4361ee;color:#fff}
+.service-cta.blue:hover{background:#3451d1;color:#fff;box-shadow:0 8px 20px rgba(67,97,238,.4);transform:translateY(-2px)}
+.service-cta.green{background:#2ec4b6;color:#fff}
+.service-cta.green:hover{background:#25a89c;color:#fff;box-shadow:0 8px 20px rgba(46,196,182,.4);transform:translateY(-2px)}
+.service-cta.gold{background:var(--gold);color:var(--black)}
+.service-cta.gold:hover{box-shadow:0 8px 20px rgba(255,214,10,.4);transform:translateY(-2px)}
+.cta-arrow{font-size:18px;transition:transform .3s}
+.service-cta:hover .cta-arrow{transform:translateX(5px)}
+.features-section{padding:80px 0;background:var(--black)}
+.feat-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:35px 28px;text-align:center;transition:all .35s;height:100%;position:relative;overflow:hidden}
+.feat-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--feat-color,var(--red));transform:scaleX(0);transition:transform .3s;transform-origin:left}
+.feat-card:hover::before{transform:scaleX(1)}
+.feat-card:hover{border-color:rgba(230,57,70,.4);transform:translateY(-8px);box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.feat-icon{width:80px;height:80px;border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 22px;transition:transform .3s}
+.feat-card:hover .feat-icon{transform:scale(1.1) rotate(-5deg)}
+.how-section{padding:80px 0;background:var(--dark)}
+.step-wrap{text-align:center;padding:20px;position:relative}
+.step-connector{position:absolute;top:27px;left:calc(50% + 27px);width:calc(100% - 54px);height:2px;background:linear-gradient(90deg,var(--red),var(--gold));display:none}
+@media(min-width:768px){.step-connector{display:block}}
+.step-num{width:54px;height:54px;background:var(--red);color:#fff;border-radius:50%;font-size:22px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;box-shadow:0 6px 20px rgba(230,57,70,.4);position:relative;z-index:1}
+.stats-section{background:linear-gradient(135deg,var(--card),#111);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:60px 0}
+.stat-box{text-align:center;padding:20px}
+.stat-num{font-size:48px;font-weight:900;color:var(--gold);display:block;line-height:1}
+.stat-label{color:var(--text-muted);font-size:14px;margin-top:8px}
+.cta-section{background:linear-gradient(135deg,#1a0000,var(--red-dark),#8b0000);padding:100px 0;text-align:center;position:relative;overflow:hidden}
+.cta-badge{background:rgba(255,214,10,.15);color:var(--gold);border:1px solid rgba(255,214,10,.3);padding:6px 18px;border-radius:25px;font-size:13px;font-weight:700;letter-spacing:1px;display:inline-block;margin-bottom:20px}
+.cta-title{font-size:48px;font-weight:900;color:#fff;line-height:1.2;margin-bottom:16px}
+.cta-sub{color:rgba(255,255,255,.75);font-size:18px;margin-bottom:40px;max-width:500px;margin-left:auto;margin-right:auto}
+.cta-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.cta-trust{margin-top:40px;display:flex;gap:25px;justify-content:center;flex-wrap:wrap}
+.cta-trust-item{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.7);font-size:13px}
+@media(max-width:991px){.hero-title{font-size:42px}}
+@media(max-width:767px){.hero-title{font-size:34px}.hero-emoji{font-size:100px}.floating-card{display:none}.cta-title{font-size:32px}.stat-num{font-size:36px}}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="slogan-bar">
+  <div class="container">
+    <div class="slogan-inner">
+      <span class="slogan-icon">{{ slogan.icon }}</span>
+      <div>
+        <div class="slogan-text">"{{ slogan.text }}"</div>
+        <div class="slogan-hindi">{{ slogan.hindi }}</div>
+      </div>
+      <span class="slogan-date">📅 {{ today }}</span>
+    </div>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-bg2"></div>
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6">
+        <div class="hero-tag">🤖 AI POWERED HEALTHCARE — 24/7</div>
+        <h1 class="hero-title">
+          Your Personal<br>
+          <span class="red">AI Doctor</span><br>
+          <span class="gold">Always Available</span>
+        </h1>
+        <p class="hero-subtitle">Apne symptoms batao aur paiye instant AI diagnosis, ghar ke nuskhe, medicines aur doctor recommendations — Hindi, English, Hinglish mein!</p>
+        <div class="hero-btns">
+          <a href="/chat/" class="btn-red" style="padding:14px 35px;font-size:16px;"><i class="fas fa-robot me-2"></i>Start AI Chat</a>
+          <a href="/appointments/" class="btn-gold" style="padding:14px 35px;font-size:16px;"><i class="fas fa-user-md me-2"></i>Find Doctors</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><span class="num">1000+</span><span class="label">Doctors</span></div>
+          <div class="hero-stat"><span class="num">24/7</span><span class="label">Available</span></div>
+          <div class="hero-stat"><span class="num">500+</span><span class="label">Medicines</span></div>
+          <div class="hero-stat"><span class="num">Free</span><span class="label">To Use</span></div>
+        </div>
+      </div>
+      <div class="col-lg-6 d-none d-lg-block">
+        <div style="text-align:center;position:relative;">
+          <span class="hero-emoji">🏥</span>
+          <div class="floating-card c1">🤒 Bukhar detected — Flu 85%</div>
+          <div class="floating-card c2">💊 Paracetamol recommended</div>
+          <div class="floating-card c3">✅ Ghar ka nuskha bataya</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="services-section">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="hero-tag">OUR SERVICES</div>
+      <h2 class="section-title mt-3">Kya <span>Chahiye</span> Aapko?</h2>
+      <div class="gold-line mx-auto"></div>
+      <p class="section-subtitle">Apni zaroorat chunein aur turant shuru karein</p>
+    </div>
+    <div class="row g-4 align-items-stretch">
+      <div class="col-xl-3 col-md-6">
+        <article class="service-card" data-accent="red">
+          <div class="service-card-header">
+            <span class="service-badge live">🟢 LIVE</span>
+            <div class="service-icon-wrap red">🤖</div>
+            <h3 class="service-title">AI Doctor Chat</h3>
+            <p class="service-desc">Multilingual AI assistant — symptoms batao, instant jawab pao Hindi, English, ya Hinglish mein.</p>
+          </div>
+          <div class="service-card-body">
+            <ul class="service-features">
+              <li><span>🌐</span> Hindi, English, Hinglish</li>
+              <li><span>🌿</span> Ghar ke nuskhe</li>
+              <li><span>💊</span> Medicine suggestions</li>
+              <li><span>⚡</span> Instant response 24/7</li>
+            </ul>
+          </div>
+          <div class="service-card-footer">
+            <a href="/chat/" class="service-cta red"><span>Start Chatting</span><span class="cta-arrow">→</span></a>
+          </div>
+        </article>
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <article class="service-card" data-accent="blue">
+          <div class="service-card-header">
+            <span class="service-badge hot">🔥 1000+</span>
+            <div class="service-icon-wrap blue">👨‍⚕️</div>
+            <h3 class="service-title">Find Doctors</h3>
+            <p class="service-desc">MP ke verified specialist doctors dhundho — Bhopal, Indore, Ujjain, Gwalior aur aur bhi.</p>
+          </div>
+          <div class="service-card-body">
+            <ul class="service-features">
+              <li><span>🏥</span> 12+ Specializations</li>
+              <li><span>📍</span> MP ke sabhi bade shehar</li>
+              <li><span>⭐</span> Experience aur fees dikhti hai</li>
+              <li><span>🔍</span> Filter by specialization</li>
+            </ul>
+          </div>
+          <div class="service-card-footer">
+            <a href="/appointments/" class="service-cta blue"><span>Find a Doctor</span><span class="cta-arrow">→</span></a>
+          </div>
+        </article>
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <article class="service-card" data-accent="green">
+          <div class="service-card-header">
+            <span class="service-badge new">📅 ONLINE</span>
+            <div class="service-icon-wrap green">📅</div>
+            <h3 class="service-title">Appointments</h3>
+            <p class="service-desc">Ghar baithe apne pasandida doctor se online appointment book karo — koi queue nahi!</p>
+          </div>
+          <div class="service-card-body">
+            <ul class="service-features">
+              <li><span>⏰</span> Time slot choose karo</li>
+              <li><span>📱</span> Confirmation milegi</li>
+              <li><span>🔄</span> Reschedule / Cancel</li>
+              <li><span>🆓</span> Booking bilkul free</li>
+            </ul>
+          </div>
+          <div class="service-card-footer">
+            <a href="/appointments/" class="service-cta green"><span>Book Appointment</span><span class="cta-arrow">→</span></a>
+          </div>
+        </article>
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <article class="service-card" data-accent="gold">
+          <div class="service-card-header">
+            <span class="service-badge fast">💊 500+</span>
+            <div class="service-icon-wrap gold">💊</div>
+            <h3 class="service-title">Medicines</h3>
+            <p class="service-desc">500+ medicines ki poori range — ghar baithe order karo, doorstep delivery pao.</p>
+          </div>
+          <div class="service-card-body">
+            <ul class="service-features">
+              <li><span>🔍</span> Search by name/category</li>
+              <li><span>💰</span> Affordable prices</li>
+              <li><span>🚚</span> Doorstep delivery</li>
+              <li><span>📦</span> Real-time stock info</li>
+            </ul>
+          </div>
+          <div class="service-card-footer">
+            <a href="/medicines/" class="service-cta gold"><span>Order Medicines</span><span class="cta-arrow">→</span></a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features-section">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="hero-tag">WHY CHOOSE US</div>
+      <h2 class="section-title mt-3">Hamari <span>Khasiyat</span></h2>
+      <div class="gold-line mx-auto"></div>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-3 col-sm-6">
+        <div class="feat-card" style="--feat-color:var(--red);">
+          <div class="feat-icon icon-red">🧠</div>
+          <h3 style="font-size:19px;font-weight:800;color:var(--text);margin-bottom:10px;">AI Symptom Checker</h3>
+          <p style="color:var(--text-muted);font-size:14px;line-height:1.75;margin-bottom:20px;">Advanced AI jo aapke symptoms analyze karke accurate disease predictions aur remedies deta hai.</p>
+          <a href="/chat/" class="btn-red" style="padding:8px 22px;font-size:13px;">Try Now →</a>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="feat-card" style="--feat-color:#4361ee;">
+          <div class="feat-icon" style="background:rgba(67,97,238,.15);border:1px solid rgba(67,97,238,.3);">✅</div>
+          <h3 style="font-size:19px;font-weight:800;color:var(--text);margin-bottom:10px;">Verified Doctors</h3>
+          <p style="color:var(--text-muted);font-size:14px;line-height:1.75;margin-bottom:20px;">Sabhi doctors verified hain — experience, specialization aur fees clearly listed hai.</p>
+          <a href="/appointments/" style="padding:8px 22px;font-size:13px;background:rgba(67,97,238,.1);border:1px solid #4361ee;color:#4361ee;border-radius:25px;text-decoration:none;">Find Doctor →</a>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="feat-card" style="--feat-color:#2ec4b6;">
+          <div class="feat-icon" style="background:rgba(46,196,182,.15);border:1px solid rgba(46,196,182,.3);">🌿</div>
+          <h3 style="font-size:19px;font-weight:800;color:var(--text);margin-bottom:10px;">Home Remedies</h3>
+          <p style="color:var(--text-muted);font-size:14px;line-height:1.75;margin-bottom:20px;">Dadi maa ke nuskhe — natural home remedies jo symptoms ke hisaab se suggest karta hai AI.</p>
+          <a href="/chat/" style="padding:8px 22px;font-size:13px;background:rgba(46,196,182,.1);border:1px solid #2ec4b6;color:#2ec4b6;border-radius:25px;text-decoration:none;">Explore →</a>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="feat-card" style="--feat-color:var(--gold);">
+          <div class="feat-icon icon-gold">🚨</div>
+          <h3 style="font-size:19px;font-weight:800;color:var(--text);margin-bottom:10px;">Doctor Referral</h3>
+          <p style="color:var(--text-muted);font-size:14px;line-height:1.75;margin-bottom:20px;">Serious symptoms? AI turant sahi specialist suggest karta hai aur appointment book karne mein help karta hai.</p>
+          <a href="/appointments/" class="btn-outline-red" style="padding:8px 22px;font-size:13px;">Book Now →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="how-section">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="hero-tag">HOW IT WORKS</div>
+      <h2 class="section-title mt-3">Sirf <span>3 Steps</span></h2>
+      <div class="gold-line mx-auto"></div>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="step-wrap">
+          <div class="step-connector"></div>
+          <div class="step-num">1</div>
+          <span style="font-size:44px;margin-bottom:15px;display:block;">💬</span>
+          <h3 style="font-size:19px;font-weight:700;color:var(--text);margin-bottom:10px;">Symptoms Batao</h3>
+          <p style="color:var(--text-muted);font-size:14px;line-height:1.7;">Hindi ya English mein apni taklif batao — natural language samajhta hai</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="step-wrap">
+          <div class="step-connector"></div>
+          <div class="step-num">2</div>
+          <span style="font-size:44px;margin-bottom:15px;display:block;">🧠</span>
+          <h3 style="font-size:19px;font-weight:700;color:var(--text);margin-bottom:10px;">AI Analyze Karta Hai</h3>
+          <p style="color:var(--text-muted);font-size:14px;line-height:1.7;">Gemini AI aapke symptoms analyze karke best solution dhundhta hai</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="step-wrap">
+          <div class="step-num">3</div>
+          <span style="font-size:44px;margin-bottom:15px;display:block;">✅</span>
+          <h3 style="font-size:19px;font-weight:700;color:var(--text);margin-bottom:10px;">Solution Paao</h3>
+          <p style="color:var(--text-muted);font-size:14px;line-height:1.7;">Ghar ke nuskhe, medicines, ya doctor referral — sab instant milta hai</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stats-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3 col-6"><div class="stat-box"><span class="stat-num">1000+</span><div class="stat-label">Registered Doctors</div></div></div>
+      <div class="col-md-3 col-6"><div class="stat-box"><span class="stat-num">500+</span><div class="stat-label">Medicines Available</div></div></div>
+      <div class="col-md-3 col-6"><div class="stat-box"><span class="stat-num">24/7</span><div class="stat-label">AI Always Available</div></div></div>
+      <div class="col-md-3 col-6"><div class="stat-box"><span class="stat-num">Free</span><div class="stat-label">No Hidden Charges</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container position-relative">
+    <div class="cta-badge">🚀 START FOR FREE</div>
+    <h2 class="cta-title">Apni Health Check Karo<br><span style="color:var(--gold);">Abhi — Bilkul Free!</span></h2>
+    <p class="cta-sub">Koi registration nahi, koi charge nahi — seedha shuru karo apna AI health checkup</p>
+    <div class="cta-btns">
+      <a href="/chat/" class="btn-gold" style="padding:16px 42px;font-size:17px;font-weight:800;"><i class="fas fa-robot me-2"></i>Start AI Chat Free</a>
+      <a href="/appointments/" style="padding:16px 42px;font-size:17px;font-weight:700;border:2px solid rgba(255,255,255,.4);color:#fff;border-radius:25px;text-decoration:none;display:inline-block;" onmouseover="this.style.background='rgba(255,255,255,.1)'" onmouseout="this.style.background='transparent'">
+        <i class="fas fa-user-md me-2"></i>Find a Doctor
+      </a>
+    </div>
+    <div class="cta-trust">
+      <div class="cta-trust-item"><span>🔒</span> 100% Private & Secure</div>
+      <div class="cta-trust-item"><span>⚡</span> Instant AI Response</div>
+      <div class="cta-trust-item"><span>🌐</span> Hindi & English Support</div>
+      <div class="cta-trust-item"><span>🆓</span> Always Free</div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

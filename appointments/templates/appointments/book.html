@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block title %}Book Appointment — AIHealthCare{% endblock %}
+
+{% block extra_css %}
+<style>
+.book-wrapper { background: var(--black); min-height: 90vh; padding: 40px 0; }
+.page-hero { background: linear-gradient(135deg, #1a0000, #0a0a0a); border-bottom: 2px solid var(--red); padding: 40px 0; text-align: center; margin-bottom: 40px; }
+.doctor-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 25px; text-align: center; margin-bottom: 25px; }
+.doctor-avatar { width: 90px; height: 90px; background: linear-gradient(135deg, var(--red-dark), var(--red)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; margin: 0 auto 15px; box-shadow: 0 8px 25px rgba(230,57,70,0.3); }
+.form-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 35px; }
+.form-label { color: var(--text); font-weight: 600; font-size: 14px; margin-bottom: 8px; }
+.form-select { background: var(--dark) !important; border: 1px solid var(--border) !important; color: var(--text) !important; border-radius: 10px !important; padding: 12px 15px !important; }
+.form-select:focus { border-color: var(--red) !important; box-shadow: 0 0 0 3px rgba(230,57,70,0.15) !important; }
+.form-select option { background: var(--dark); color: var(--text); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-hero">
+    <div class="container">
+        <div class="page-tag" style="background:rgba(230,57,70,0.15);color:var(--red);border:1px solid rgba(230,57,70,0.3);padding:6px 18px;border-radius:25px;font-size:12px;font-weight:600;letter-spacing:1px;display:inline-block;margin-bottom:15px;">📅 BOOK APPOINTMENT</div>
+        <h2 style="font-size:36px;font-weight:900;color:var(--text);margin:10px 0;">Book Your <span style="color:var(--red);">Appointment</span></h2>
+    </div>
+</div>
+
+<div class="book-wrapper">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="doctor-card">
+                    <div class="doctor-avatar">👨‍⚕️</div>
+                    <h4 style="color:var(--text);font-weight:700;">Dr. {{ doctor.name }}</h4>
+                    <span style="background:rgba(230,57,70,0.15);color:var(--red);border:1px solid rgba(230,57,70,0.3);padding:4px 14px;border-radius:20px;font-size:12px;font-weight:600;">{{ doctor.specialization }}</span>
+                    <div class="d-flex justify-content-center gap-4 mt-3 flex-wrap">
+                        <span style="color:var(--text-muted);font-size:14px;">⭐ {{ doctor.experience }} Years Exp</span>
+                        <span style="color:var(--text-muted);font-size:14px;">📅 {{ doctor.available_days }}</span>
+                        <span style="color:var(--gold);font-weight:700;font-size:14px;">💰 ₹{{ doctor.fee }}</span>
+                    </div>
+                </div>
+
+                <div class="form-card">
+                    <h5 style="color:var(--text);font-weight:700;margin-bottom:25px;">📋 Patient Details</h5>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">👤 Your Name</label>
+                                <input type="text" name="patient_name" class="dark-input form-control" placeholder="Apna naam likho" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">📞 Phone Number</label>
+                                <input type="tel" name="patient_phone" class="dark-input form-control" placeholder="Mobile number" required>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label">📧 Email</label>
+                                <input type="email" name="patient_email" class="dark-input form-control" placeholder="Email address" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">📅 Date</label>
+                                <input type="date" name="date" class="dark-input form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">⏰ Time</label>
+                                <select name="time" class="form-select" required>
+                                    <option value="">Select time</option>
+                                    <option value="09:00">9:00 AM</option>
+                                    <option value="10:00">10:00 AM</option>
+                                    <option value="11:00">11:00 AM</option>
+                                    <option value="12:00">12:00 PM</option>
+                                    <option value="14:00">2:00 PM</option>
+                                    <option value="15:00">3:00 PM</option>
+                                    <option value="16:00">4:00 PM</option>
+                                    <option value="17:00">5:00 PM</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">🩺 Reason for Visit</label>
+                                <textarea name="reason" class="dark-input form-control" rows="3" placeholder="Symptoms ya problem batao"></textarea>
+                            </div>
+                            <div class="col-12 mt-2">
+                                <button type="submit" class="btn-red w-100" style="padding:14px;font-size:16px;font-weight:700;border-radius:12px;border:none;cursor:pointer;">
+                                    ✅ Confirm Appointment
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
