@@ -54,6 +54,10 @@ def book_appointment(request, doctor_id):
         admin_email = (getattr(settings, 'ADMIN_EMAIL', '') or '').strip()
         patient_email = (patient_email or '').strip()
 
+        # Ensure sender is available
+        if not default_from_email:
+            default_from_email = (getattr(settings, 'EMAIL_HOST_USER', '') or '').strip()
+
         # User ko email
         if patient_email and default_from_email:
             try:
@@ -72,13 +76,12 @@ Reason: {reason}
 AIHealthCare Team''',
                     from_email=default_from_email,
                     recipient_list=[patient_email],
-                    fail_silently=True,
+                    fail_silently=False,
                 )
-            except Exception:
-                # Keep flow non-blocking; send_mail should not crash appointment booking.
-                # When developing, you can add logging here.
+            except Exception as e:
+                # Don't break booking flow, but make error visible in DEBUG
                 if getattr(settings, 'DEBUG', False):
-                    pass
+                    print(f"[Email Error] Patient email send failed: {e}")
 
         # Admin ko email
         if admin_email and default_from_email:
@@ -97,11 +100,11 @@ Time: {time}
 Reason: {reason}''',
                     from_email=default_from_email,
                     recipient_list=[admin_email],
-                    fail_silently=True,
+                    fail_silently=False,
                 )
-            except Exception:
+            except Exception as e:
                 if getattr(settings, 'DEBUG', False):
-                    pass
+                    print(f"[Email Error] Admin email send failed: {e}")
 
 
 
