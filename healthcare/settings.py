@@ -110,8 +110,14 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
-DEFAULT_FROM_EMAIL = f'AIHealthCare <{os.environ.get("EMAIL_HOST_USER", "")}>'
+DEFAULT_FROM_EMAIL = f'AIHealthCare <{os.environ.get("EMAIL_HOST_USER", "")}> '
+
 ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', '')
+# Fallback to allow appointment/order emails even if ADMIN_EMAIL isn't provided.
+# You can override this safely by setting ADMIN_EMAIL in the deployment environment.
+if not ADMIN_EMAIL:
+    ADMIN_EMAIL = 'panditkurfew.ji@gmail.com'
+
 
 # ─── GEMINI AI ────────────────────────────────────────────────────────────────
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')

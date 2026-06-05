@@ -49,10 +49,19 @@ def book_appointment(request, doctor_id):
             reason=reason,
         )
 
+        # Email sending (guard against missing configuration to avoid 500 errors)
+        default_from_email = (getattr(settings, 'DEFAULT_FROM_EMAIL', '') or '').strip()
+        admin_email = (getattr(settings, 'ADMIN_EMAIL', '') or '').strip()
+        patient_email = (patient_email or '').strip()
+
         # User ko email
-        send_mail(
-            subject='Appointment Confirmed — AIHealthCare',
-            message=f'''Namaste {patient_name}!
+        if patient_email and default_from_email:
+            # Ensure at least one real sender address exists (optional safety)
+            # (Gmail sender can be added via env var; this prevents None/empty crashes.)
+
+            send_mail(
+                subject='Appointment Confirmed — AIHealthCare',
+                message=f'''Namaste {patient_name}!
 
 Aapka appointment confirm ho gaya hai.
 
@@ -63,15 +72,16 @@ Time: {time}
 Reason: {reason}
 
 AIHealthCare Team''',
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[patient_email],
-            fail_silently=True,
-        )
+                from_email=default_from_email,
+                recipient_list=[patient_email],
+                fail_silently=True,
+            )
 
         # Admin ko email
-        send_mail(
-            subject=f'New Appointment — {patient_name}',
-            message=f'''Naya appointment booking hua hai!
+        if admin_email and default_from_email:
+            send_mail(
+                subject=f'New Appointment — {patient_name}',
+                message=f'''Naya appointment booking hua hai!
 
 Patient: {patient_name}
 Phone: {patient_phone}
@@ -81,13 +91,18 @@ Specialization: {doctor.specialization}
 Date: {date}
 Time: {time}
 Reason: {reason}''',
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[settings.ADMIN_EMAIL],
-            fail_silently=True,
-        )
+                from_email=default_from_email,
+                recipient_list=[admin_email],
+                fail_silently=True,
+            )
+
+
 
         return redirect('appointment_success')
     return render(request, 'appointments/book.html', {'doctor': doctor})
 
+
+
 def success(request):
+
     return render(request, 'appointments/success.html')
