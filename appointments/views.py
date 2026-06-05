@@ -74,8 +74,11 @@ AIHealthCare Team''',
                     recipient_list=[patient_email],
                     fail_silently=True,
                 )
-            except TypeError:
-                pass
+            except Exception:
+                # Keep flow non-blocking; send_mail should not crash appointment booking.
+                # When developing, you can add logging here.
+                if getattr(settings, 'DEBUG', False):
+                    pass
 
         # Admin ko email
         if admin_email and default_from_email:
@@ -96,8 +99,9 @@ Reason: {reason}''',
                     recipient_list=[admin_email],
                     fail_silently=True,
                 )
-            except TypeError:
-                pass
+            except Exception:
+                if getattr(settings, 'DEBUG', False):
+                    pass
 
 
 

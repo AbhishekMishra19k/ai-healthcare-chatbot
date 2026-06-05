@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block title %}Your Cart{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+
+      <div class="card p-4" style="border-radius:18px;border:none;box-shadow:0 4px 15px rgba(0,0,0,0.1);background:var(--card);color:var(--text);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h3 class="fw-bold">🛒 Shopping Cart</h3>
+          <a href="/medicines/" class="btn btn-outline-primary">💊 Continue Shopping</a>
+        </div>
+
+        {% if cart_items %}
+          <div class="table-responsive">
+            <table class="table" style="color:var(--text);">
+              <thead>
+                <tr>
+                  <th>Medicine</th>
+                  <th>Price</th>
+                  <th style="width:140px;">Qty</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in cart_items %}
+                  <tr>
+                    <td>
+                      <div class="fw-bold">{{ item.medicine.name }}</div>
+                      <div class="text-muted" style="font-size:13px;">{{ item.medicine.category }}</div>
+                    </td>
+                    <td>₹{{ item.medicine.price }}</td>
+<td>
+                      {{ item.quantity }}
+                    </td>
+                    <td>₹{{ item.medicine.price|mul:item.quantity }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="p-3" style="background:#0f172a33;border:1px solid var(--border);border-radius:14px;">
+            <div class="d-flex justify-content-between">
+              <div class="fw-bold">Grand Total</div>
+              <div class="fw-bold" style="color:var(--gold);font-size:20px;">₹{{ cart_total }}</div>
+            </div>
+          </div>
+
+          <div class="mt-4 d-grid">
+            <a href="/medicines/checkout/" class="btn btn-gold btn-lg">✅ Checkout</a>
+          </div>
+
+        {% else %}
+          <div class="text-center py-5">
+            <div style="font-size:70px;margin-bottom:10px;">🛒</div>
+            <h4 class="fw-bold">Cart is empty</h4>
+            <p class="text-muted">Medicines add karein aur phir checkout karein.</p>
+            <a href="/medicines/" class="btn btn-success btn-lg">💊 Browse Medicines</a>
+          </div>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

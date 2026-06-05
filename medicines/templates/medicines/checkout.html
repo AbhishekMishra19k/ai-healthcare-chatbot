@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-7">
+
+      <div class="card p-4" style="border-radius:18px;border:none;box-shadow:0 4px 15px rgba(0,0,0,0.1);background:var(--card);color:var(--text);">
+        <div class="mb-3">
+          <h3 class="fw-bold">🧾 Checkout</h3>
+          <div class="text-muted">Cash on Delivery</div>
+        </div>
+
+        {% if cart_items %}
+          <div class="p-3 mb-4" style="background:#e8f5e9;border:1px solid rgba(40,167,69,0.3);border-radius:14px;">
+            <div class="d-flex justify-content-between">
+              <span class="fw-bold">Items in cart</span>
+              <span class="fw-bold">{{ cart_count }}</span>
+            </div>
+            <div class="d-flex justify-content-between mt-2">
+              <span class="fw-bold">Grand Total</span>
+              <span class="fw-bold" style="color:var(--gold);font-size:18px;">₹{{ cart_total }}</span>
+            </div>
+          </div>
+
+          <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label class="form-label fw-bold">👤 Your Name</label>
+              <input type="text" name="patient_name" class="dark-input" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold">📞 Phone Number</label>
+              <input type="tel" name="patient_phone" class="dark-input" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold">🏠 Delivery Address</label>
+              <textarea name="patient_address" class="dark-input" rows="3" required></textarea>
+            </div>
+
+            <div class="text-center">
+              <button type="submit" class="btn btn-gold btn-lg">✅ Place Order</button>
+            </div>
+          </form>
+
+        {% else %}
+          <div class="text-center py-5">
+            <div style="font-size:60px;margin-bottom:10px;">🛒</div>
+            <h4 class="fw-bold">Cart is empty</h4>
+            <p class="text-muted">Pehele cart mein medicines add karein.</p>
+            <a href="/medicines/" class="btn btn-success btn-lg">💊 Browse Medicines</a>
+          </div>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
