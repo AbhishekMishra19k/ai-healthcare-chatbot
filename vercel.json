@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "buildCommand": "pip install -r requirements.txt && python manage.py migrate",
+  "installCommand": "pip install -r requirements.txt",
+  "builds": [
+    {
+      "src": "healthcare/wsgi.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "framework": "django"
+}
+
