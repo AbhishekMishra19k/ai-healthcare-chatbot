@@ -3,33 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>{% block title %}AI Healthcare{% endblock %}</title>
+    <title>{% block title %}AIHealthCare{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --black: #0a0a0a;
-            --dark: #111111;
-            --card: #1a1a1a;
-            --red: #e63946;
-            --red-dark: #c1121f;
-            --gold: #ffd60a;
-            --gold-dark: #e6c009;
-            --text: #ffffff;
-            --text-muted: #aaaaaa;
-            --border: #2a2a2a;
+            --green-dark:   #1b5e20;
+            --green:        #2e7d32;
+            --green-mid:    #388e3c;
+            --green-light:  #66bb6a;
+            --green-pale:   #e8f5e9;
+            --green-bg:     #f1f8e9;
+            --white:        #ffffff;
+            --text:         #1a1a1a;
+            --text-muted:   #6b7280;
+            --border:       #c8e6c9;
+            --shadow:       rgba(46,125,50,0.12);
         }
 
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-        html {
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
+        html { overflow-x: hidden; scroll-behavior: smooth; }
 
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background: var(--black);
+            font-family: 'DM Sans', 'Segoe UI', sans-serif;
+            background: var(--green-bg);
             color: var(--text);
             overflow-x: hidden;
             width: 100%;
@@ -39,34 +37,37 @@
         img, video, iframe { max-width: 100%; height: auto; }
 
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--dark); }
-        ::-webkit-scrollbar-thumb { background: var(--red); border-radius: 3px; }
+        ::-webkit-scrollbar-track { background: var(--green-pale); }
+        ::-webkit-scrollbar-thumb { background: var(--green); border-radius: 3px; }
 
         /* ── NAVBAR ── */
         .main-navbar {
-            background: var(--dark);
-            border-bottom: 2px solid var(--red);
+            background: var(--white);
+            border-bottom: 3px solid var(--green);
             padding: 12px 0;
             position: sticky;
             top: 0;
             z-index: 1000;
             width: 100%;
+            box-shadow: 0 2px 12px var(--shadow);
         }
         .main-navbar .navbar-brand {
             font-size: 20px;
             font-weight: 800;
             color: var(--text) !important;
             text-decoration: none;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
-        .brand-red { color: var(--red); }
-        .brand-gold { color: var(--gold); }
+        .brand-green  { color: var(--green); }
+        .brand-dark   { color: var(--green-dark); }
+
         .navbar-toggler {
-            border-color: var(--red) !important;
-            color: var(--red) !important;
+            border-color: var(--green) !important;
             padding: 6px 10px;
         }
         .navbar-toggler:focus { box-shadow: none !important; }
+
         .main-navbar .nav-link {
             color: var(--text-muted) !important;
             font-size: 14px;
@@ -77,30 +78,44 @@
             font-weight: 500;
         }
         .main-navbar .nav-link:hover {
-            color: var(--text) !important;
-            background: rgba(230,57,70,0.15);
+            color: var(--green-dark) !important;
+            background: var(--green-pale);
         }
         .main-navbar .nav-link.active {
-            color: var(--gold) !important;
-            background: rgba(255,214,10,0.1);
-            border: 1px solid rgba(255,214,10,0.3);
+            color: var(--green-dark) !important;
+            background: var(--green-pale);
+            border: 1px solid var(--border);
+            font-weight: 700;
+        }
+        .nav-cart-badge {
+            background: var(--green);
+            color: white;
+            font-size: 10px;
+            padding: 1px 6px;
+            border-radius: 10px;
+            font-weight: 700;
+            margin-left: 3px;
         }
         .nav-cta {
-            background: var(--red) !important;
+            background: linear-gradient(135deg, var(--green-dark), var(--green)) !important;
             color: white !important;
             padding: 8px 20px !important;
             border-radius: 25px !important;
+            font-weight: 700 !important;
         }
-        .nav-cta:hover { background: var(--red-dark) !important; }
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow);
+        }
 
-        /* Mobile navbar */
         @media (max-width: 991px) {
             .navbar-collapse {
-                background: var(--dark);
+                background: var(--white);
                 border: 1px solid var(--border);
                 border-radius: 16px;
                 padding: 15px;
                 margin-top: 10px;
+                box-shadow: 0 8px 24px var(--shadow);
             }
             .navbar-nav { gap: 4px !important; }
             .main-navbar .nav-link { padding: 10px 16px !important; }
@@ -108,35 +123,35 @@
 
         /* ── FOOTER ── */
         .main-footer {
-            background: var(--dark);
-            border-top: 2px solid var(--red);
-            color: var(--text);
+            background: var(--green-dark);
+            border-top: 3px solid var(--green-light);
+            color: rgba(255,255,255,0.85);
             padding: 50px 0 20px;
             margin-top: 60px;
             width: 100%;
         }
-        .footer-brand { font-size: 22px; font-weight: 800; margin-bottom: 12px; }
+        .footer-brand { font-size: 22px; font-weight: 800; margin-bottom: 12px; font-family: 'Plus Jakarta Sans', sans-serif; }
         .footer-link {
-            color: var(--text-muted);
+            color: rgba(255,255,255,0.65);
             text-decoration: none;
             display: block;
             margin: 8px 0;
             font-size: 14px;
             transition: 0.3s;
         }
-        .footer-link:hover { color: var(--gold); padding-left: 5px; }
+        .footer-link:hover { color: #a5d6a7; padding-left: 5px; }
         .footer-bottom {
-            border-top: 1px solid var(--border);
+            border-top: 1px solid rgba(255,255,255,0.15);
             padding-top: 20px;
             margin-top: 30px;
             text-align: center;
-            color: var(--text-muted);
+            color: rgba(255,255,255,0.5);
             font-size: 13px;
         }
 
         /* ── BUTTONS ── */
-        .btn-red {
-            background: var(--red);
+        .btn-green {
+            background: linear-gradient(135deg, var(--green-dark), var(--green));
             color: white;
             border: none;
             padding: 10px 25px;
@@ -146,33 +161,15 @@
             text-decoration: none;
             display: inline-block;
         }
-        .btn-red:hover {
-            background: var(--red-dark);
+        .btn-green:hover {
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(230,57,70,0.4);
+            box-shadow: 0 5px 15px var(--shadow);
         }
-        .btn-gold {
-            background: var(--gold);
-            color: var(--black);
-            border: none;
-            padding: 10px 25px;
-            border-radius: 25px;
-            font-weight: 700;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .btn-gold:hover {
-            background: var(--gold-dark);
-            color: var(--black);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255,214,10,0.4);
-        }
-        .btn-outline-red {
+        .btn-outline-green {
             background: transparent;
-            color: var(--red);
-            border: 2px solid var(--red);
+            color: var(--green);
+            border: 2px solid var(--green);
             padding: 10px 25px;
             border-radius: 25px;
             font-weight: 600;
@@ -180,59 +177,66 @@
             text-decoration: none;
             display: inline-block;
         }
-        .btn-outline-red:hover {
-            background: var(--red);
+        .btn-outline-green:hover {
+            background: var(--green);
             color: white;
             transform: translateY(-2px);
         }
+        /* Keep old btn-red/btn-gold as green aliases for backward compat */
+        .btn-red  { background: linear-gradient(135deg, var(--green-dark), var(--green)); color: white; border: none; padding: 10px 25px; border-radius: 25px; font-weight: 600; transition: all .3s; text-decoration: none; display: inline-block; }
+        .btn-red:hover  { color: white; transform: translateY(-2px); box-shadow: 0 5px 15px var(--shadow); }
+        .btn-gold { background: var(--green-pale); color: var(--green-dark); border: 2px solid var(--border); padding: 10px 25px; border-radius: 25px; font-weight: 700; transition: all .3s; text-decoration: none; display: inline-block; }
+        .btn-gold:hover { background: var(--green); color: white; transform: translateY(-2px); }
+        .btn-outline-red { background: transparent; color: var(--green); border: 2px solid var(--green); padding: 10px 25px; border-radius: 25px; font-weight: 600; transition: all .3s; text-decoration: none; display: inline-block; }
+        .btn-outline-red:hover { background: var(--green); color: white; transform: translateY(-2px); }
 
         /* ── CARDS ── */
         .dark-card {
-            background: var(--card);
+            background: var(--white);
             border: 1px solid var(--border);
             border-radius: 16px;
             transition: all 0.3s;
         }
         .dark-card:hover {
-            border-color: var(--red);
+            border-color: var(--green);
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(230,57,70,0.15);
+            box-shadow: 0 10px 30px var(--shadow);
         }
 
         /* ── BADGES ── */
-        .badge-red { background: rgba(230,57,70,0.15); color: var(--red); padding: 4px 12px; border-radius: 20px; font-size: 12px; border: 1px solid rgba(230,57,70,0.3); }
-        .badge-gold { background: rgba(255,214,10,0.15); color: var(--gold); padding: 4px 12px; border-radius: 20px; font-size: 12px; border: 1px solid rgba(255,214,10,0.3); }
-        .badge-green { background: rgba(40,167,69,0.15); color: #28a745; padding: 4px 12px; border-radius: 20px; font-size: 12px; border: 1px solid rgba(40,167,69,0.3); }
+        .badge-red   { background: var(--green-pale); color: var(--green-dark); padding: 4px 12px; border-radius: 20px; font-size: 12px; border: 1px solid var(--border); }
+        .badge-gold  { background: #fff8e1; color: #f57f17; padding: 4px 12px; border-radius: 20px; font-size: 12px; border: 1px solid #ffe082; }
+        .badge-green { background: var(--green-pale); color: var(--green-dark); padding: 4px 12px; border-radius: 20px; font-size: 12px; border: 1px solid var(--border); }
 
         /* ── FORM INPUTS ── */
         .dark-input {
-            background: var(--dark) !important;
-            border: 1px solid var(--border) !important;
+            background: var(--white) !important;
+            border: 1.5px solid var(--border) !important;
             color: var(--text) !important;
             border-radius: 10px !important;
             padding: 12px 15px !important;
             width: 100%;
         }
         .dark-input:focus {
-            border-color: var(--red) !important;
-            box-shadow: 0 0 0 3px rgba(230,57,70,0.15) !important;
+            border-color: var(--green) !important;
+            box-shadow: 0 0 0 3px rgba(46,125,50,0.12) !important;
             color: var(--text) !important;
         }
-        .dark-input::placeholder { color: var(--text-muted) !important; }
+        .dark-input::placeholder { color: #bdbdbd !important; }
 
         /* ── SECTION TITLES ── */
-        .section-title { font-size: 36px; font-weight: 800; color: var(--text); margin-bottom: 10px; }
-        .section-title span { color: var(--red); }
+        .section-title { font-size: 36px; font-weight: 800; color: var(--text); margin-bottom: 10px; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .section-title span { color: var(--green); }
         .section-subtitle { color: var(--text-muted); font-size: 16px; margin-bottom: 40px; }
-        .gold-line { width: 60px; height: 4px; background: var(--gold); border-radius: 2px; margin: 10px 0 20px; }
+        .gold-line { width: 60px; height: 4px; background: var(--green); border-radius: 2px; margin: 10px 0 20px; }
 
         /* ── ICON COLORS ── */
-        .icon-red { background: rgba(230,57,70,.15); border: 1px solid rgba(230,57,70,.3); }
-        .icon-gold { background: rgba(255,214,10,.15); border: 1px solid rgba(255,214,10,.3); }
-        .icon-green { background: rgba(40,167,69,.15); border: 1px solid rgba(40,167,69,.3); }
-        .icon-blue { background: rgba(67,97,238,.15); border: 1px solid rgba(67,97,238,.3); }
+        .icon-red   { background: var(--green-pale); border: 1px solid var(--border); }
+        .icon-gold  { background: #fff8e1; border: 1px solid #ffe082; }
+        .icon-green { background: var(--green-pale); border: 1px solid var(--border); }
+        .icon-blue  { background: #e3f2fd; border: 1px solid #90caf9; }
 
-        /* ── MOBILE FIXES ── */
+        /* ── MOBILE ── */
         @media (max-width: 767px) {
             .section-title { font-size: 26px; }
             .section-subtitle { font-size: 14px; }
@@ -241,12 +245,8 @@
             .footer-brand { font-size: 18px; }
             .row { margin-left: 0; margin-right: 0; }
         }
-
         @media (max-width: 480px) {
-            .btn-red, .btn-gold, .btn-outline-red {
-                padding: 9px 18px;
-                font-size: 14px;
-            }
+            .btn-green, .btn-red, .btn-gold, .btn-outline-green { padding: 9px 18px; font-size: 14px; }
         }
     </style>
     {% block extra_css %}{% endblock %}
@@ -257,11 +257,11 @@
 <nav class="main-navbar navbar navbar-expand-lg">
     <div class="container">
         <a class="navbar-brand" href="/">
-            🏥 <span class="brand-red">AI</span><span class="brand-gold">Health</span>Care
+            🏥 <span class="brand-green">AI</span><span class="brand-dark">Health</span>Care
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
             aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-            <i class="fas fa-bars" style="color:var(--red);"></i>
+            <i class="fas fa-bars" style="color:var(--green);"></i>
         </button>
         <div class="collapse navbar-collapse" id="mainNav">
             <ul class="navbar-nav ms-auto gap-1 align-items-lg-center">
@@ -283,9 +283,10 @@
                 <li class="nav-item">
                     <a class="nav-link {% if '/medicines/' in request.path %}active{% endif %}" href="/medicines/">
                         <i class="fas fa-pills me-1"></i>Medicines
+                        {% if cart_count %}<span class="nav-cart-badge">{{ cart_count }}</span>{% endif %}
                     </a>
                 </li>
-               
+
                 {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="/accounts/profile/">
@@ -293,7 +294,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/accounts/logout/" style="color:var(--red) !important;">
+                    <a class="nav-link" href="/accounts/logout/" style="color:#e53935 !important; font-weight:600;">
                         <i class="fas fa-sign-out-alt me-1"></i>Logout
                     </a>
                 </li>
@@ -304,8 +305,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/accounts/register/"
-                        style="background:var(--gold);color:var(--black) !important;font-weight:700;border-radius:25px;padding:8px 18px !important;">
+                    <a class="nav-link nav-cta" href="/accounts/register/">
                         <i class="fas fa-user-plus me-1"></i>Register
                     </a>
                 </li>
@@ -317,31 +317,29 @@
 
 <!-- MESSAGES -->
 {% if messages %}
-<div style="position:fixed;top:70px;right:20px;z-index:9999;max-width:350px;">
+<div style="position:fixed;top:75px;right:20px;z-index:9999;max-width:350px;">
     {% for message in messages %}
-    <div style="background:{% if message.tags == 'error' %}rgba(230,57,70,0.95){% else %}rgba(40,167,69,0.95){% endif %};
-        color:white;padding:12px 18px;border-radius:12px;margin-bottom:8px;
-        font-size:14px;font-weight:600;box-shadow:0 5px 20px rgba(0,0,0,0.3);
+    <div style="background:{% if message.tags == 'error' %}#ffebee;border-left:4px solid #e53935;color:#b71c1c;{% else %}#e8f5e9;border-left:4px solid #2e7d32;color:#1b5e20;{% endif %};
+        padding:14px 18px;border-radius:12px;margin-bottom:8px;
+        font-size:14px;font-weight:600;box-shadow:0 4px 16px rgba(0,0,0,0.1);
         animation:slideIn .3s ease;" id="msg-{{ forloop.counter }}">
         {% if message.tags == 'error' %}❌{% else %}✅{% endif %} {{ message }}
     </div>
     {% endfor %}
 </div>
+<style>@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}</style>
 <script>
-setTimeout(function() {
-    document.querySelectorAll('[id^="msg-"]').forEach(function(el) {
-        el.style.transition = 'opacity 0.5s';
-        el.style.opacity = '0';
-        setTimeout(function() { el.remove(); }, 500);
+setTimeout(function(){
+    document.querySelectorAll('[id^="msg-"]').forEach(function(el){
+        el.style.transition='opacity .5s';el.style.opacity='0';
+        setTimeout(function(){el.remove();},500);
     });
-}, 3000);
+},3000);
 </script>
 {% endif %}
 
 <!-- MAIN CONTENT -->
-<main>
-    {% block content %}{% endblock %}
-</main>
+<main>{% block content %}{% endblock %}</main>
 
 <!-- FOOTER -->
 <footer class="main-footer" role="contentinfo">
@@ -349,28 +347,29 @@ setTimeout(function() {
         <div class="row g-4">
             <div class="col-lg-4 col-md-6">
                 <div class="footer-brand">
-                    🏥 <span style="color:var(--red);">AI</span><span style="color:var(--gold);">Health</span>Care
+                    🏥 <span style="color:#a5d6a7;">AI</span><span style="color:#fff;">Health</span>Care
                 </div>
-                <p style="color:var(--text-muted);font-size:14px;line-height:1.85;margin-bottom:20px;">
+                <p style="color:rgba(255,255,255,.65);font-size:14px;line-height:1.85;margin-bottom:20px;">
                     An AI-powered healthcare platform providing 24/7 symptom checking, doctor consultations, and medicine ordering — built for the people of Madhya Pradesh.
                 </p>
                 <div style="display:flex;gap:10px;">
-                    <a href="mailto:support@aihealthcare.com" style="width:38px;height:38px;background:rgba(230,57,70,.15);border:1px solid rgba(230,57,70,.3);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--red);text-decoration:none;transition:all .3s;"
-                        onmouseover="this.style.background='var(--red)';this.style.color='white'"
-                        onmouseout="this.style.background='rgba(230,57,70,.15)';this.style.color='var(--red)'">
+                    <a href="mailto:support@aihealthcare.com"
+                        style="width:38px;height:38px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.8);text-decoration:none;transition:all .3s;"
+                        onmouseover="this.style.background='rgba(255,255,255,.2)'"
+                        onmouseout="this.style.background='rgba(255,255,255,.1)'">
                         <i class="fas fa-envelope"></i>
                     </a>
                     <a href="https://github.com/AbhishekMishra19k/ai-healthcare-chatbot" target="_blank" rel="noopener"
-                        style="width:38px;height:38px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--text-muted);text-decoration:none;transition:all .3s;"
-                        onmouseover="this.style.background='rgba(255,255,255,.1)';this.style.color='white'"
-                        onmouseout="this.style.background='rgba(255,255,255,.05)';this.style.color='var(--text-muted)'">
+                        style="width:38px;height:38px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.8);text-decoration:none;transition:all .3s;"
+                        onmouseover="this.style.background='rgba(255,255,255,.2)'"
+                        onmouseout="this.style.background='rgba(255,255,255,.1)'">
                         <i class="fab fa-github"></i>
                     </a>
                 </div>
             </div>
 
             <div class="col-lg-2 col-md-3 col-6">
-                <h6 style="color:var(--gold);font-weight:700;margin-bottom:18px;font-size:13px;letter-spacing:1px;">QUICK LINKS</h6>
+                <h6 style="color:#a5d6a7;font-weight:700;margin-bottom:18px;font-size:13px;letter-spacing:1px;">QUICK LINKS</h6>
                 <a class="footer-link" href="/"><i class="fas fa-home me-2"></i>Home</a>
                 <a class="footer-link" href="/chat/"><i class="fas fa-robot me-2"></i>AI Chat</a>
                 <a class="footer-link" href="/appointments/"><i class="fas fa-user-md me-2"></i>Doctors</a>
@@ -379,44 +378,26 @@ setTimeout(function() {
             </div>
 
             <div class="col-lg-3 col-md-3 col-6">
-                <h6 style="color:var(--gold);font-weight:700;margin-bottom:18px;font-size:13px;letter-spacing:1px;">CONTACT US</h6>
-                <p style="color:var(--text-muted);font-size:14px;line-height:2.2;margin:0;">
-                    <a href="mailto:support@aihealthcare.com" style="color:var(--text-muted);text-decoration:none;"
-                        onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">
-                        <i class="fas fa-envelope me-2" style="color:var(--red);"></i>support@aihealthcare.com
-                    </a><br>
-                    <a href="tel:+917898XXXXXX" style="color:var(--text-muted);text-decoration:none;"
-                        onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">
-                        <i class="fas fa-phone me-2" style="color:var(--red);"></i>+91 78980 XXXXX
-                    </a><br>
-                    <span><i class="fas fa-map-marker-alt me-2" style="color:var(--red);"></i>Sagar, Madhya Pradesh, India</span>
+                <h6 style="color:#a5d6a7;font-weight:700;margin-bottom:18px;font-size:13px;letter-spacing:1px;">CONTACT US</h6>
+                <p style="color:rgba(255,255,255,.65);font-size:14px;line-height:2.2;margin:0;">
+                    <i class="fas fa-envelope me-2" style="color:#a5d6a7;"></i>support@aihealthcare.com<br>
+                    <i class="fas fa-phone me-2" style="color:#a5d6a7;"></i>+91 78980 XXXXX<br>
+                    <i class="fas fa-map-marker-alt me-2" style="color:#a5d6a7;"></i>Sagar, Madhya Pradesh
                 </p>
             </div>
 
             <div class="col-lg-3 col-md-6">
-                <h6 style="color:var(--gold);font-weight:700;margin-bottom:18px;font-size:13px;letter-spacing:1px;">EMERGENCY</h6>
-                <div style="background:rgba(230,57,70,.08);border:1px solid rgba(230,57,70,.2);border-radius:14px;padding:16px;">
-                    <p style="color:var(--text-muted);font-size:14px;line-height:2.3;margin:0;">
-                        <a href="tel:108" style="color:var(--text-muted);text-decoration:none;font-weight:600;"
-                            onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--text-muted)'">
-                            🚨 Medical Emergency: <span style="color:var(--red);font-weight:800;">108</span>
-                        </a><br>
-                        <a href="tel:102" style="color:var(--text-muted);text-decoration:none;font-weight:600;"
-                            onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--text-muted)'">
-                            🚑 Ambulance: <span style="color:var(--red);font-weight:800;">102</span>
-                        </a><br>
-                        <a href="tel:104" style="color:var(--text-muted);text-decoration:none;font-weight:600;"
-                            onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">
-                            📞 Health Helpline: <span style="color:var(--gold);font-weight:800;">104</span>
-                        </a><br>
-                        <a href="tel:14555" style="color:var(--text-muted);text-decoration:none;font-weight:600;"
-                            onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">
-                            🏥 Ayushman Bharat: <span style="color:var(--gold);font-weight:800;">14555</span>
-                        </a>
+                <h6 style="color:#a5d6a7;font-weight:700;margin-bottom:18px;font-size:13px;letter-spacing:1px;">EMERGENCY</h6>
+                <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:16px;">
+                    <p style="color:rgba(255,255,255,.75);font-size:14px;line-height:2.3;margin:0;">
+                        🚨 Medical Emergency: <strong style="color:#ef9a9a;">108</strong><br>
+                        🚑 Ambulance: <strong style="color:#ef9a9a;">102</strong><br>
+                        📞 Health Helpline: <strong style="color:#a5d6a7;">104</strong><br>
+                        🏥 Ayushman Bharat: <strong style="color:#a5d6a7;">14555</strong>
                     </p>
                 </div>
                 <div style="margin-top:14px;">
-                    <span class="badge-red me-2" style="font-size:11px;">⚕️ HIPAA Compliant</span>
+                    <span class="badge-green me-2" style="font-size:11px;">⚕️ HIPAA Compliant</span>
                     <span class="badge-gold" style="font-size:11px;">🤖 AI Powered</span>
                 </div>
             </div>
@@ -424,10 +405,10 @@ setTimeout(function() {
 
         <div class="footer-bottom">
             <p style="margin:0;">
-                © 2026 <span style="color:var(--red);">AI</span><span style="color:var(--gold);">Health</span>Care &nbsp;|&nbsp;
-                Developed by <span style="color:var(--gold);font-weight:700;">Abhishek Mishra</span>,
+                © 2026 <span style="color:#a5d6a7;">AI</span><span style="color:#fff;">Health</span>Care &nbsp;|&nbsp;
+                Developed by <span style="color:#a5d6a7;font-weight:700;">Abhishek Mishra</span>,
                 Arpit Asati, Srashti Mishra, Arpit Yadav &nbsp;|&nbsp;
-                <span style="color:var(--text-muted);">Gyan Sagar College of Engineering, Sagar MP</span>
+                <span style="color:rgba(255,255,255,.4);">Gyan Sagar College of Engineering, Sagar MP</span>
             </p>
             <p style="margin:8px 0 0;font-size:12px;color:rgba(255,255,255,.3);">
                 ⚠️ This platform provides general health information only. Always consult a qualified doctor for medical diagnosis and treatment.

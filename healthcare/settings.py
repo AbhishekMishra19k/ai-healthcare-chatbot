@@ -4,8 +4,7 @@ import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# ─── SECURITY ────────────────────────────────────────────────────────────────
-# Load from environment variables. For local dev, create a .env file.
+# ── SECURITY ──────────────────────────────────────────────────────────────────
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-me-in-production')
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
@@ -14,9 +13,10 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'ai-healthcare-chatbot-navy.vercel.app',
     '.vercel.app',
+    '*',
 ]
 
-# ─── APPS ─────────────────────────────────────────────────────────────────────
+# ── APPS ──────────────────────────────────────────────────────────────────────
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -30,7 +30,7 @@ INSTALLED_APPS = [
     'accounts',
 ]
 
-# ─── MIDDLEWARE ───────────────────────────────────────────────────────────────
+# ── MIDDLEWARE ─────────────────────────────────────────────────────────────────
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -55,6 +55,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'medicines.context_processors.cart_count',
             ],
         },
     },
@@ -62,9 +63,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'healthcare.wsgi.application'
 
-# ─── DATABASE ─────────────────────────────────────────────────────────────────
-# Production: set DATABASE_URL env variable (Neon, Railway, etc.)
-# Local dev:  leave DATABASE_URL unset → uses SQLite automatically
+# ── DATABASE ──────────────────────────────────────────────────────────────────
 DATABASE_URL = os.environ.get('DATABASE_URL', '')
 
 if DATABASE_URL:
@@ -77,7 +76,7 @@ else:
         }
     }
 
-# ─── PASSWORD VALIDATION ──────────────────────────────────────────────────────
+# ── PASSWORD VALIDATION ───────────────────────────────────────────────────────
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -85,43 +84,44 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# ─── LOCALISATION ─────────────────────────────────────────────────────────────
+# ── LOCALISATION ──────────────────────────────────────────────────────────────
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Asia/Kolkata'
 USE_I18N = True
 USE_TZ = True
 
-# ─── STATIC FILES ─────────────────────────────────────────────────────────────
+# ── STATIC FILES ──────────────────────────────────────────────────────────────
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+# ── MEDIA FILES ───────────────────────────────────────────────────────────────
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# ─── AUTH REDIRECTS ───────────────────────────────────────────────────────────
+# ── AUTH REDIRECTS ────────────────────────────────────────────────────────────
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
 
-# ─── EMAIL ────────────────────────────────────────────────────────────────────
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
+# ── EMAIL ─────────────────────────────────────────────────────────────────────
+EMAIL_HOST_USER     = os.environ.get('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
 
+# Use console backend in dev (no credentials needed),
+# SMTP only in production when credentials are set.
+if EMAIL_HOST_USER and EMAIL_HOST_PASSWORD:
+    EMAIL_BACKEND  = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST     = 'smtp.gmail.com'
+    EMAIL_PORT     = 587
+    EMAIL_USE_TLS  = True
+else:
+    EMAIL_BACKEND  = 'django.core.mail.backends.console.EmailBackend'
 
-# DEFAULT_FROM_EMAIL must be a valid sender address. If EMAIL_HOST_USER is not set,
-# keep it empty so send_mail guards can prevent 500 errors.
-DEFAULT_FROM_EMAIL = f'AIHealthCare <{EMAIL_HOST_USER}>' if EMAIL_HOST_USER else ''
+DEFAULT_FROM_EMAIL = f'AIHealthCare <{EMAIL_HOST_USER}>' if EMAIL_HOST_USER else 'AIHealthCare <noreply@aihealthcare.com>'
+ADMIN_EMAIL        = os.environ.get('ADMIN_EMAIL', EMAIL_HOST_USER)
 
-ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', '')
-# Fallback to allow appointment/order emails even if ADMIN_EMAIL isn't provided.
-# You can override this safely by setting ADMIN_EMAIL in the deployment environment.
-if not ADMIN_EMAIL:
-    ADMIN_EMAIL = 'panditkurfew.ji@gmail.com'
-
-
-# ─── GEMINI AI ────────────────────────────────────────────────────────────────
+# ── GEMINI AI ─────────────────────────────────────────────────────────────────
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
