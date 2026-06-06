@@ -8,245 +8,111 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --green-dark:   #1b5e20;
-            --green:        #2e7d32;
-            --green-mid:    #388e3c;
-            --green-light:  #66bb6a;
-            --green-pale:   #e8f5e9;
-            --green-bg:     #f1f8e9;
-            --white:        #ffffff;
-            --text:         #1a1a1a;
-            --text-muted:   #6b7280;
-            --border:       #c8e6c9;
-            --shadow:       rgba(46,125,50,0.12);
+        :root{
+            --primary:#0EA5E9;
+            --secondary:#1E3A8A;
+            --success:#10B981;
+            --bg:#F8FAFC;
+            --card:#FFFFFF;
+            --text:#0F172A;
+            --text-muted:#64748B;
+            --border:rgba(14,165,233,.16);
+            --shadow:rgba(14,165,233,.18);
+
+            /* aliases used by existing templates */
+            --green-dark: var(--secondary);
+            --green: var(--primary);
+            --green-mid: rgba(14,165,233,.85);
+            --green-light: rgba(16,185,129,.85);
+            --green-pale: rgba(14,165,233,.10);
+            --green-bg: var(--bg);
+            --white: var(--card);
         }
 
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-        html { overflow-x: hidden; scroll-behavior: smooth; }
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        html{overflow-x:hidden;scroll-behavior:smooth}
+        body{font-family:'DM Sans','Segoe UI',sans-serif;background:var(--green-bg);color:var(--text);overflow-x:hidden;min-height:100vh}
+        img,video,iframe{max-width:100%;height:auto}
 
-        body {
-            font-family: 'DM Sans', 'Segoe UI', sans-serif;
-            background: var(--green-bg);
-            color: var(--text);
-            overflow-x: hidden;
-            width: 100%;
-            min-height: 100vh;
-        }
+        ::-webkit-scrollbar{width:6px}
+        ::-webkit-scrollbar-track{background:var(--green-pale)}
+        ::-webkit-scrollbar-thumb{background:var(--green);border-radius:3px}
 
-        img, video, iframe { max-width: 100%; height: auto; }
+        .main-navbar{background:var(--white);border-bottom:3px solid var(--green);padding:12px 0;position:sticky;top:0;z-index:1000;width:100%;box-shadow:0 2px 12px var(--shadow)}
+        .main-navbar .navbar-brand{font-size:20px;font-weight:800;color:var(--text) !important;text-decoration:none;letter-spacing:.5px;font-family:'Plus Jakarta Sans',sans-serif}
+        .brand-green{color:var(--green)}
+        .brand-dark{color:var(--green-dark)}
+        .navbar-toggler{border-color:var(--green) !important;padding:6px 10px}
+        .navbar-toggler:focus{box-shadow:none !important}
 
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--green-pale); }
-        ::-webkit-scrollbar-thumb { background: var(--green); border-radius: 3px; }
+        .main-navbar .nav-link{color:var(--text-muted) !important;font-size:14px;padding:8px 16px !important;border-radius:25px;transition:all .3s;text-decoration:none;font-weight:500}
+        .main-navbar .nav-link:hover{color:var(--green-dark) !important;background:var(--green-pale)}
+        .main-navbar .nav-link.active{color:var(--green-dark) !important;background:var(--green-pale);border:1px solid var(--border);font-weight:700}
+        .nav-cart-badge{background:var(--green);color:#fff;font-size:10px;padding:1px 6px;border-radius:10px;font-weight:700;margin-left:3px}
+        .nav-cta{background:linear-gradient(135deg,var(--green-dark),var(--green)) !important;color:#fff !important;padding:8px 20px !important;border-radius:25px !important;font-weight:700 !important}
+        .nav-cta:hover{transform:translateY(-2px);box-shadow:0 5px 15px var(--shadow)}
 
-        /* ── NAVBAR ── */
-        .main-navbar {
-            background: var(--white);
-            border-bottom: 3px solid var(--green);
-            padding: 12px 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            width: 100%;
-            box-shadow: 0 2px 12px var(--shadow);
-        }
-        .main-navbar .navbar-brand {
-            font-size: 20px;
-            font-weight: 800;
-            color: var(--text) !important;
-            text-decoration: none;
-            letter-spacing: 0.5px;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-        .brand-green  { color: var(--green); }
-        .brand-dark   { color: var(--green-dark); }
-
-        .navbar-toggler {
-            border-color: var(--green) !important;
-            padding: 6px 10px;
-        }
-        .navbar-toggler:focus { box-shadow: none !important; }
-
-        .main-navbar .nav-link {
-            color: var(--text-muted) !important;
-            font-size: 14px;
-            padding: 8px 16px !important;
-            border-radius: 25px;
-            transition: all 0.3s;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        .main-navbar .nav-link:hover {
-            color: var(--green-dark) !important;
-            background: var(--green-pale);
-        }
-        .main-navbar .nav-link.active {
-            color: var(--green-dark) !important;
-            background: var(--green-pale);
-            border: 1px solid var(--border);
-            font-weight: 700;
-        }
-        .nav-cart-badge {
-            background: var(--green);
-            color: white;
-            font-size: 10px;
-            padding: 1px 6px;
-            border-radius: 10px;
-            font-weight: 700;
-            margin-left: 3px;
-        }
-        .nav-cta {
-            background: linear-gradient(135deg, var(--green-dark), var(--green)) !important;
-            color: white !important;
-            padding: 8px 20px !important;
-            border-radius: 25px !important;
-            font-weight: 700 !important;
-        }
-        .nav-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px var(--shadow);
+        @media (max-width:991px){
+            .navbar-collapse{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:15px;margin-top:10px;box-shadow:0 8px 24px var(--shadow)}
+            .navbar-nav{gap:4px !important}
+            .main-navbar .nav-link{padding:10px 16px !important}
         }
 
-        @media (max-width: 991px) {
-            .navbar-collapse {
-                background: var(--white);
-                border: 1px solid var(--border);
-                border-radius: 16px;
-                padding: 15px;
-                margin-top: 10px;
-                box-shadow: 0 8px 24px var(--shadow);
-            }
-            .navbar-nav { gap: 4px !important; }
-            .main-navbar .nav-link { padding: 10px 16px !important; }
-        }
+        .main-footer{background:var(--green-dark);border-top:3px solid var(--green-light);color:rgba(255,255,255,.85);padding:50px 0 20px;margin-top:60px;width:100%}
+        .footer-brand{font-size:22px;font-weight:800;margin-bottom:12px;font-family:'Plus Jakarta Sans',sans-serif}
+        .footer-link{color:rgba(255,255,255,.65);text-decoration:none;display:block;margin:8px 0;font-size:14px;transition:.3s}
+        .footer-link:hover{color:#a5d6a7;padding-left:5px}
+        .footer-bottom{border-top:1px solid rgba(255,255,255,.15);padding-top:20px;margin-top:30px;text-align:center;color:rgba(255,255,255,.5);font-size:13px}
 
-        /* ── FOOTER ── */
-        .main-footer {
-            background: var(--green-dark);
-            border-top: 3px solid var(--green-light);
-            color: rgba(255,255,255,0.85);
-            padding: 50px 0 20px;
-            margin-top: 60px;
-            width: 100%;
-        }
-        .footer-brand { font-size: 22px; font-weight: 800; margin-bottom: 12px; font-family: 'Plus Jakarta Sans', sans-serif; }
-        .footer-link {
-            color: rgba(255,255,255,0.65);
-            text-decoration: none;
-            display: block;
-            margin: 8px 0;
-            font-size: 14px;
-            transition: 0.3s;
-        }
-        .footer-link:hover { color: #a5d6a7; padding-left: 5px; }
-        .footer-bottom {
-            border-top: 1px solid rgba(255,255,255,0.15);
-            padding-top: 20px;
-            margin-top: 30px;
-            text-align: center;
-            color: rgba(255,255,255,0.5);
-            font-size: 13px;
-        }
+        .btn-green{background:linear-gradient(135deg,var(--green-dark),var(--green));color:#fff;border:none;padding:10px 25px;border-radius:25px;font-weight:600;transition:all .3s;text-decoration:none;display:inline-block}
+        .btn-green:hover{transform:translateY(-2px);box-shadow:0 5px 15px var(--shadow)}
+        .btn-outline-green{background:transparent;color:var(--green);border:2px solid var(--green);padding:10px 25px;border-radius:25px;font-weight:600;transition:all .3s;text-decoration:none;display:inline-block}
+        .btn-outline-green:hover{background:var(--green);color:#fff;transform:translateY(-2px)}
 
-        /* ── BUTTONS ── */
-        .btn-green {
-            background: linear-gradient(135deg, var(--green-dark), var(--green));
-            color: white;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 25px;
-            font-weight: 600;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .btn-green:hover {
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px var(--shadow);
-        }
-        .btn-outline-green {
-            background: transparent;
-            color: var(--green);
-            border: 2px solid var(--green);
-            padding: 10px 25px;
-            border-radius: 25px;
-            font-weight: 600;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .btn-outline-green:hover {
-            background: var(--green);
-            color: white;
-            transform: translateY(-2px);
-        }
-        /* Keep old btn-red/btn-gold as green aliases for backward compat */
-        .btn-red  { background: linear-gradient(135deg, var(--green-dark), var(--green)); color: white; border: none; padding: 10px 25px; border-radius: 25px; font-weight: 600; transition: all .3s; text-decoration: none; display: inline-block; }
-        .btn-red:hover  { color: white; transform: translateY(-2px); box-shadow: 0 5px 15px var(--shadow); }
-        .btn-gold { background: var(--green-pale); color: var(--green-dark); border: 2px solid var(--border); padding: 10px 25px; border-radius: 25px; font-weight: 700; transition: all .3s; text-decoration: none; display: inline-block; }
-        .btn-gold:hover { background: var(--green); color: white; transform: translateY(-2px); }
-        .btn-outline-red { background: transparent; color: var(--green); border: 2px solid var(--green); padding: 10px 25px; border-radius: 25px; font-weight: 600; transition: all .3s; text-decoration: none; display: inline-block; }
-        .btn-outline-red:hover { background: var(--green); color: white; transform: translateY(-2px); }
+        /* compatibility aliases */
+        .btn-red{background:linear-gradient(135deg,var(--green-dark),var(--green));color:#fff;border:none;padding:10px 25px;border-radius:25px;font-weight:600;transition:all .3s;text-decoration:none;display:inline-block}
+        .btn-red:hover{transform:translateY(-2px);box-shadow:0 5px 15px var(--shadow)}
+        .btn-gold{background:var(--green-pale);color:var(--green-dark);border:2px solid var(--border);padding:10px 25px;border-radius:25px;font-weight:700;transition:all .3s;text-decoration:none;display:inline-block}
+        .btn-gold:hover{background:var(--green);color:#fff;transform:translateY(-2px)}
+        .btn-outline-red{background:transparent;color:var(--green);border:2px solid var(--green);padding:10px 25px;border-radius:25px;font-weight:600;transition:all .3s;text-decoration:none;display:inline-block}
+        .btn-outline-red:hover{background:var(--green);color:#fff;transform:translateY(-2px)}
 
-        /* ── CARDS ── */
-        .dark-card {
-            background: var(--white);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            transition: all 0.3s;
-        }
-        .dark-card:hover {
-            border-color: var(--green);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px var(--shadow);
-        }
+        .dark-card{background:var(--white);border:1px solid var(--border);border-radius:16px;transition:all .3s}
+        .dark-card:hover{border-color:var(--green);transform:translateY(-5px);box-shadow:0 10px 30px var(--shadow)}
 
-        /* ── BADGES ── */
-        .badge-red   { background: var(--green-pale); color: var(--green-dark); padding: 4px 12px; border-radius: 20px; font-size: 12px; border: 1px solid var(--border); }
-        .badge-gold  { background: #fff8e1; color: #f57f17; padding: 4px 12px; border-radius: 20px; font-size: 12px; border: 1px solid #ffe082; }
-        .badge-green { background: var(--green-pale); color: var(--green-dark); padding: 4px 12px; border-radius: 20px; font-size: 12px; border: 1px solid var(--border); }
+        .badge-red{background:var(--green-pale);color:var(--green-dark);padding:4px 12px;border-radius:20px;font-size:12px;border:1px solid var(--border)}
+        .badge-gold{background:#fff8e1;color:#f57f17;padding:4px 12px;border-radius:20px;font-size:12px;border:1px solid #ffe082}
+        .badge-green{background:var(--green-pale);color:var(--green-dark);padding:4px 12px;border-radius:20px;font-size:12px;border:1px solid var(--border)}
 
-        /* ── FORM INPUTS ── */
-        .dark-input {
-            background: var(--white) !important;
-            border: 1.5px solid var(--border) !important;
-            color: var(--text) !important;
-            border-radius: 10px !important;
-            padding: 12px 15px !important;
-            width: 100%;
+        .dark-input{background:var(--white) !important;border:1.5px solid var(--border) !important;color:var(--text) !important;border-radius:10px !important;padding:12px 15px !important;width:100%}
+        .dark-input:focus{border-color:var(--green) !important;box-shadow:0 0 0 3px rgba(46,125,50,.12) !important;color:var(--text) !important}
+        .dark-input::placeholder{color:#bdbdbd !important}
+
+        .section-title{font-size:36px;font-weight:800;color:var(--text);margin-bottom:10px;font-family:'Plus Jakarta Sans',sans-serif}
+        .section-title span{color:var(--green)}
+        .section-subtitle{color:var(--text-muted);font-size:16px;margin-bottom:40px}
+        .gold-line{width:60px;height:4px;background:var(--green);border-radius:2px;margin:10px 0 20px}
+
+        .icon-red{background:var(--green-pale);border:1px solid var(--border)}
+        .icon-gold{background:#fff8e1;border:1px solid #ffe082}
+        .icon-green{background:var(--green-pale);border:1px solid var(--border)}
+        .icon-blue{background:#e3f2fd;border:1px solid #90caf9}
+
+        .glass{background:rgba(255,255,255,.65);border:1px solid rgba(14,165,233,.18);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 10px 30px rgba(14,165,233,.12)}
+        .scroll-reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+        .scroll-reveal.is-visible{opacity:1;transform:translateY(0)}
+        .focus-ring:focus{outline:none;box-shadow:0 0 0 4px rgba(14,165,233,.18)}
+
+        @media (max-width:767px){
+            .section-title{font-size:26px}
+            .section-subtitle{font-size:14px}
+            .container{padding-left:16px;padding-right:16px}
+            .main-footer{padding:30px 0 15px;margin-top:30px}
+            .footer-brand{font-size:18px}
+            .row{margin-left:0;margin-right:0}
         }
-        .dark-input:focus {
-            border-color: var(--green) !important;
-            box-shadow: 0 0 0 3px rgba(46,125,50,0.12) !important;
-            color: var(--text) !important;
-        }
-        .dark-input::placeholder { color: #bdbdbd !important; }
-
-        /* ── SECTION TITLES ── */
-        .section-title { font-size: 36px; font-weight: 800; color: var(--text); margin-bottom: 10px; font-family: 'Plus Jakarta Sans', sans-serif; }
-        .section-title span { color: var(--green); }
-        .section-subtitle { color: var(--text-muted); font-size: 16px; margin-bottom: 40px; }
-        .gold-line { width: 60px; height: 4px; background: var(--green); border-radius: 2px; margin: 10px 0 20px; }
-
-        /* ── ICON COLORS ── */
-        .icon-red   { background: var(--green-pale); border: 1px solid var(--border); }
-        .icon-gold  { background: #fff8e1; border: 1px solid #ffe082; }
-        .icon-green { background: var(--green-pale); border: 1px solid var(--border); }
-        .icon-blue  { background: #e3f2fd; border: 1px solid #90caf9; }
-
-        /* ── MOBILE ── */
-        @media (max-width: 767px) {
-            .section-title { font-size: 26px; }
-            .section-subtitle { font-size: 14px; }
-            .container { padding-left: 16px; padding-right: 16px; }
-            .main-footer { padding: 30px 0 15px; margin-top: 30px; }
-            .footer-brand { font-size: 18px; }
-            .row { margin-left: 0; margin-right: 0; }
-        }
-        @media (max-width: 480px) {
-            .btn-green, .btn-red, .btn-gold, .btn-outline-green { padding: 9px 18px; font-size: 14px; }
+        @media (max-width:480px){
+            .btn-green,.btn-red,.btn-gold,.btn-outline-green{padding:9px 18px;font-size:14px}
         }
     </style>
     {% block extra_css %}{% endblock %}
@@ -266,47 +132,74 @@
         <div class="collapse navbar-collapse" id="mainNav">
             <ul class="navbar-nav ms-auto gap-1 align-items-lg-center">
                 <li class="nav-item">
-                    <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="/">
+                    <a class="nav-link focus-ring {% if request.path == '/' %}active{% endif %}" href="/">
                         <i class="fas fa-home me-1"></i>Home
                     </a>
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link {% if request.path == '/chat/' %}active{% endif %}" href="/chat/">
-                        <i class="fas fa-comment-medical me-1"></i>Chat
+                    <a class="nav-link focus-ring" href="/#services">
+                        <i class="fas fa-hospital me-1" aria-hidden="true"></i>Services
                     </a>
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link {% if '/appointments/' in request.path %}active{% endif %}" href="/appointments/">
-                        <i class="fas fa-user-md me-1"></i>Doctors
+                    <a class="nav-link focus-ring {% if request.path == '/chat/' %}active{% endif %}" href="/chat/">
+                        <i class="fas fa-stethoscope me-1" aria-hidden="true"></i>AI Assistant
                     </a>
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link {% if '/medicines/' in request.path %}active{% endif %}" href="/medicines/">
-                        <i class="fas fa-pills me-1"></i>Medicines
+                    <a class="nav-link focus-ring" href="/medicines/">
+                        <i class="fas fa-pills me-1" aria-hidden="true"></i>Medicine
                         {% if cart_count %}<span class="nav-cart-badge">{{ cart_count }}</span>{% endif %}
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link focus-ring {% if '/appointments/' in request.path %}active{% endif %}" href="/appointments/">
+                        <i class="fas fa-user-md me-1" aria-hidden="true"></i>Doctors
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link focus-ring" href="/appointments/">
+                        <i class="fas fa-calendar-check me-1" aria-hidden="true"></i>Appointments
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link focus-ring" href="/#reports">
+                        <i class="fas fa-file-medical me-1" aria-hidden="true"></i>Reports
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link focus-ring" href="/#contact">
+                        <i class="fas fa-phone-alt me-1" aria-hidden="true"></i>Contact
                     </a>
                 </li>
 
                 {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="/accounts/profile/">
-                        <i class="fas fa-user-circle me-1"></i>{{ user.username }}
+                    <a class="nav-link focus-ring" href="/accounts/profile/">
+                        <i class="fas fa-user-circle me-1" aria-hidden="true"></i>{{ user.username }}
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/accounts/logout/" style="color:#e53935 !important; font-weight:600;">
-                        <i class="fas fa-sign-out-alt me-1"></i>Logout
+                    <a class="nav-link focus-ring" href="/accounts/logout/" style="color:#ef4444 !important; font-weight:700;">
+                        <i class="fas fa-sign-out-alt me-1" aria-hidden="true"></i>Logout
                     </a>
                 </li>
                 {% else %}
                 <li class="nav-item">
-                    <a class="nav-link" href="/accounts/login/">
-                        <i class="fas fa-sign-in-alt me-1"></i>Login
+                    <a class="nav-link focus-ring" href="/accounts/login/">
+                        <i class="fas fa-sign-in-alt me-1" aria-hidden="true"></i>Login
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link nav-cta" href="/accounts/register/">
-                        <i class="fas fa-user-plus me-1"></i>Register
+                    <a class="nav-link nav-cta focus-ring" href="/accounts/register/">
+                        <i class="fas fa-user-plus me-1" aria-hidden="true"></i>Register
                     </a>
                 </li>
                 {% endif %}
