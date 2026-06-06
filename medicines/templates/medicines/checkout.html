@@ -1,61 +1,77 @@
 {% extends 'base.html' %}
-{% block title %}Checkout{% endblock %}
+{% block title %}Checkout — AIHealthCare{% endblock %}
+
+{% block extra_css %}
+<style>
+.checkout-hero{background:linear-gradient(135deg,#0a0a00,#1a1500);border-bottom:2px solid var(--gold);padding:50px 0;text-align:center}
+.checkout-section{background:var(--black);min-height:80vh;padding:50px 0}
+.form-box{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:35px}
+.form-label{color:var(--text-muted);font-size:13px;font-weight:600;margin-bottom:6px;display:block}
+.form-control{background:var(--dark)!important;border:1px solid var(--border)!important;color:var(--text)!important;border-radius:10px!important;padding:12px 15px!important}
+.form-control:focus{border-color:var(--gold)!important;box-shadow:0 0 0 3px rgba(255,214,10,.1)!important;color:var(--text)!important}
+.form-control::placeholder{color:var(--text-muted)!important}
+.order-box{background:var(--card);border:1px solid var(--gold);border-radius:20px;padding:28px}
+.order-item{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px;color:var(--text-muted)}
+.order-item:last-child{border-bottom:none}
+.place-btn{background:var(--gold);color:var(--black);border:none;width:100%;padding:15px;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;transition:all .3s;margin-top:20px}
+.place-btn:hover{background:#e6c200;transform:translateY(-3px);box-shadow:0 8px 25px rgba(255,214,10,.4)}
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-  <div class="row justify-content-center">
-    <div class="col-md-7">
+<div class="checkout-hero">
+  <div class="container">
+    <div style="background:rgba(255,214,10,.15);color:var(--gold);border:1px solid rgba(255,214,10,.3);padding:6px 20px;border-radius:25px;font-size:12px;font-weight:700;letter-spacing:1px;display:inline-block;margin-bottom:15px;">📦 CHECKOUT</div>
+    <h2 style="font-size:40px;font-weight:900;color:var(--text);">Place Your <span style="color:var(--gold);">Order</span></h2>
+  </div>
+</div>
 
-      <div class="card p-4" style="border-radius:18px;border:none;box-shadow:0 4px 15px rgba(0,0,0,0.1);background:var(--card);color:var(--text);">
-        <div class="mb-3">
-          <h3 class="fw-bold">🧾 Checkout</h3>
-          <div class="text-muted">Cash on Delivery</div>
-        </div>
-
-        {% if cart_items %}
-          <div class="p-3 mb-4" style="background:#e8f5e9;border:1px solid rgba(40,167,69,0.3);border-radius:14px;">
-            <div class="d-flex justify-content-between">
-              <span class="fw-bold">Items in cart</span>
-              <span class="fw-bold">{{ cart_count }}</span>
-            </div>
-            <div class="d-flex justify-content-between mt-2">
-              <span class="fw-bold">Grand Total</span>
-              <span class="fw-bold" style="color:var(--gold);font-size:18px;">₹{{ cart_total }}</span>
-            </div>
-          </div>
-
+<div class="checkout-section">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <div class="form-box">
+          <h5 style="color:var(--gold);font-weight:800;margin-bottom:25px;">📋 Delivery Details</h5>
           <form method="POST">
             {% csrf_token %}
             <div class="mb-3">
-              <label class="form-label fw-bold">👤 Your Name</label>
-              <input type="text" name="patient_name" class="dark-input" required>
+              <label class="form-label">👤 Full Name</label>
+              <input type="text" name="patient_name" class="form-control" placeholder="Aapka naam" required>
             </div>
             <div class="mb-3">
-              <label class="form-label fw-bold">📞 Phone Number</label>
-              <input type="tel" name="patient_phone" class="dark-input" required>
+              <label class="form-label">📱 Phone Number</label>
+              <input type="tel" name="patient_phone" class="form-control" placeholder="10 digit number" required>
             </div>
             <div class="mb-3">
-              <label class="form-label fw-bold">🏠 Delivery Address</label>
-              <textarea name="patient_address" class="dark-input" rows="3" required></textarea>
+              <label class="form-label">📧 Email (confirmation ke liye)</label>
+              <input type="email" name="patient_email" class="form-control" placeholder="aapka@email.com">
             </div>
-
-            <div class="text-center">
-              <button type="submit" class="btn btn-gold btn-lg">✅ Place Order</button>
+            <div class="mb-3">
+              <label class="form-label">🏠 Delivery Address</label>
+              <textarea name="patient_address" class="form-control" rows="3" placeholder="Ghar ka address likhein" required></textarea>
             </div>
+            <button type="submit" class="place-btn">🚀 Place Order — ₹{{ total }}</button>
           </form>
-
-        {% else %}
-          <div class="text-center py-5">
-            <div style="font-size:60px;margin-bottom:10px;">🛒</div>
-            <h4 class="fw-bold">Cart is empty</h4>
-            <p class="text-muted">Pehele cart mein medicines add karein.</p>
-            <a href="/medicines/" class="btn btn-success btn-lg">💊 Browse Medicines</a>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="order-box">
+          <h5 style="color:var(--gold);font-weight:800;margin-bottom:20px;">🛒 Order Summary</h5>
+          {% for item in cart_items %}
+          <div class="order-item">
+            <span>{{ item.name|truncatechars:25 }} ×{{ item.quantity }}</span>
+            <span style="color:var(--text);font-weight:600;">₹{{ item.subtotal }}</span>
           </div>
-        {% endif %}
-
+          {% endfor %}
+          <div style="display:flex;justify-content:space-between;padding:15px 0 0;font-size:20px;font-weight:800;color:var(--gold);">
+            <span>Total</span><span>₹{{ total }}</span>
+          </div>
+          <div style="margin-top:20px;background:rgba(40,167,69,.08);border:1px solid rgba(40,167,69,.2);border-radius:12px;padding:15px;">
+            <p style="color:#28a745;font-size:13px;margin:0;font-weight:600;">✅ Cash on Delivery available<br>✅ Free delivery above ₹500<br>✅ Genuine medicines guaranteed</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 {% endblock %}
-

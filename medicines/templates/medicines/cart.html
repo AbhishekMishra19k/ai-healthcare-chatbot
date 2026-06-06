@@ -1,69 +1,82 @@
 {% extends 'base.html' %}
-{% block title %}Your Cart{% endblock %}
+{% block title %}Cart — AIHealthCare{% endblock %}
+
+{% block extra_css %}
+<style>
+.cart-hero{background:linear-gradient(135deg,#0a0a00,#1a1500);border-bottom:2px solid var(--gold);padding:50px 0;text-align:center}
+.cart-section{background:var(--black);min-height:80vh;padding:50px 0}
+.cart-table{background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden}
+.cart-row{display:flex;align-items:center;padding:18px 24px;border-bottom:1px solid var(--border);transition:background .2s;gap:10px}
+.cart-row:hover{background:rgba(255,214,10,.03)}
+.cart-row:last-child{border-bottom:none}
+.cart-name{flex:1;font-weight:600;color:var(--text);font-size:15px}
+.cart-price{color:var(--text-muted);font-size:13px;width:70px;text-align:center}
+.cart-qty{color:var(--gold);font-weight:700;font-size:15px;width:50px;text-align:center}
+.cart-sub{color:var(--gold);font-weight:800;font-size:15px;width:80px;text-align:right}
+.remove-btn{background:rgba(230,57,70,.15);color:var(--red);border:1px solid rgba(230,57,70,.3);padding:5px 12px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;transition:all .3s}
+.remove-btn:hover{background:var(--red);color:white;text-decoration:none}
+.cart-total-box{background:var(--card);border:1px solid var(--gold);border-radius:20px;padding:30px}
+.total-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px;color:var(--text-muted)}
+.total-final{display:flex;justify-content:space-between;padding:15px 0 0;font-size:22px;font-weight:800;color:var(--gold)}
+.checkout-btn{background:var(--gold);color:var(--black);border:none;width:100%;padding:15px;border-radius:14px;font-size:16px;font-weight:800;transition:all .3s;text-decoration:none;display:block;text-align:center;margin-top:20px}
+.checkout-btn:hover{background:#e6c200;color:var(--black);transform:translateY(-3px);box-shadow:0 8px 25px rgba(255,214,10,.4);text-decoration:none}
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-  <div class="row justify-content-center">
-    <div class="col-md-8">
+<div class="cart-hero">
+  <div class="container">
+    <div style="background:rgba(255,214,10,.15);color:var(--gold);border:1px solid rgba(255,214,10,.3);padding:6px 20px;border-radius:25px;font-size:12px;font-weight:700;letter-spacing:1px;display:inline-block;margin-bottom:15px;">🛒 YOUR CART</div>
+    <h2 style="font-size:40px;font-weight:900;color:var(--text);">Medicine <span style="color:var(--gold);">Cart</span></h2>
+  </div>
+</div>
 
-      <div class="card p-4" style="border-radius:18px;border:none;box-shadow:0 4px 15px rgba(0,0,0,0.1);background:var(--card);color:var(--text);">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h3 class="fw-bold">🛒 Shopping Cart</h3>
-          <a href="/medicines/" class="btn btn-outline-primary">💊 Continue Shopping</a>
+<div class="cart-section">
+  <div class="container">
+    {% if cart_items %}
+    <div class="row g-4">
+      <div class="col-lg-8">
+        <div class="cart-table">
+          <div style="padding:18px 24px;border-bottom:1px solid var(--border);">
+            <span style="color:var(--gold);font-weight:700;font-size:16px;">🛒 {{ cart_items|length }} Item{% if cart_items|length > 1 %}s{% endif %}</span>
+          </div>
+          {% for item in cart_items %}
+          <div class="cart-row">
+            <div style="font-size:26px;">💊</div>
+            <div class="cart-name">{{ item.name }}</div>
+            <div class="cart-price">₹{{ item.price }}</div>
+            <div class="cart-qty">×{{ item.quantity }}</div>
+            <div class="cart-sub">₹{{ item.subtotal }}</div>
+            <a href="/medicines/cart/remove/{{ item.id }}/" class="remove-btn">🗑 Remove</a>
+          </div>
+          {% endfor %}
         </div>
-
-        {% if cart_items %}
-          <div class="table-responsive">
-            <table class="table" style="color:var(--text);">
-              <thead>
-                <tr>
-                  <th>Medicine</th>
-                  <th>Price</th>
-                  <th style="width:140px;">Qty</th>
-                  <th>Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for item in cart_items %}
-                  <tr>
-                    <td>
-                      <div class="fw-bold">{{ item.medicine.name }}</div>
-                      <div class="text-muted" style="font-size:13px;">{{ item.medicine.category }}</div>
-                    </td>
-                    <td>₹{{ item.medicine.price }}</td>
-<td>
-                      {{ item.quantity }}
-                    </td>
-                    <td>₹{{ item.medicine.price|mul:item.quantity }}</td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
+        <a href="/medicines/" style="color:var(--text-muted);font-size:13px;display:inline-block;margin-top:15px;text-decoration:none;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">← Aur medicines add karo</a>
+      </div>
+      <div class="col-lg-4">
+        <div class="cart-total-box">
+          <h5 style="color:var(--gold);font-weight:800;margin-bottom:20px;">💰 Order Summary</h5>
+          {% for item in cart_items %}
+          <div class="total-row">
+            <span>{{ item.name|truncatechars:22 }}</span>
+            <span>₹{{ item.subtotal }}</span>
           </div>
-
-          <div class="p-3" style="background:#0f172a33;border:1px solid var(--border);border-radius:14px;">
-            <div class="d-flex justify-content-between">
-              <div class="fw-bold">Grand Total</div>
-              <div class="fw-bold" style="color:var(--gold);font-size:20px;">₹{{ cart_total }}</div>
-            </div>
+          {% endfor %}
+          <div class="total-final">
+            <span>Total</span><span>₹{{ total }}</span>
           </div>
-
-          <div class="mt-4 d-grid">
-            <a href="/medicines/checkout/" class="btn btn-gold btn-lg">✅ Checkout</a>
-          </div>
-
-        {% else %}
-          <div class="text-center py-5">
-            <div style="font-size:70px;margin-bottom:10px;">🛒</div>
-            <h4 class="fw-bold">Cart is empty</h4>
-            <p class="text-muted">Medicines add karein aur phir checkout karein.</p>
-            <a href="/medicines/" class="btn btn-success btn-lg">💊 Browse Medicines</a>
-          </div>
-        {% endif %}
-
+          <a href="/medicines/checkout/" class="checkout-btn">🚀 Checkout Now</a>
+        </div>
       </div>
     </div>
+    {% else %}
+    <div style="text-align:center;padding:80px 0;">
+      <div style="font-size:80px;margin-bottom:20px;">🛒</div>
+      <h3 style="color:var(--text);">Cart khaali hai!</h3>
+      <p style="color:var(--text-muted);margin-bottom:30px;">Medicines add karo aur order karo</p>
+      <a href="/medicines/" class="btn-gold" style="padding:12px 35px;font-size:16px;">💊 Medicines Dekho</a>
+    </div>
+    {% endif %}
   </div>
 </div>
 {% endblock %}
-
