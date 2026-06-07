@@ -1,13 +1,26 @@
-# TODO - Premium Hospital Frontend Redesign
+# TODO
 
-## Plan steps
-- [ ] Locate templates/views for Reports, Health Dashboard, Contact, Testimonials, FAQ
-- [ ] Implement Tailwind + Framer Motion foundation in `templates/base.html` (palette, glassmorphism, navbar, scroll reveal, skeleton styles)
-- [x] Redesign homepage in `chatbot/templates/chatbot/home.html` to match requested premium hospital layout (hero, services/features, testimonials, FAQ, contact)
-- [ ] Redesign AI chatbot widget in `chatbot/templates/chatbot/index.html` (floating widget, motion, premium medical theme)
-- [ ] Redesign Doctors + Appointments UIs in `appointments/templates/appointments/index.html` and `appointments/templates/appointments/book.html`
-- [ ] Redesign Medicines UIs in `medicines/templates/medicines/index.html` and `medicines/templates/medicines/checkout.html`
-- [ ] Add Health Dashboard + Charts with Recharts (once template/context is identified)
-- [ ] Validate nothing breaks: chat `/chat/api/`, appointments POST, medicines add-to-cart/checkout
-- [ ] Run quick manual accessibility checks (keyboard focus, aria labels, contrast)
+## 1) Doctors page theme fix (red → green)
+- Update `chatbot/templates/chatbot/index.html` styles/variables:
+  - Add missing `--black`, `--red`, `--red-dark` mappings so buttons/text show correctly.
+  - Replace hardcoded red colors in UI elements with green equivalents. ✅
+
+
+## 2) Home page theme fix (blue → green)
+- Update `chatbot/templates/chatbot/home.html` CSS variables and gradients:
+  - Switch `--secondary`/blue gradients to green palette. ✅ (partial: primary/secondary now green)
+
+
+
+## 3) Speed slow (DB queries)
+- Update `appointments/views.py`:
+  - Reduce redundant DB hits:
+    - compute filtered count once
+  - Optimize queryset fields (use `.only(...)` for list page).
+
+## 4) Verification
+- Run server and manually check:
+  - `/` home colors
+  - `/appointments/` doctor page button visibility
+  - Pagination/search works
 

@@ -3,9 +3,22 @@
 
 {% block extra_css %}
 <style>
+  /* Map missing base vars + convert red UI to green theme */
+  :root{
+    --black:#0b1220;
+    --red: var(--green);
+    --red-dark: var(--green-dark);
+    --gold:#F59E0B;
+  }
+
 .chat-wrapper { min-height: 90vh; background: var(--black); padding: 30px 0; }
+
+
 .chat-container { max-width: 900px; margin: 0 auto; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(230,57,70,0.2); border: 1px solid var(--border); }
-.chat-header { background: linear-gradient(135deg, #1a0a0a, #2a0a0a); border-bottom: 2px solid var(--red); padding: 20px 25px; display: flex; align-items: center; gap: 15px; }
+
+.chat-header { background: linear-gradient(135deg, rgba(14,165,233,.18), rgba(16,185,129,.18)); border-bottom: 2px solid var(--red); padding: 20px 25px; display: flex; align-items: center; gap: 15px; }
+
+
 .chat-header-icon { width: 50px; height: 50px; background: var(--red); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; animation: pulse 2s infinite; }
 @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(230,57,70,0.4); } 50% { box-shadow: 0 0 0 10px rgba(230,57,70,0); } }
 .online-dot { width: 8px; height: 8px; background: #28a745; border-radius: 50%; display: inline-block; margin-right: 5px; animation: blink 1.5s infinite; }
@@ -21,6 +34,11 @@
 .bot-avatar { width: 38px; height: 38px; background: var(--red); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; align-self: flex-end; }
 .bot-bubble { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 14px 18px; border-radius: 18px 18px 18px 4px; max-width: 82%; font-size: 14px; line-height: 1.8; }
 .bot-bubble strong { color: var(--gold); }
+
+
+  /* make sure inline red references (e.g. span style="color:var(--red)") stay visible */
+  .chip { color: var(--green); }
+
 .typing-indicator { display: none; align-items: center; gap: 10px; margin: 12px 25px; }
 .typing-bubble { background: var(--card); border: 1px solid var(--border); padding: 14px 18px; border-radius: 18px 18px 18px 4px; display: flex; gap: 5px; align-items: center; }
 .typing-dot { width: 8px; height: 8px; background: var(--red); border-radius: 50%; animation: bounce 1.2s infinite; }
@@ -28,17 +46,21 @@
 .typing-dot:nth-child(3) { animation-delay: 0.4s; }
 @keyframes bounce { 0%,60%,100% { transform:translateY(0); } 30% { transform:translateY(-8px); } }
 .chip-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-.chip { background: rgba(230,57,70,0.1); color: var(--red); border: 1px solid rgba(230,57,70,0.3); padding: 6px 14px; border-radius: 20px; font-size: 12px; cursor: pointer; transition: all 0.3s; }
-.chip:hover { background: var(--red); color: white; transform: translateY(-2px); }
+.chip { background: rgba(16,185,129,0.10); color: var(--green); border: 1px solid rgba(16,185,129,0.25); padding: 6px 14px; border-radius: 20px; font-size: 12px; cursor: pointer; transition: all 0.3s; }
+.chip:hover { background: var(--green); color: white; transform: translateY(-2px); }
+
 .chat-input-area { background: #111; border-top: 1px solid var(--border); padding: 15px 20px; }
 .input-wrapper { display: flex; gap: 10px; align-items: center; background: var(--card); border: 1px solid var(--border); border-radius: 30px; padding: 8px 8px 8px 20px; transition: all 0.3s; }
-.input-wrapper:focus-within { border-color: var(--red); box-shadow: 0 0 0 3px rgba(230,57,70,0.15); }
+.input-wrapper:focus-within { border-color: var(--green); box-shadow: 0 0 0 3px rgba(16,185,129,0.15); }
+
 .chat-input { background: transparent !important; border: none !important; color: var(--text) !important; font-size: 14px; flex: 1; outline: none; box-shadow: none !important; }
 .chat-input::placeholder { color: var(--text-muted) !important; }
-.send-btn { width: 42px; height: 42px; background: var(--red); border: none; border-radius: 50%; color: white; font-size: 16px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; }
-.send-btn:hover { background: var(--red-dark); transform: scale(1.1); }
+.send-btn { width: 42px; height: 42px; background: var(--green); border: none; border-radius: 50%; color: white; font-size: 16px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; }
+.send-btn:hover { background: var(--green-dark); transform: scale(1.1); }
+
 .clear-btn { background: transparent; border: 1px solid var(--border); color: var(--text-muted); padding: 6px 14px; border-radius: 20px; font-size: 12px; cursor: pointer; transition: all 0.3s; }
-.clear-btn:hover { border-color: var(--red); color: var(--red); }
+.clear-btn:hover { border-color: var(--green); color: var(--green); }
+
 </style>
 {% endblock %}
 
@@ -163,8 +185,9 @@ function sendMessage() {
   })
   .catch(err => {
     typing.style.display = 'none';
-    appendBotMessage('<span style="color:var(--red);">Connection error. Server check karo.</span>');
+    appendBotMessage('<span style="color:var(--green);">Connection error. Server check karo.</span>');
   });
+
 }
 
 function formatMessage(text) {

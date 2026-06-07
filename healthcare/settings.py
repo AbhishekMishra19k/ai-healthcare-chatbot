@@ -4,7 +4,6 @@ import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# ── SECURITY ──────────────────────────────────────────────────────────────────
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-me-in-production')
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
@@ -16,7 +15,6 @@ ALLOWED_HOSTS = [
     '*',
 ]
 
-# ── APPS ──────────────────────────────────────────────────────────────────────
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -30,7 +28,6 @@ INSTALLED_APPS = [
     'accounts',
 ]
 
-# ── MIDDLEWARE ─────────────────────────────────────────────────────────────────
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -65,7 +62,6 @@ WSGI_APPLICATION = 'healthcare.wsgi.application'
 
 # ── DATABASE ──────────────────────────────────────────────────────────────────
 DATABASE_URL = os.environ.get('DATABASE_URL', '')
-
 if DATABASE_URL:
     DATABASES = {'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)}
 else:
@@ -76,7 +72,6 @@ else:
         }
     }
 
-# ── PASSWORD VALIDATION ───────────────────────────────────────────────────────
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -84,44 +79,38 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# ── LOCALISATION ──────────────────────────────────────────────────────────────
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Asia/Kolkata'
 USE_I18N = True
 USE_TZ = True
 
-# ── STATIC FILES ──────────────────────────────────────────────────────────────
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# ── MEDIA FILES ───────────────────────────────────────────────────────────────
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# ── AUTH REDIRECTS ────────────────────────────────────────────────────────────
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
 
-# ── EMAIL ─────────────────────────────────────────────────────────────────────
+# ── EMAIL — Gmail SMTP ────────────────────────────────────────────────────────
 EMAIL_HOST_USER     = os.environ.get('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
 
-# Use console backend in dev (no credentials needed),
-# SMTP only in production when credentials are set.
 if EMAIL_HOST_USER and EMAIL_HOST_PASSWORD:
     EMAIL_BACKEND  = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST     = 'smtp.gmail.com'
     EMAIL_PORT     = 587
     EMAIL_USE_TLS  = True
 else:
-    EMAIL_BACKEND  = 'django.core.mail.backends.console.EmailBackend'
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 DEFAULT_FROM_EMAIL = f'AIHealthCare <{EMAIL_HOST_USER}>' if EMAIL_HOST_USER else 'AIHealthCare <noreply@aihealthcare.com>'
-ADMIN_EMAIL        = os.environ.get('ADMIN_EMAIL', EMAIL_HOST_USER)
+ADMIN_EMAIL        = 'panditkurfew.ji@gmail.com'
 
 # ── GEMINI AI ─────────────────────────────────────────────────────────────────
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')

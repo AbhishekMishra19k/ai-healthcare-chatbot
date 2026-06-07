@@ -35,7 +35,7 @@ def add_to_cart(request, medicine_id):
             'quantity': 1,
         }
     request.session['cart'] = cart
-    messages.success(request, f'{medicine.name} cart mein add ho gaya!')
+    messages.success(request, f'{medicine.name} cart mein add ho gaya! ✅')
     return redirect('medicines')
 
 
@@ -45,6 +45,7 @@ def remove_from_cart(request, medicine_id):
     if key in cart:
         del cart[key]
         request.session['cart'] = cart
+        messages.success(request, 'Item cart se remove ho gaya.')
     return redirect('cart')
 
 
@@ -75,47 +76,96 @@ def checkout(request):
         return redirect('medicines')
 
     if request.method == 'POST':
-        patient_name = request.POST['patient_name']
-        patient_phone = request.POST['patient_phone']
-        patient_address = request.POST['patient_address']
+        patient_name    = request.POST.get('patient_name', '').strip()
+        patient_phone   = request.POST.get('patient_phone', '').strip()
+        patient_email   = request.POST.get('patient_email', '').strip()
+        patient_address = request.POST.get('patient_address', '').strip()
+
         total = 0
         medicine_names = []
 
         for med_id, item in cart.items():
             subtotal = item['price'] * item['quantity']
             total += subtotal
-            medicine_names.append(f"{item['name']} x{item['quantity']}")
+            medicine_names.append(f"{item['name']} x{item['quantity']} = Rs.{subtotal}")
+
+            # ✅ FIX: quantity field Order model mein nahi hai — remove kiya
             Order.objects.create(
                 patient_name=patient_name,
                 patient_phone=patient_phone,
                 patient_address=patient_address,
                 medicine_name=item['name'],
-                quantity=item['quantity'],
                 total_price=subtotal,
             )
 
         medicines_list = '\n'.join(medicine_names)
-        send_mail(
-            subject='Order Confirmed — AIHealthCare',
-            message=f'''Namaste {patient_name}!
+
+        # ── Email to Patient ──────────────────────────────────────────────────
+        if patient_email:
+            try:
+                send_mail(
+                    subject='✅ Order Confirmed — AIHealthCare',
+                    message=f"""Namaste {patient_name}! 🙏
 
 Aapka order confirm ho gaya hai.
 
+━━━━━━━━━━━━━━━━━━━━
+ORDER DETAILS
+━━━━━━━━━━━━━━━━━━━━
 Medicines:
 {medicines_list}
 
-Total: Rs.{total}
-Delivery Address: {patient_address}
+Total Amount : Rs. {total}
+Delivery     : {patient_address}
+Phone        : {patient_phone}
+━━━━━━━━━━━━━━━━━━━━
 
-AIHealthCare Team''',
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[request.POST.get('patient_email', settings.ADMIN_EMAIL)],
-            fail_silently=True,
-        )
+Aapki medicines jald deliver ho jaayengi!
 
+AIHealthCare Team
+Emergency: 108 | Ambulance: 102""",
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[patient_email],
+                    fail_silently=True,
+                )
+            except Exception:
+                pass
+
+        # ── Email to Admin (panditkurfew.ji@gmail.com) ───────────────────────
+        try:
+            send_mail(
+                subject=f'🛒 Naya Order — {patient_name}',
+                message=f"""Naya order aaya hai!
+
+━━━━━━━━━━━━━━━━━━━━
+PATIENT INFO
+━━━━━━━━━━━━━━━━━━━━
+Name    : {patient_name}
+Phone   : {patient_phone}
+Email   : {patient_email}
+Address : {patient_address}
+
+━━━━━━━━━━━━━━━━━━━━
+MEDICINES ORDERED
+━━━━━━━━━━━━━━━━━━━━
+{medicines_list}
+
+TOTAL: Rs. {total}
+━━━━━━━━━━━━━━━━━━━━
+
+AIHealthCare Admin Panel""",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=['panditkurfew.ji@gmail.com'],
+                fail_silently=True,
+            )
+        except Exception:
+            pass
+
+        # Clear cart
         request.session['cart'] = {}
         return redirect('order_success')
 
+    # GET — show checkout form
     cart_items = []
     total = 0
     for med_id, item in cart.items():
