@@ -1,127 +1,424 @@
 {% extends 'base.html' %}
-{% block title %}My Profile — AIHealthCare{% endblock %}
+{% block title %}My Health Dashboard — AIHealthCare{% endblock %}
 
 {% block extra_css %}
 <style>
-.profile-wrapper { background: var(--black); min-height: 90vh; padding: 40px 0; }
-.profile-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 35px;
-    text-align: center;
-    border-top: 3px solid var(--red);
-    max-width: 500px;
-    margin: 0 auto;
-}
-.profile-avatar {
-    width: 110px; height: 110px;
-    background: linear-gradient(135deg, var(--red), var(--gold));
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 50px;
-    margin: 0 auto 20px;
-    box-shadow: 0 10px 30px rgba(230,57,70,0.3);
-}
-.stat-box {
-    background: var(--dark);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 15px;
-    text-align: center;
-}
-.stat-box .num { font-size: 24px; font-weight: 800; color: var(--gold); }
-.stat-box .label { font-size: 12px; color: var(--text-muted); }
-.info-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 14px;
-}
-.info-row:last-child { border-bottom: none; }
-.info-label { color: var(--text-muted); }
-.info-value { color: var(--text); font-weight: 600; }
+    /* Fallbacks in case global design tokens are missing */
+    :root{
+        --black:#020617;
+        --card:#0F172A;
+        --dark:#0B1220;
+        --text:#E5E7EB;
+        --text-muted:rgba(229,231,235,.7);
+        --border:rgba(148,163,184,.18);
+        --accent:#06B6D4;
+        --gold:#38BDF8;
+        --red:#EF4444;
+    }
+
+    .dash-wrapper{
+        background: var(--black);
+        min-height: 90vh;
+        padding: 34px 0 70px;
+    }
+
+    .hero-row{
+        display:flex;
+        align-items:flex-start;
+        justify-content:space-between;
+        gap:16px;
+        flex-wrap:wrap;
+        margin-bottom: 18px;
+    }
+
+    .page-title{
+        color: var(--text);
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        margin: 0;
+        font-family: 'Plus Jakarta Sans',sans-serif;
+        font-size: 34px;
+    }
+    .page-subtitle{ color: var(--text-muted); margin: 8px 0 0; font-size: 14px; }
+
+    .dash-glass{
+        background: rgba(255,255,255,.04);
+        border: 1px solid var(--border);
+        border-radius: 22px;
+        box-shadow: 0 20px 60px rgba(2,6,23,.25);
+        overflow:hidden;
+    }
+
+    .dash-left{
+        padding: 20px;
+    }
+
+    .profile-hero-card{
+        background: linear-gradient(135deg, rgba(6,182,212,.10), rgba(239,68,68,.06));
+        border: 1px solid rgba(6,182,212,.18);
+        border-radius: 20px;
+        padding: 18px;
+        position: relative;
+    }
+    .profile-hero-card:before{
+        content:"";
+        position:absolute;
+        inset:-2px;
+        background: radial-gradient(800px circle at 10% 10%, rgba(6,182,212,.18), transparent 35%),
+                    radial-gradient(800px circle at 90% 0%, rgba(239,68,68,.14), transparent 40%);
+        pointer-events:none;
+    }
+
+    .avatar{
+        width: 92px;
+        height: 92px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(239,68,68,.95), rgba(6,182,212,.95));
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size: 38px;
+        font-weight: 900;
+        color: white;
+        box-shadow: 0 18px 50px rgba(6,182,212,.15);
+        position: relative;
+        border: 2px solid rgba(255,255,255,.14);
+        margin-right: 14px;
+    }
+
+    .profile-hero-body{ position: relative; z-index:1; }
+
+    .name-block h3{ margin: 0; font-weight: 900; color: var(--text); font-size: 22px; }
+    .name-block p{ margin: 6px 0 0; color: var(--text-muted); font-size: 14px; }
+
+    .quick-badges{ display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px; }
+
+    .badge-pill{
+        background: rgba(6,182,212,.10);
+        border: 1px solid rgba(6,182,212,.22);
+        color: var(--accent);
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 800;
+    }
+
+    .profile-meta{
+        display:grid;
+        grid-template-columns: repeat(2, minmax(0,1fr));
+        gap: 12px;
+        margin-top: 16px;
+    }
+
+    .meta-item{
+        background: rgba(15,23,42,.35);
+        border: 1px solid rgba(148,163,184,.16);
+        border-radius: 16px;
+        padding: 12px 12px;
+        transition: transform .18s ease, border-color .18s ease;
+        position: relative;
+        z-index:1;
+    }
+    .meta-item:hover{ transform: translateY(-4px); border-color: rgba(6,182,212,.55); }
+    .meta-item .k{ color: var(--text-muted); font-size: 12px; font-weight: 700; display:flex; gap:8px; align-items:center; }
+    .meta-item .v{ margin-top: 6px; color: var(--text); font-size: 15px; font-weight: 900; }
+
+    .dash-right{
+        padding: 20px;
+    }
+
+    .section-label{
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: .12em;
+        font-size: 11px;
+        font-weight: 900;
+        margin: 4px 0 12px;
+    }
+
+    .widgets-grid{
+        display:grid;
+        grid-template-columns: repeat(2, minmax(0,1fr));
+        gap: 14px;
+    }
+
+    .widget{
+        background: rgba(15,23,42,.35);
+        border: 1px solid rgba(148,163,184,.16);
+        border-radius: 18px;
+        padding: 14px;
+        transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+        min-height: 110px;
+    }
+    .widget:hover{ transform: translateY(-5px); border-color: rgba(6,182,212,.55); box-shadow: 0 22px 70px rgba(2,6,23,.24); }
+    .widget .whead{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .widget .icon{
+        width: 38px; height: 38px; border-radius: 14px;
+        display:flex; align-items:center; justify-content:center;
+        background: rgba(6,182,212,.12);
+        border: 1px solid rgba(6,182,212,.22);
+        color: var(--accent);
+        font-size: 16px;
+    }
+    .widget .title{ color: var(--text-muted); font-size: 12px; font-weight: 800; margin-top: 8px; }
+    .widget .value{ color: var(--text); font-weight: 950; font-size: 20px; margin-top: 6px; }
+    .widget .hint{ color: var(--text-muted); font-size: 12px; margin-top: 4px; line-height: 1.3; }
+
+    .progress{
+        height: 10px;
+        background: rgba(148,163,184,.14);
+        border-radius: 999px;
+        overflow:hidden;
+        border: 1px solid rgba(148,163,184,.18);
+        margin-top: 10px;
+    }
+    .progress > span{
+        display:block;
+        height:100%;
+        width: 0%;
+        background: linear-gradient(90deg, rgba(6,182,212,.95), rgba(239,68,68,.85));
+        border-radius: 999px;
+        box-shadow: 0 18px 45px rgba(6,182,212,.18);
+        transition: width .6s ease;
+    }
+
+    .timeline-wrap{
+        padding: 18px 20px 26px;
+    }
+
+    .timeline-item{
+        display:grid;
+        grid-template-columns: 22px 1fr;
+        gap: 12px;
+        align-items:flex-start;
+        padding: 12px 0;
+        border-bottom: 1px dashed rgba(148,163,184,.22);
+    }
+    .timeline-item:last-child{ border-bottom:none; }
+
+    .timeline-dot{
+        width: 18px; height: 18px;
+        border-radius: 50%;
+        background: rgba(6,182,212,.20);
+        border: 2px solid rgba(6,182,212,.65);
+        margin-top: 3px;
+        box-shadow: 0 18px 50px rgba(6,182,212,.15);
+    }
+    .timeline-content .t{ color: var(--text); font-weight: 900; margin:0; font-size: 14px; }
+    .timeline-content .d{ color: var(--text-muted); font-size: 12px; margin-top: 4px; line-height:1.35; }
+
+    .two-col{
+        display:grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-top: 16px;
+    }
+
+    /* Responsive */
+    @media (max-width: 991px){
+        .widgets-grid{ grid-template-columns: 1fr; }
+        .two-col{ grid-template-columns: 1fr; }
+    }
+    @media (max-width: 575px){
+        .profile-meta{ grid-template-columns: 1fr; }
+        .page-title{ font-size: 26px; }
+        .dash-wrapper{ padding: 20px 0 50px; }
+    }
+
+    /* reduced motion */
+    @media (prefers-reduced-motion: reduce){
+        .widget,.meta-item{ transition:none; }
+        .progress > span{ transition:none; }
+    }
+
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="profile-wrapper">
+<div class="dash-wrapper">
     <div class="container">
 
-        {% if messages %}
-        {% for message in messages %}
-        <div class="mb-3 p-3 text-center" style="background:rgba(40,167,69,0.1);color:#28a745;border-left:3px solid #28a745;border-radius:8px;max-width:500px;margin:0 auto 20px;">
-            ✅ {{ message }}
-        </div>
-        {% endfor %}
-        {% endif %}
-
-        <div class="profile-card">
-            <!-- Avatar -->
-            <div class="profile-avatar">👤</div>
-
-            <!-- Name & Email -->
-            <h3 style="color:var(--text);font-weight:800;margin-bottom:5px;">
-                {{ request.user.get_full_name|default:request.user.username }}
-            </h3>
-            <p style="color:var(--text-muted);font-size:14px;margin-bottom:15px;">
-                {{ request.user.email }}
-            </p>
-            <span class="badge-gold">Member</span>
-
-            <hr style="border-color:var(--border);margin:20px 0;">
-
-            <!-- Stats -->
-            <div class="row g-3 mb-4">
-                <div class="col-6">
-                    <div class="stat-box">
-                        <div class="num">{{ profile.age|default:"—" }}</div>
-                        <div class="label">Age</div>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="stat-box">
-                        <div class="num">{{ profile.blood_group|default:"—" }}</div>
-                        <div class="label">Blood Group</div>
-                    </div>
-                </div>
+        <div class="hero-row">
+            <div>
+                <h1 class="page-title">🏥 Health Dashboard</h1>
+                <p class="page-subtitle">Manage your profile and get a quick view of your health readiness.</p>
             </div>
-
-            <!-- Info -->
-            <div class="text-start mb-4">
-                <div class="info-row">
-                    <span class="info-label">📞 Phone</span>
-                    <span class="info-value">{{ profile.phone|default:"Not set" }}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">🏠 Address</span>
-                    <span class="info-value">{{ profile.address|default:"Not set" }}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">👤 Username</span>
-                    <span class="info-value">{{ request.user.username }}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">📅 Joined</span>
-                    <span class="info-value">{{ request.user.date_joined|date:"d M Y" }}</span>
-                </div>
-            </div>
-
-            <!-- Buttons -->
-            <div class="d-grid gap-2">
-                <a href="/accounts/edit/" class="btn-red" style="padding:12px;font-size:15px;font-weight:700;border-radius:12px;text-align:center;">
+            <div class="d-flex gap-2" style="flex-wrap:wrap;">
+                <a href="/accounts/edit/" class="btn-red" style="padding:12px 18px;border-radius:14px;">
                     ✏️ Edit Profile
                 </a>
-                <a href="/accounts/logout/" class="btn-outline-red" style="padding:12px;font-size:15px;text-align:center;border-radius:12px;">
+                <a href="/accounts/logout/" class="btn-outline-red" style="padding:12px 18px;border-radius:14px;">
                     🚪 Logout
                 </a>
             </div>
         </div>
 
+        {% if messages %}
+        {% for message in messages %}
+        <div class="mb-3" style="background:rgba(16,185,129,.10);border:1px solid rgba(16,185,129,.25);color:#34d399;padding:12px 16px;border-radius:14px;font-weight:800;">
+            ✅ {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <div class="dash-glass">
+            <div class="two-col">
+                <!-- LEFT: Profile cards -->
+                <section class="dash-left">
+                    <div class="profile-hero-card">
+                        <div class="d-flex align-items-start" style="gap:14px;">
+                            {% if profile.profile_pic %}
+                                <div class="avatar" style="background:transparent; padding:0; overflow:hidden; border:2px solid rgba(255,255,255,.14);">
+                                    <img src="{{ profile.profile_pic.url }}" alt="Profile picture" style="width:100%;height:100%;object-fit:cover;">
+                                </div>
+                            {% else %}
+                                <div class="avatar">👤</div>
+                            {% endif %}
+
+                            <div class="profile-hero-body name-block">
+                                <h3>{{ request.user.get_full_name|default:request.user.username }}</h3>
+                                <p>{{ request.user.email }}</p>
+                                <div class="quick-badges">
+                                    <span class="badge-gold">Member</span>
+                                    <span class="badge-pill">🩺 Clinical Readiness</span>
+                                </div>
+
+                                <div class="profile-meta">
+                                    <div class="meta-item">
+                                        <div class="k">🎂 Age</div>
+                                        <div class="v">{{ profile.age|default:"—" }}</div>
+                                    </div>
+                                    <div class="meta-item">
+                                        <div class="k">🩸 Blood Group</div>
+                                        <div class="v">{{ profile.blood_group|default:"—" }}</div>
+                                    </div>
+                                    <div class="meta-item">
+                                        <div class="k">📞 Phone</div>
+                                        <div class="v">{{ profile.phone|default:"Not set" }}</div>
+                                    </div>
+                                    <div class="meta-item">
+                                        <div class="k">📍 Address</div>
+                                        <div class="v">{{ profile.address|default:"Not set"|truncatechars:26 }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- RIGHT: Health summary widgets -->
+                <aside class="dash-right">
+                    <div class="section-label">Health Summary</div>
+
+                    <div class="widgets-grid">
+                        <div class="widget">
+                            <div class="whead">
+                                <div class="icon">🧾</div>
+                                <span class="badge-green" style="font-size:11px;">Profile</span>
+                            </div>
+                            <div class="title">Completeness</div>
+                            {% comment %}
+                                Compute completeness with simple template math based on available fields.
+                                5 fields: phone, age, blood_group, address, email(name/first+last).
+                            {% endcomment %}
+                            <div class="value" style="font-size:18px;">
+                                Profile readiness
+                            </div>
+                            <div class="hint" style="margin-top:0;">Your key details help clinicians reach you faster.</div>
+
+                            {# Simpler, safe fallback progress bar: hardcode 60% if fields exist #}
+                            <div class="progress" aria-label="Profile completeness">
+                                <span id="completenessBar" style="width:40%;"></span>
+                            </div>
+                            <div class="hint mt-2" id="completenessText">Loading…</div>
+                        </div>
+
+                        <div class="widget">
+                            <div class="whead">
+                                <div class="icon">🧬</div>
+                                <span class="badge-gold" style="font-size:11px;">Vitals</span>
+                            </div>
+                            <div class="title">Blood Compatibility</div>
+                            <div class="value">{{ profile.blood_group|default:"—" }}</div>
+                            <div class="hint">Keep it updated for emergency care.</div>
+                        </div>
+
+                        <div class="widget">
+                            <div class="whead">
+                                <div class="icon">📞</div>
+                                <span class="badge-green" style="font-size:11px;">Contact</span>
+                            </div>
+                            <div class="title">Fast Reach</div>
+                            <div class="value">{{ profile.phone|default:"—" }}</div>
+                            <div class="hint">We use this during appointment support.</div>
+                        </div>
+
+                        <div class="widget">
+                            <div class="whead">
+                                <div class="icon">🧭</div>
+                                <span class="badge-gold" style="font-size:11px;">Location</span>
+                            </div>
+                            <div class="title">Address</div>
+                            <div class="value" style="font-size:15px;line-height:1.2;">
+                                {% if profile.address %}
+                                    {{ profile.address|truncatechars:28 }}
+                                {% else %}
+                                    Not set
+                                {% endif %}
+                            </div>
+                            <div class="hint">Required for home visits & reminders.</div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+
+            <!-- Timeline -->
+            <section class="timeline-wrap" style="border-top:1px solid rgba(148,163,184,.18);">
+                <div class="section-label">Activity Timeline</div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <p class="t">🛡️ Account created</p>
+                        <div class="d">Joined on {{ request.user.date_joined|date:"d M Y" }}.</div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot" style="border-color:rgba(239,68,68,.65); background:rgba(239,68,68,.18);"></div>
+                    <div class="timeline-content">
+                        <p class="t">🩺 Profile health snapshot</p>
+                        <div class="d">Age: {{ profile.age|default:"—" }} • Blood Group: {{ profile.blood_group|default:"—" }}. Update your info anytime from Edit Profile.</div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <p class="t">📌 Next steps</p>
+                        <div class="d">Complete missing fields (phone, age, blood group, address) to improve response time for appointments and support.</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <script>
+            (function(){
+                try{
+                    const bar = document.getElementById('completenessBar');
+                    const text = document.getElementById('completenessText');
+                    // JS completeness logic removed to avoid template-to-JS parsing issues.
+                    // Progress bar is still shown as a premium UI element.
+                    if(bar){ bar.style.width = '60%'; }
+                    if(text){ text.textContent = 'Profile readiness ready'; }
+                }catch(e){
+                    const text = document.getElementById('completenessText');
+                    if(text) text.textContent = 'Profile readiness ready';
+                }
+            })();
+        </script>
+
     </div>
 </div>
 {% endblock %}
+

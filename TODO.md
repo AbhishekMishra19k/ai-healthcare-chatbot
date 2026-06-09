@@ -1,9 +1,7 @@
 # TODO
 
-## Templates Home Rebuild
-- [x] Inspect current `templates/home.html` and `templates/base.html`
-- [ ] Replace `templates/home.html` with a complete premium healthcare SaaS landing page (all old structure removed)
-- [ ] Verify required sections render: Hero, Stats, Feature grid, Platform showcase, Services grid, Testimonials, FAQ, Final CTA
-- [ ] Verify CTA links work: `/chat/` and `/appointments/` and `/medicines/`
-- [ ] Smoke-test in browser (refresh)
+- [x] Update `accounts/templates/accounts/profile.html` to premium healthcare dashboard layout (profile cards, health widgets, activity timeline, responsive design, hover interactions).
+- [x] Update `accounts/templates/accounts/edit.html` to modern healthcare profile management page (two-column layout, grouped fields, better form UX, inline validation styling, profile summary panel) while preserving all existing Django variables/field names and backend compatibility.
+
+
 
