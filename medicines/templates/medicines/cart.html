@@ -3,80 +3,291 @@
 
 {% block extra_css %}
 <style>
-.cart-hero{background:linear-gradient(135deg,#0a0a00,#1a1500);border-bottom:2px solid var(--gold);padding:50px 0;text-align:center}
-.cart-section{background:var(--black);min-height:80vh;padding:50px 0}
-.cart-table{background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden}
-.cart-row{display:flex;align-items:center;padding:18px 24px;border-bottom:1px solid var(--border);transition:background .2s;gap:10px}
-.cart-row:hover{background:rgba(255,214,10,.03)}
-.cart-row:last-child{border-bottom:none}
-.cart-name{flex:1;font-weight:600;color:var(--text);font-size:15px}
-.cart-price{color:var(--text-muted);font-size:13px;width:70px;text-align:center}
-.cart-qty{color:var(--gold);font-weight:700;font-size:15px;width:50px;text-align:center}
-.cart-sub{color:var(--gold);font-weight:800;font-size:15px;width:80px;text-align:right}
-.remove-btn{background:rgba(230,57,70,.15);color:var(--red);border:1px solid rgba(230,57,70,.3);padding:5px 12px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;transition:all .3s}
-.remove-btn:hover{background:var(--red);color:white;text-decoration:none}
-.cart-total-box{background:var(--card);border:1px solid var(--gold);border-radius:20px;padding:30px}
-.total-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px;color:var(--text-muted)}
-.total-final{display:flex;justify-content:space-between;padding:15px 0 0;font-size:22px;font-weight:800;color:var(--gold)}
-.checkout-btn{background:var(--gold);color:var(--black);border:none;width:100%;padding:15px;border-radius:14px;font-size:16px;font-weight:800;transition:all .3s;text-decoration:none;display:block;text-align:center;margin-top:20px}
-.checkout-btn:hover{background:#e6c200;color:var(--black);transform:translateY(-3px);box-shadow:0 8px 25px rgba(255,214,10,.4);text-decoration:none}
+  .cart-hero{
+    background:linear-gradient(135deg,#0a0a00,#1a1500);
+    border-bottom:2px solid var(--gold);
+    padding:46px 0 36px;
+    text-align:center;
+  }
+  .cart-shell{background:var(--black);min-height:80vh;padding:28px 0 56px;}
+
+  .cart-grid{gap:18px;}
+
+  .page-title-pill{
+    background:rgba(255,214,10,.15);
+    color:var(--gold);
+    border:1px solid rgba(255,214,10,.30);
+    padding:6px 18px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:1px;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+  }
+
+  .cart-table{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:22px;
+    overflow:hidden;
+  }
+  .cart-table-head{
+    padding:18px 22px;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+  }
+  .cart-table-head .items-meta{
+    color:var(--gold);
+    font-weight:900;
+    font-size:16px;
+  }
+
+  .cart-items{padding:8px 10px;}
+
+  .cart-item{
+    display:flex;
+    gap:14px;
+    align-items:center;
+    padding:14px 10px;
+    border-radius:18px;
+    transition:transform .2s ease, background .2s ease, border-color .2s ease;
+    border:1px solid transparent;
+    margin:10px 4px;
+  }
+  .cart-item:hover{
+    background:rgba(255,214,10,.05);
+    border-color:rgba(255,214,10,.18);
+    transform:translateY(-2px);
+  }
+
+  .cart-item-thumb{
+    width:54px;height:54px;border-radius:18px;
+    background:linear-gradient(135deg, rgba(6,182,212,.16), rgba(255,214,10,.10));
+    border:1px solid rgba(6,182,212,.22);
+    display:flex;align-items:center;justify-content:center;
+    font-size:26px;flex:0 0 auto;
+  }
+
+  .cart-item-name{
+    font-weight:900;color:var(--text);
+    font-size:14px;
+    line-height:1.2;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    max-width:260px;
+  }
+  .cart-item-meta{
+    margin-top:4px;
+    color:var(--text-muted);
+    font-size:12px;
+    font-weight:700;
+  }
+
+  .qty-pill{
+    border:1px solid rgba(6,182,212,.25);
+    background:rgba(6,182,212,.08);
+    color:var(--secondary);
+    border-radius:999px;
+    padding:8px 12px;
+    font-weight:900;
+    font-size:12px;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+  }
+
+  .qty-control{
+    display:flex;align-items:center;gap:10px;
+  }
+  .qty-btn{
+    width:34px;height:34px;border-radius:12px;
+    background:rgba(6,182,212,.10);
+    border:1px solid rgba(6,182,212,.25);
+    color:var(--accent);
+    font-weight:900;
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    user-select:none;
+  }
+  .qty-btn:hover{background:rgba(6,182,212,.18)}
+  .qty-value{min-width:26px;text-align:center;color:var(--gold);font-weight:900;}
+
+  /* Keep existing remove link behavior */
+  .remove-btn{
+    background:rgba(230,57,70,.10);
+    color:#ffb4b8;
+    border:1px solid rgba(230,57,70,.25);
+    padding:9px 14px;
+    border-radius:14px;
+    font-size:12px;
+    font-weight:900;
+    text-decoration:none;
+    transition:all .2s ease;
+    white-space:nowrap;
+  }
+  .remove-btn:hover{background:rgba(230,57,70,.95);color:white;text-decoration:none;border-color:transparent;transform:translateY(-2px)}
+
+  .cart-total-box{
+    background:var(--card);
+    border:1px solid var(--gold);
+    border-radius:22px;
+    padding:22px;
+    position:sticky;
+    top:90px;
+  }
+  .cart-total-head{
+    color:var(--gold);
+    font-weight:900;
+    font-size:16px;
+    margin-bottom:10px;
+  }
+  .total-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px;color:var(--text-muted)}
+  .total-row:last-of-type{border-bottom:none}
+  .total-final{display:flex;justify-content:space-between;padding:15px 0 0;font-size:22px;font-weight:900;color:var(--gold)}
+
+  .checkout-btn{
+    background:var(--gold);
+    color:var(--black);
+    border:none;
+    width:100%;
+    padding:14px 14px;
+    border-radius:16px;
+    font-size:16px;
+    font-weight:900;
+    transition:all .25s;
+    text-decoration:none;
+    display:block;
+    text-align:center;
+    margin-top:16px;
+    box-shadow:0 12px 30px rgba(255,214,10,.18);
+  }
+  .checkout-btn:hover{background:#e6c200;transform:translateY(-3px);box-shadow:0 18px 50px rgba(255,214,10,.28);text-decoration:none}
+
+  .empty-state{
+    text-align:center;
+    padding:58px 0;
+    background:linear-gradient(135deg, rgba(6,182,212,.08), rgba(255,214,10,.05));
+    border:1px solid rgba(6,182,212,.18);
+    border-radius:22px;
+  }
+  .empty-state .icon{font-size:70px;margin-bottom:10px}
+  .empty-state h3{color:var(--text);font-weight:900;margin-bottom:8px}
+  .empty-state p{color:var(--text-muted);font-weight:700;margin-bottom:22px}
+
+  .muted-link{
+    color:var(--text-muted);
+    font-size:13px;
+    display:inline-block;
+    margin-top:12px;
+    text-decoration:none;
+    font-weight:800;
+  }
+  .muted-link:hover{color:var(--gold);text-decoration:none}
+
+  @media (max-width:991px){
+    .cart-total-box{position:relative;top:auto}
+    .cart-item-name{max-width:190px}
+  }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="cart-hero">
   <div class="container">
-    <div style="background:rgba(255,214,10,.15);color:var(--gold);border:1px solid rgba(255,214,10,.3);padding:6px 20px;border-radius:25px;font-size:12px;font-weight:700;letter-spacing:1px;display:inline-block;margin-bottom:15px;">🛒 YOUR CART</div>
-    <h2 style="font-size:40px;font-weight:900;color:var(--text);">Medicine <span style="color:var(--gold);">Cart</span></h2>
+    <div class="page-title-pill">🛒 YOUR CART</div>
+    <h2 style="font-size:40px;font-weight:900;color:var(--text);margin-top:14px;">
+      Medicine <span style="color:var(--gold);">Cart</span>
+    </h2>
   </div>
 </div>
 
-<div class="cart-section">
+<div class="cart-shell">
   <div class="container">
     {% if cart_items %}
-    <div class="row g-4">
-      <div class="col-lg-8">
-        <div class="cart-table">
-          <div style="padding:18px 24px;border-bottom:1px solid var(--border);">
-            <span style="color:var(--gold);font-weight:700;font-size:16px;">🛒 {{ cart_items|length }} Item{% if cart_items|length > 1 %}s{% endif %}</span>
+      <div class="row g-4 cart-grid align-items-start">
+        <div class="col-lg-8">
+          <div class="cart-table">
+            <div class="cart-table-head">
+              <div class="items-meta">
+                🛒 {{ cart_items|length }} Item{% if cart_items|length > 1 %}s{% endif %}
+              </div>
+              <div style="color:var(--text-muted);font-weight:800;font-size:12px;">
+                Tata 1mg · Apollo · PharmEasy
+              </div>
+            </div>
+            <div class="cart-items">
+              {% for item in cart_items %}
+                <div class="cart-item">
+                  <div class="cart-item-thumb" aria-hidden="true">💊</div>
+
+                  <div style="flex:1;min-width:0;">
+                    <div class="cart-item-name" title="{{ item.name }}">{{ item.name }}</div>
+                    <div class="cart-item-meta">Price per unit: <strong style="color:var(--gold)">₹{{ item.price }}</strong></div>
+                  </div>
+
+                  <div class="qty-control" style="flex:0 0 auto;">
+                    <div class="qty-pill" aria-label="Quantity">
+                      <span style="color:var(--text-muted);">Qty</span>
+                      <span style="color:var(--gold);font-weight:900">{{ item.quantity }}</span>
+                    </div>
+                  </div>
+
+                  <div style="flex:0 0 auto;text-align:right;margin-left:8px;">
+                    <div style="color:var(--gold);font-weight:900;font-size:16px;">₹{{ item.subtotal }}</div>
+                    <div style="color:var(--text-muted);font-weight:800;font-size:12px;margin-top:2px;">Subtotal</div>
+                  </div>
+
+                  <div style="flex:0 0 auto;">
+                    <a href="/medicines/cart/remove/{{ item.id }}/" class="remove-btn">🗑 Remove</a>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
           </div>
-          {% for item in cart_items %}
-          <div class="cart-row">
-            <div style="font-size:26px;">💊</div>
-            <div class="cart-name">{{ item.name }}</div>
-            <div class="cart-price">₹{{ item.price }}</div>
-            <div class="cart-qty">×{{ item.quantity }}</div>
-            <div class="cart-sub">₹{{ item.subtotal }}</div>
-            <a href="/medicines/cart/remove/{{ item.id }}/" class="remove-btn">🗑 Remove</a>
-          </div>
-          {% endfor %}
+
+          <a href="/medicines/" class="muted-link" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">← Aur medicines add karo</a>
         </div>
-        <a href="/medicines/" style="color:var(--text-muted);font-size:13px;display:inline-block;margin-top:15px;text-decoration:none;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">← Aur medicines add karo</a>
-      </div>
-      <div class="col-lg-4">
-        <div class="cart-total-box">
-          <h5 style="color:var(--gold);font-weight:800;margin-bottom:20px;">💰 Order Summary</h5>
-          {% for item in cart_items %}
-          <div class="total-row">
-            <span>{{ item.name|truncatechars:22 }}</span>
-            <span>₹{{ item.subtotal }}</span>
+
+        <div class="col-lg-4">
+          <div class="cart-total-box">
+            <div class="cart-total-head">💰 Order Summary</div>
+
+            {% for item in cart_items %}
+              <div class="total-row">
+                <span>{{ item.name|truncatechars:22 }}</span>
+                <span>₹{{ item.subtotal }}</span>
+              </div>
+            {% endfor %}
+
+            <div class="total-final">
+              <span>Total</span>
+              <span>₹{{ total }}</span>
+            </div>
+
+            <a href="/medicines/checkout/" class="checkout-btn">🚀 Proceed to Checkout</a>
+
+            <div style="margin-top:16px;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.18);border-radius:16px;padding:14px;">
+              <div style="color:rgba(16,185,129,.98);font-weight:900;font-size:12px;">✅ Safety & authenticity promise</div>
+              <div style="color:var(--text-muted);font-weight:800;font-size:12px;margin-top:6px;">
+                Genuine medicines · Secure checkout · Quick support
+              </div>
+            </div>
           </div>
-          {% endfor %}
-          <div class="total-final">
-            <span>Total</span><span>₹{{ total }}</span>
-          </div>
-          <a href="/medicines/checkout/" class="checkout-btn">🚀 Checkout Now</a>
         </div>
       </div>
-    </div>
     {% else %}
-    <div style="text-align:center;padding:80px 0;">
-      <div style="font-size:80px;margin-bottom:20px;">🛒</div>
-      <h3 style="color:var(--text);">Cart khaali hai!</h3>
-      <p style="color:var(--text-muted);margin-bottom:30px;">Medicines add karo aur order karo</p>
-      <a href="/medicines/" class="btn-gold" style="padding:12px 35px;font-size:16px;">💊 Medicines Dekho</a>
-    </div>
+      <div class="empty-state">
+        <div class="icon">🛒</div>
+        <h3>Cart khaali hai!</h3>
+        <p>Medicines add karo aur order karo</p>
+        <a href="/medicines/" class="btn-gold" style="padding:12px 35px;font-size:16px;text-decoration:none;display:inline-block;">💊 Medicines Dekho</a>
+      </div>
     {% endif %}
   </div>
 </div>
 {% endblock %}
+

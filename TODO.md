@@ -1,26 +1,9 @@
 # TODO
 
-## 1) Doctors page theme fix (red → green)
-- Update `chatbot/templates/chatbot/index.html` styles/variables:
-  - Add missing `--black`, `--red`, `--red-dark` mappings so buttons/text show correctly.
-  - Replace hardcoded red colors in UI elements with green equivalents. ✅
-
-
-## 2) Home page theme fix (blue → green)
-- Update `chatbot/templates/chatbot/home.html` CSS variables and gradients:
-  - Switch `--secondary`/blue gradients to green palette. ✅ (partial: primary/secondary now green)
-
-
-
-## 3) Speed slow (DB queries)
-- Update `appointments/views.py`:
-  - Reduce redundant DB hits:
-    - compute filtered count once
-  - Optimize queryset fields (use `.only(...)` for list page).
-
-## 4) Verification
-- Run server and manually check:
-  - `/` home colors
-  - `/appointments/` doctor page button visibility
-  - Pagination/search works
+## Templates Home Rebuild
+- [x] Inspect current `templates/home.html` and `templates/base.html`
+- [ ] Replace `templates/home.html` with a complete premium healthcare SaaS landing page (all old structure removed)
+- [ ] Verify required sections render: Hero, Stats, Feature grid, Platform showcase, Services grid, Testimonials, FAQ, Final CTA
+- [ ] Verify CTA links work: `/chat/` and `/appointments/` and `/medicines/`
+- [ ] Smoke-test in browser (refresh)
 

@@ -1,0 +1,1222 @@
+{% extends 'base.html' %}
+{% block title %}AIHealthCare — Premium AI Healthcare Platform{% endblock %}
+
+{% block extra_css %}
+<style>
+  :root{
+    --bg0:#060A1A;
+    --bg1:#071B2E;
+    --card: rgba(255,255,255,.08);
+    --card2: rgba(255,255,255,.06);
+    --stroke: rgba(94,234,212,.26);
+    --stroke2: rgba(148,163,184,.18);
+    --text:#EAF2FF;
+    --muted: rgba(234,242,255,.72);
+    --muted2: rgba(234,242,255,.55);
+    --accent:#06B6D4;
+    --accent2:#10B981;
+    --violet:#7C3AED;
+    --warning:#F59E0B;
+
+    --shadow: 0 25px 70px rgba(0,0,0,.45);
+    --shadow2: 0 12px 40px rgba(0,0,0,.30);
+
+    --radius-xl: 28px;
+    --radius-lg: 20px;
+    --radius-md: 16px;
+
+    --container-pad: 16px;
+
+    --grid-gap: 18px;
+  }
+
+  /* Base */
+  .landing{
+    background: radial-gradient(1200px 650px at 20% -10%, rgba(6,182,212,.25), transparent 55%),
+                radial-gradient(950px 600px at 90% 10%, rgba(124,58,237,.20), transparent 55%),
+                radial-gradient(900px 520px at 30% 80%, rgba(16,185,129,.18), transparent 55%),
+                linear-gradient(180deg, var(--bg0), #050814 35%, #040611 100%);
+    color: var(--text);
+  }
+
+  .container-padded{
+    padding-left: var(--container-pad);
+    padding-right: var(--container-pad);
+  }
+
+  /* Animated background */
+  .bg-animate{
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+  }
+  .bg-animate .orb{
+    position: absolute;
+    width: 520px;
+    height: 520px;
+    border-radius: 50%;
+    filter: blur(30px);
+    opacity: .35;
+    transform: translate3d(0,0,0);
+    animation: orbFloat 10s ease-in-out infinite;
+  }
+  .bg-animate .orb.one{left:-160px; top:-180px; background: radial-gradient(circle at 30% 30%, rgba(6,182,212,.9), transparent 55%); animation-duration: 12s;}
+  .bg-animate .orb.two{right:-180px; top:-120px; background: radial-gradient(circle at 50% 40%, rgba(124,58,237,.8), transparent 55%); animation-duration: 15s;}
+  .bg-animate .orb.three{left:10%; bottom:-260px; background: radial-gradient(circle at 50% 50%, rgba(16,185,129,.7), transparent 55%); animation-duration: 18s;}
+
+  @keyframes orbFloat{
+    0%,100%{ transform: translate3d(0,0,0) scale(1); }
+    50%{ transform: translate3d(0,-22px,0) scale(1.04); }
+  }
+
+  .bg-grid{
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(to right, rgba(255,255,255,.05) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(255,255,255,.05) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(600px 320px at 50% 0%, black 40%, transparent 70%);
+    opacity: .35;
+  }
+
+  .bg-scan{
+    position: absolute;
+    left: -20%;
+    top: -10%;
+    width: 140%;
+    height: 40%;
+    background: linear-gradient(90deg, transparent, rgba(6,182,212,.18), transparent);
+    transform: rotate(-10deg);
+    animation: scan 7s ease-in-out infinite;
+    opacity: .55;
+  }
+  @keyframes scan{
+    0%,100%{ transform: translateY(-30px) rotate(-10deg); }
+    50%{ transform: translateY(80px) rotate(-10deg); }
+  }
+
+  /* Motion safety */
+  @media (prefers-reduced-motion: reduce){
+    .bg-animate .orb, .bg-scan{ animation: none !important; }
+  }
+
+  /* Premium typography */
+  .display{
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, Segoe UI, sans-serif;
+    letter-spacing: -0.035em;
+    font-weight: 950;
+    line-height: 1.02;
+  }
+  .kicker{
+    display:inline-flex;
+    align-items:center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(6,182,212,.28);
+    background: rgba(6,182,212,.10);
+    box-shadow: 0 12px 40px rgba(0,0,0,.25);
+    color: rgba(234,242,255,.92);
+    font-weight: 800;
+    font-size: 13px;
+  }
+
+  /* Glass cards */
+  .glass{
+    background: rgba(255,255,255,.07);
+    border: 1px solid var(--stroke);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow2);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  /* Hero */
+  .hero{
+    padding: 92px 0 64px;
+    position: relative;
+  }
+
+  .hero-grid{
+    display: grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap: 28px;
+    align-items: center;
+  }
+  @media (max-width: 992px){
+    .hero-grid{ grid-template-columns: 1fr; }
+    .hero{ padding-top: 78px; }
+  }
+
+  .hero h1{
+    font-size: clamp(40px, 4.3vw, 68px);
+    margin-top: 18px;
+    margin-bottom: 18px;
+  }
+
+  .hero p{
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.85;
+    max-width: 62ch;
+    margin-bottom: 26px;
+  }
+
+  .hero-cta{
+    display:flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap: 10px;
+    padding: 13px 18px;
+    border-radius: 14px;
+    font-weight: 900;
+    text-decoration:none;
+    transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease, background .22s ease, color .22s ease;
+    border: 1px solid transparent;
+    user-select: none;
+  }
+
+  .btn-primary{
+    background: linear-gradient(135deg, rgba(6,182,212,.95), rgba(16,185,129,.95));
+    color: #001018;
+    box-shadow: 0 18px 55px rgba(6,182,212,.22);
+  }
+  .btn-primary:hover{ transform: translateY(-3px); box-shadow: 0 24px 70px rgba(6,182,212,.28); }
+
+  .btn-secondary{
+    background: rgba(255,255,255,.06);
+    border-color: rgba(148,163,184,.20);
+    color: rgba(234,242,255,.92);
+  }
+  .btn-secondary:hover{ transform: translateY(-3px); border-color: rgba(6,182,212,.35); background: rgba(255,255,255,.09); }
+
+  /* Trust badges */
+  .trust-row{
+    margin-top: 22px;
+    display:flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .trust-badge{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(148,163,184,.18);
+    background: rgba(255,255,255,.05);
+    color: rgba(234,242,255,.88);
+  }
+  .trust-badge i{ color: var(--accent); }
+  .trust-badge strong{ font-weight: 950; }
+  .trust-badge span{ color: var(--muted2); font-weight: 700; font-size: 13px; }
+
+  /* Floating healthcare elements */
+  .float-stage{ position: relative; height: 520px; }
+  @media (max-width: 992px){ .float-stage{ height: 420px; } }
+
+  .float-item{
+    position: absolute;
+    border-radius: 20px;
+    padding: 14px 14px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(6,182,212,.25);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 18px 60px rgba(0,0,0,.28);
+    transform: translate3d(0,0,0);
+    animation: floaty 6.5s ease-in-out infinite;
+  }
+
+  @keyframes floaty{
+    0%,100%{ transform: translateY(0); }
+    50%{ transform: translateY(-14px); }
+  }
+  .float-item:nth-child(1){ left: 10px; top: 18px; animation-duration: 6.5s; }
+  .float-item:nth-child(2){ right: 18px; top: 72px; animation-duration: 8.2s; }
+  .float-item:nth-child(3){ left: 26px; bottom: 120px; animation-duration: 7.6s; }
+  .float-item:nth-child(4){ right: 12px; bottom: 48px; animation-duration: 9.0s; }
+
+  .float-item .mini{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width: 46px;
+    height: 46px;
+    border-radius: 16px;
+    background: rgba(6,182,212,.12);
+    border: 1px solid rgba(6,182,212,.25);
+    color: rgba(234,242,255,.95);
+    margin-right: 10px;
+  }
+  .float-item .txt strong{ font-weight: 950; display:block; }
+  .float-item .txt span{ color: var(--muted2); font-weight: 700; font-size: 13px; }
+
+  /* Hero showcase card */
+  .showcase{
+    position:absolute;
+    inset: 0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 18px;
+  }
+
+  .console-card{
+    width: 100%;
+    max-width: 420px;
+    border-radius: var(--radius-xl);
+    background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.06));
+    border: 1px solid rgba(148,163,184,.18);
+    box-shadow: 0 30px 90px rgba(0,0,0,.45);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    overflow:hidden;
+  }
+
+  .console-head{
+    padding: 16px 16px 12px;
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(148,163,184,.16);
+  }
+  .pulse-dot{
+    width: 10px; height:10px; border-radius: 50%;
+    background: rgba(6,182,212,.95);
+    box-shadow: 0 0 0 0 rgba(6,182,212,.45);
+    animation: pulse 1.8s ease-out infinite;
+  }
+  @keyframes pulse{
+    0%{ box-shadow: 0 0 0 0 rgba(6,182,212,.40); }
+    100%{ box-shadow: 0 0 0 18px rgba(6,182,212,0); }
+  }
+
+  .console-head strong{ font-weight: 950; }
+  .console-body{ padding: 14px 16px 16px; }
+  .console-line{
+    display:flex; gap: 12px; align-items:flex-start;
+    padding: 12px 12px;
+    border-radius: 16px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(148,163,184,.14);
+    margin-bottom: 10px;
+    transition: transform .22s ease, border-color .22s ease, background .22s ease;
+  }
+  .console-line:hover{ transform: translateY(-2px); border-color: rgba(6,182,212,.32); background: rgba(255,255,255,.08); }
+
+  .line-icon{
+    width: 40px; height:40px; border-radius: 14px;
+    background: rgba(6,182,212,.10);
+    border: 1px solid rgba(6,182,212,.22);
+    display:flex; align-items:center; justify-content:center;
+    color: rgba(234,242,255,.95);
+    flex: 0 0 auto;
+  }
+  .console-line b{ display:block; font-weight: 950; }
+  .console-line small{ color: var(--muted2); font-weight: 700; line-height: 1.5; display:block; margin-top: 3px; }
+
+  .console-foot{
+    padding: 14px 16px 18px;
+  }
+  .spark{
+    height: 10px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(6,182,212,.05), rgba(6,182,212,.9), rgba(16,185,129,.9), rgba(124,58,237,.55));
+    opacity:.55;
+    filter: blur(.1px);
+  }
+
+  /* Sections */
+  section{ padding: 72px 0; }
+  .section-head{
+    margin-bottom: 26px;
+  }
+  .eyebrow{
+    color: rgba(6,182,212,.95);
+    font-weight: 950;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
+
+  .h2{
+    font-size: clamp(28px, 3.1vw, 44px);
+    line-height: 1.12;
+    margin: 0;
+    font-weight: 950;
+    letter-spacing: -0.03em;
+  }
+  .sub{
+    color: var(--muted);
+    line-height: 1.9;
+    margin-top: 12px;
+    max-width: 72ch;
+  }
+
+  /* Stats counters */
+  .stats{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--grid-gap);
+    margin-top: 18px;
+  }
+  @media(max-width: 992px){ .stats{ grid-template-columns: repeat(2, 1fr);} }
+  @media(max-width: 520px){ .stats{ grid-template-columns: 1fr;} }
+
+  .stat{
+    padding: 18px;
+    border-radius: var(--radius-lg);
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(148,163,184,.18);
+    transition: transform .22s ease, border-color .22s ease, background .22s ease;
+  }
+  .stat:hover{ transform: translateY(-4px); border-color: rgba(6,182,212,.35); background: rgba(255,255,255,.08); }
+
+  .stat .num{ font-size: 34px; font-weight: 1000; letter-spacing: -0.03em; }
+  .stat .label{ color: var(--muted2); font-weight: 750; margin-top: 8px; line-height: 1.4; }
+  .stat .chip{
+    display:inline-flex;
+    align-items:center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(6,182,212,.24);
+    background: rgba(6,182,212,.10);
+    color: rgba(234,242,255,.92);
+    font-weight: 900;
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+
+  /* AI healthcare showcase */
+  .showcase-grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--grid-gap);
+    align-items: start;
+  }
+  @media(max-width: 992px){ .showcase-grid{ grid-template-columns: 1fr; } }
+
+  .panel{
+    border-radius: var(--radius-xl);
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(148,163,184,.18);
+    padding: 20px;
+    box-shadow: 0 18px 60px rgba(0,0,0,.22);
+  }
+
+  .steps{ display:flex; flex-direction: column; gap: 12px; margin-top: 14px; }
+  .step{
+    display:flex; gap: 12px;
+    padding: 14px;
+    border-radius: 18px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(148,163,184,.14);
+    transition: transform .22s ease, border-color .22s ease;
+  }
+  .step:hover{ transform: translateY(-3px); border-color: rgba(6,182,212,.34); }
+
+  .step .n{
+    width: 44px; height:44px;
+    border-radius: 16px;
+    display:flex; align-items:center; justify-content:center;
+    background: rgba(6,182,212,.11);
+    border: 1px solid rgba(6,182,212,.24);
+    color: rgba(234,242,255,.95);
+    font-weight: 1000;
+  }
+  .step b{ font-weight: 1000; }
+  .step small{ display:block; color: var(--muted2); font-weight: 720; margin-top: 4px; line-height: 1.6; }
+
+  /* Features grid */
+  .cards3{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--grid-gap);
+  }
+  @media(max-width: 992px){ .cards3{ grid-template-columns: repeat(2, 1fr);} }
+  @media(max-width: 560px){ .cards3{ grid-template-columns: 1fr;} }
+
+  .feature{
+    padding: 18px;
+    border-radius: var(--radius-xl);
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(148,163,184,.18);
+    transition: transform .22s ease, border-color .22s ease, background .22s ease;
+    position: relative;
+    overflow: hidden;
+    min-height: 168px;
+  }
+  .feature:before{
+    content:"";
+    position:absolute;
+    inset: -2px;
+    background: radial-gradient(450px 220px at 20% 0%, rgba(6,182,212,.18), transparent 55%),
+                radial-gradient(420px 240px at 90% 30%, rgba(124,58,237,.14), transparent 60%);
+    opacity: 0;
+    transition: opacity .25s ease;
+  }
+  .feature:hover:before{ opacity: 1; }
+  .feature:hover{ transform: translateY(-5px); border-color: rgba(6,182,212,.35); background: rgba(255,255,255,.08); }
+
+  .feature > *{ position: relative; z-index: 1; }
+
+  .feature .ico{
+    width: 50px; height:50px;
+    border-radius: 18px;
+    background: rgba(6,182,212,.10);
+    border: 1px solid rgba(6,182,212,.22);
+    display:flex; align-items:center; justify-content:center;
+    color: rgba(234,242,255,.95);
+    margin-bottom: 14px;
+  }
+  .feature b{ font-weight: 1000; font-size: 16px; }
+  .feature p{ color: var(--muted2); font-weight: 720; line-height: 1.75; margin-top: 8px; font-size: 13px; }
+
+  /* Services section */
+  .services-grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--grid-gap);
+    align-items: stretch;
+  }
+  @media(max-width: 992px){ .services-grid{ grid-template-columns: 1fr; } }
+
+  .service-card{
+    padding: 22px;
+    border-radius: var(--radius-xl);
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(148,163,184,.18);
+    transition: transform .22s ease, border-color .22s ease, background .22s ease;
+    position: relative;
+    overflow:hidden;
+  }
+  .service-card:hover{ transform: translateY(-6px); border-color: rgba(6,182,212,.38); background: rgba(255,255,255,.08); }
+
+  .service-card .top{
+    display:flex; align-items:flex-start; justify-content: space-between; gap: 16px;
+    margin-bottom: 12px;
+  }
+  .service-card .tag{
+    display:inline-flex; align-items:center; gap: 8px;
+    padding: 8px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(6,182,212,.22);
+    background: rgba(6,182,212,.10);
+    color: rgba(234,242,255,.92);
+    font-weight: 950;
+    font-size: 12px;
+  }
+
+  .service-card .numbadge{
+    font-weight: 1000;
+    font-size: 12px;
+    color: rgba(234,242,255,.9);
+    padding: 8px 10px;
+    border-radius: 14px;
+    border: 1px solid rgba(148,163,184,.18);
+    background: rgba(255,255,255,.06);
+  }
+
+  .service-card h3{ margin: 10px 0 8px; font-weight: 1000; letter-spacing: -0.02em; }
+  .service-card p{ color: var(--muted2); font-weight: 730; line-height: 1.8; margin:0; }
+
+  /* Testimonials */
+  .test-grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--grid-gap);
+  }
+  @media(max-width: 992px){ .test-grid{ grid-template-columns: repeat(2, 1fr);} }
+  @media(max-width: 560px){ .test-grid{ grid-template-columns: 1fr;} }
+
+  .quote{
+    padding: 20px;
+    border-radius: var(--radius-xl);
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(148,163,184,.18);
+    transition: transform .22s ease, border-color .22s ease, background .22s ease;
+    min-height: 220px;
+  }
+  .quote:hover{ transform: translateY(-5px); border-color: rgba(6,182,212,.35); background: rgba(255,255,255,.08); }
+
+  .quote .stars{ color: #FDE68A; letter-spacing: 2px; font-weight: 1000; }
+  .quote p{ color: var(--muted2); margin-top: 12px; line-height: 1.85; font-weight: 720; }
+  .quote .who{ margin-top: 16px; display:flex; gap: 12px; align-items:center; }
+  .avatar{
+    width: 44px; height:44px;
+    border-radius: 16px;
+    background: rgba(6,182,212,.12);
+    border: 1px solid rgba(6,182,212,.25);
+    display:flex; align-items:center; justify-content:center;
+    font-weight: 1000;
+  }
+  .who b{ font-weight: 1000; }
+  .who span{ display:block; color: var(--muted2); font-weight: 720; margin-top: 2px; font-size: 13px; }
+
+  /* FAQ */
+  .faq{
+    border-radius: var(--radius-xl);
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(148,163,184,.18);
+    padding: 18px;
+  }
+  .faq .accordion-item{ background: transparent; border: 1px solid rgba(148,163,184,.15); border-radius: 18px; overflow:hidden; margin-bottom: 12px; }
+  .faq .accordion-button{ background: rgba(255,255,255,.04); color: rgba(234,242,255,.95); font-weight: 950; }
+  .faq .accordion-button:not(.collapsed){ background: rgba(6,182,212,.09); color: rgba(234,242,255,1); }
+  .faq .accordion-body{ color: var(--muted2); font-weight: 720; line-height: 1.9; }
+
+  /* CTA */
+  .cta{
+    padding: 64px 0;
+  }
+  .cta-card{
+    border-radius: calc(var(--radius-xl) + 4px);
+    padding: 26px;
+    border: 1px solid rgba(6,182,212,.30);
+    background: radial-gradient(900px 400px at 10% 10%, rgba(6,182,212,.22), transparent 55%),
+                radial-gradient(800px 400px at 85% 20%, rgba(124,58,237,.18), transparent 60%),
+                rgba(255,255,255,.06);
+    box-shadow: 0 40px 120px rgba(0,0,0,.55);
+    position: relative;
+    overflow:hidden;
+  }
+  .cta-card:after{
+    content:"";
+    position:absolute;
+    inset: -2px;
+    background: linear-gradient(120deg, rgba(6,182,212,.25), rgba(16,185,129,.12), rgba(124,58,237,.22));
+    opacity: .18;
+    pointer-events:none;
+  }
+  .cta-card > *{ position: relative; z-index: 1; }
+
+  .cta-row{
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+  .cta h2{ margin: 0; font-size: clamp(28px, 3vw, 44px); font-weight: 1000; letter-spacing: -0.03em; }
+  .cta p{ margin-top: 10px; color: var(--muted); font-weight: 720; line-height: 1.85; max-width: 70ch; }
+
+  /* Scroll reveal */
+  [data-reveal]{opacity:0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease;}
+  [data-reveal].is-visible{opacity:1; transform: translateY(0);}
+
+  /* Simple section anchor spacing for navbar overlap */
+  .anchor{ scroll-margin-top: 110px; }
+</style>
+
+<script>
+  // Scroll reveal + counter animation (frontend only)
+  document.addEventListener('DOMContentLoaded', () => {
+    // Reveal
+    const revealEls = Array.from(document.querySelectorAll('[data-reveal]'));
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries){
+        if(e.isIntersecting){
+          e.target.classList.add('is-visible');
+          io.unobserve(e.target);
+        }
+      }
+    }, { threshold: 0.18 });
+    revealEls.forEach(el => io.observe(el));
+
+    // Counters
+    const counterSection = document.getElementById('stats');
+    const counters = Array.from(document.querySelectorAll('[data-count]'));
+    if(!counterSection || counters.length === 0) return;
+
+    let started = false;
+    const animate = (el, target) => {
+      const duration = 1150;
+      const start = performance.now();
+      const from = 0;
+      const tick = (now) => {
+        const t = Math.min(1, (now - start) / duration);
+        const eased = 1 - Math.pow(1 - t, 3);
+        const val = Math.floor(from + (target - from) * eased);
+        el.textContent = String(val);
+        if(t < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+
+    const cIO = new IntersectionObserver((entries) => {
+      for (const ent of entries){
+        if(ent.isIntersecting && !started){
+          started = true;
+          setTimeout(() => {
+            counters.forEach(el => {
+              const t = parseInt(el.getAttribute('data-count') || '0', 10);
+              if(Number.isFinite(t)) animate(el, t);
+            });
+          }, 120);
+          cIO.disconnect();
+          break;
+        }
+      }
+    }, { threshold: 0.25 });
+
+    cIO.observe(counterSection);
+  });
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="landing">
+  <!-- Animated background layer -->
+  <div class="bg-animate" aria-hidden="true">
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+    <div class="orb three"></div>
+    <div class="bg-grid"></div>
+    <div class="bg-scan"></div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container container-padded">
+      <div class="hero-grid">
+        <div>
+          <div class="kicker" data-reveal>
+            <i class="fas fa-shield-heart" style="color:var(--accent)"></i>
+            HIPAA-style privacy mindset • AI-assisted care
+          </div>
+
+          <h1 class="display" data-reveal>
+            Premium healthcare, <span style="color:var(--accent);">powered by AI</span>.
+          </h1>
+
+          <p data-reveal>
+            Get symptom clarity, book trusted doctors, and manage medicines with a calm, premium SaaS experience—designed for real-world care journeys.
+          </p>
+
+          <div class="hero-cta" data-reveal>
+            <a class="btn btn-primary" href="/chat/">
+              <i class="fas fa-stethoscope" aria-hidden="true"></i>
+              Start an AI Consultation
+            </a>
+            <a class="btn btn-secondary" href="/appointments/">
+              <i class="fas fa-calendar-check" aria-hidden="true"></i>
+              Book a Doctor
+            </a>
+          </div>
+
+          <div class="trust-row" data-reveal>
+            <div class="trust-badge">
+              <i class="fas fa-lock"></i>
+              <div>
+                <strong>Privacy-first</strong>
+                <span>Secure-by-design UX</span>
+              </div>
+            </div>
+            <div class="trust-badge">
+              <i class="fas fa-user-check" style="color:var(--accent2)"></i>
+              <div>
+                <strong>Trusted care</strong>
+                <span>Doctor recommendations</span>
+              </div>
+            </div>
+            <div class="trust-badge">
+              <i class="fas fa-sparkles" style="color:var(--violet)"></i>
+              <div>
+                <strong>AI assistance</strong>
+                <span>Guided next steps</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass" style="border-radius: var(--radius-xl); padding: 18px;">
+          <div class="float-stage" data-reveal>
+            <div class="float-item">
+              <div class="mini"><i class="fas fa-heart-pulse"></i></div>
+              <div class="txt">
+                <strong>Symptom Triage</strong>
+                <span>Urgency signals</span>
+              </div>
+            </div>
+            <div class="float-item">
+              <div class="mini" style="background:rgba(124,58,237,.12);border-color:rgba(124,58,237,.24)"><i class="fas fa-brain"></i></div>
+              <div class="txt">
+                <strong>AI Guidance</strong>
+                <span>Clear next steps</span>
+              </div>
+            </div>
+            <div class="float-item">
+              <div class="mini" style="background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.24)"><i class="fas fa-user-md"></i></div>
+              <div class="txt">
+                <strong>Doctor Fit</strong>
+                <span>Specialist matching</span>
+              </div>
+            </div>
+            <div class="float-item">
+              <div class="mini" style="background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.28)"><i class="fas fa-pills"></i></div>
+              <div class="txt">
+                <strong>Medicine Flow</strong>
+                <span>Fast ordering</span>
+              </div>
+            </div>
+
+            <div class="showcase">
+              <div class="console-card">
+                <div class="console-head">
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <div class="pulse-dot" aria-hidden="true"></div>
+                    <div>
+                      <strong>AI Clinic Console</strong>
+                      <div style="color:var(--muted2);font-weight:800;font-size:13px; margin-top:2px;">Live guidance preview</div>
+                    </div>
+                  </div>
+                  <div style="display:flex;gap:8px;align-items:center;">
+                    <span style="padding:8px 10px;border-radius:999px;border:1px solid rgba(6,182,212,.25);background:rgba(6,182,212,.10);font-weight:950;font-size:12px;">Secure</span>
+                  </div>
+                </div>
+
+                <div class="console-body">
+                  <div class="console-line">
+                    <div class="line-icon"><i class="fas fa-wave-square"></i></div>
+                    <div>
+                      <b>Step 1: Describe</b>
+                      <small>Share symptoms in natural language. Get structured clarity.</small>
+                    </div>
+                  </div>
+                  <div class="console-line">
+                    <div class="line-icon"><i class="fas fa-clipboard-check"></i></div>
+                    <div>
+                      <b>Step 2: Understand</b>
+                      <small>AI suggests urgency + next steps, with calm explanations.</small>
+                    </div>
+                  </div>
+                  <div class="console-line" style="margin-bottom:0;">
+                    <div class="line-icon"><i class="fas fa-route"></i></div>
+                    <div>
+                      <b>Step 3: Act</b>
+                      <small>Book a doctor or order medicines—when it makes sense.</small>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="console-foot">
+                  <div class="spark"></div>
+                  <div style="margin-top:10px;color:var(--muted2);font-weight:760;font-size:13px;line-height:1.6;">
+                    Premium UX • Glassmorphism • Smooth motion • Scroll reveal
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Statistics counters -->
+      <div class="stats" id="stats" style="margin-top: 28px;" aria-label="Key statistics">
+        <div class="stat" data-reveal>
+          <div class="chip"><i class="fas fa-user-doctor"></i> Care network</div>
+          <div class="num"><span data-count="120">0</span>+</div>
+          <div class="label">Trusted doctors & specialists</div>
+        </div>
+        <div class="stat" data-reveal>
+          <div class="chip"><i class="fas fa-clock"></i> Always on</div>
+          <div class="num"><span data-count="24">0</span>/7</div>
+          <div class="label">AI guidance availability</div>
+        </div>
+        <div class="stat" data-reveal>
+          <div class="chip"><i class="fas fa-pills"></i> Quick ordering</div>
+          <div class="num"><span data-count="500">0</span>+</div>
+          <div class="label">Medicines prepared for checkout</div>
+        </div>
+        <div class="stat" data-reveal>
+          <div class="chip"><i class="fas fa-star"></i> Patient love</div>
+          <div class="num"><span data-count="10000">0</span>+</div>
+          <div class="label">Calm consultations delivered</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI healthcare showcase (requested) -->
+  <section class="anchor" id="showcase">
+    <div class="container container-padded">
+      <div class="section-head" data-reveal>
+        <div class="eyebrow">AI healthcare showcase</div>
+        <h2 class="h2">From symptoms to next steps—without the stress.</h2>
+        <div class="sub">A premium flow that feels like a modern healthcare startup: structured, reassuring, and action-oriented.</div>
+      </div>
+
+      <div class="showcase-grid">
+        <div class="panel" data-reveal>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+            <div>
+              <div class="kicker" style="background:rgba(124,58,237,.10);border-color:rgba(124,58,237,.25);">
+                <i class="fas fa-magic" style="color:var(--violet)"></i> Premium AI Flow
+              </div>
+              <h3 style="margin:14px 0 8px;font-weight:1000;letter-spacing:-0.02em;">AI triage that stays human</h3>
+              <p class="sub" style="margin-top:0;max-width:64ch;">Get calm explanations, urgency hints, and recommended actions—designed for clarity.</p>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-weight:1000;font-size:34px;letter-spacing:-0.03em;">+4.9★</div>
+              <div style="color:var(--muted2);font-weight:800;font-size:13px;">Patient trust</div>
+            </div>
+          </div>
+
+          <div class="steps">
+            <div class="step">
+              <div class="n">01</div>
+              <div>
+                <b>Guided symptom input</b>
+                <small>Natural language + structured signals help you move forward quickly.</small>
+              </div>
+            </div>
+            <div class="step">
+              <div class="n">02</div>
+              <div>
+                <b>Actionable next steps</b>
+                <small>Understand what to do now—home care cues, doctor fit, or urgency.</small>
+              </div>
+            </div>
+            <div class="step">
+              <div class="n">03</div>
+              <div>
+                <b>Book & order in seconds</b>
+                <small>Seamless checkout and scheduling inside one premium experience.</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel" data-reveal>
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div style="width:54px;height:54px;border-radius:20px;display:flex;align-items:center;justify-content:center;background:rgba(6,182,212,.12);border:1px solid rgba(6,182,212,.25);">
+              <i class="fas fa-shield-virus"></i>
+            </div>
+            <div>
+              <h3 style="margin:0;font-weight:1000;">Glass UI that scales</h3>
+              <div style="color:var(--muted2);font-weight:800;margin-top:6px;">Scroll animations • hover motion • modern cards</div>
+            </div>
+          </div>
+
+          <div style="margin-top:16px;display:grid;grid-template-columns:1fr;gap:12px;">
+            <div class="console-line" style="margin:0;">
+              <div class="line-icon"><i class="fas fa-file-medical"></i></div>
+              <div>
+                <b>Report insights</b>
+                <small>Turn medical documents into clearer explanations—built for confidence.</small>
+              </div>
+            </div>
+            <div class="console-line" style="margin:0;">
+              <div class="line-icon"><i class="fas fa-user-clock"></i></div>
+              <div>
+                <b>Doctor scheduling</b>
+                <small>Choose specialists faster with a guided booking experience.</small>
+              </div>
+            </div>
+            <div class="console-line" style="margin:0;">
+              <div class="line-icon"><i class="fas fa-truck-medical"></i></div>
+              <div>
+                <b>Medicines ordering</b>
+                <small>Quick flows for selecting and preparing orders with minimal friction.</small>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+            <a class="btn btn-secondary" href="/chat/" style="border-radius:16px; padding:12px 14px;"><i class="fas fa-comment-dots"></i> Try AI Triage</a>
+            <a class="btn btn-primary" href="/medicines/" style="border-radius:16px; padding:12px 14px;"><i class="fas fa-bag-shopping"></i> Order Medicines</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features grid (requested) -->
+  <section id="features" class="anchor">
+    <div class="container container-padded">
+      <div class="section-head" data-reveal>
+        <div class="eyebrow">Features</div>
+        <h2 class="h2">Premium features that feel effortless.</h2>
+        <div class="sub">Designed to look and behave like a modern healthcare SaaS platform.</div>
+      </div>
+
+      <div class="cards3">
+        <div class="feature" data-reveal>
+          <div class="ico"><i class="fas fa-wave-square"></i></div>
+          <b>Symptom clarity</b>
+          <p>Structured guidance that turns uncertainty into understandable next steps.</p>
+        </div>
+        <div class="feature" data-reveal>
+          <div class="ico" style="background:rgba(124,58,237,.12);border-color:rgba(124,58,237,.22);"><i class="fas fa-brain"></i></div>
+          <b>AI medical assistant</b>
+          <p>Fast answers with reassurance—built for 24/7 access.</p>
+        </div>
+        <div class="feature" data-reveal>
+          <div class="ico" style="background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.22);"><i class="fas fa-user-md"></i></div>
+          <b>Doctor fit matching</b>
+          <p>Book the right specialist with guided scheduling experiences.</p>
+        </div>
+        <div class="feature" data-reveal>
+          <div class="ico"><i class="fas fa-pills"></i></div>
+          <b>Medicine ordering</b>
+          <p>Quick selection and clean checkout flow with minimal friction.</p>
+        </div>
+        <div class="feature" data-reveal>
+          <div class="ico" style="background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.24);"><i class="fas fa-file-medical"></i></div>
+          <b>Report insights</b>
+          <p>Readable explanations designed to increase confidence and reduce confusion.</p>
+        </div>
+        <div class="feature" data-reveal>
+          <div class="ico" style="background:rgba(255,255,255,.08);border-color:rgba(148,163,184,.24);"><i class="fas fa-shield-alt"></i></div>
+          <b>Privacy-first UX</b>
+          <p>Trust-centric presentation that feels safe and premium.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services section (requested) -->
+  <section id="services" class="anchor">
+    <div class="container container-padded">
+      <div class="section-head" data-reveal>
+        <div class="eyebrow">Services</div>
+        <h2 class="h2">Care, in clear steps.</h2>
+        <div class="sub">Pick the path you need—consultation, doctor booking, medicines, or report clarity.</div>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card" data-reveal>
+          <div class="top">
+            <div class="tag"><i class="fas fa-stethoscope"></i> AI Consultation</div>
+            <div class="numbadge">24/7</div>
+          </div>
+          <h3>Symptom guidance with calm confidence</h3>
+          <p>Instant clarity on what to do next—designed to reduce anxiety and guide action.</p>
+          <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+            <a class="btn btn-primary" href="/chat/" style="padding:12px 14px;border-radius:16px;">
+              <i class="fas fa-comment-dots"></i> Start
+            </a>
+            <a class="btn btn-secondary" href="/chat/" style="padding:12px 14px;border-radius:16px;">
+              <i class="fas fa-shield-heart"></i> How it works
+            </a>
+          </div>
+        </div>
+
+        <div class="service-card" data-reveal>
+          <div class="top">
+            <div class="tag" style="border-color:rgba(124,58,237,.25);background:rgba(124,58,237,.10);"><i class="fas fa-user-doctor"></i> Doctor Booking</div>
+            <div class="numbadge" style="border-color:rgba(124,58,237,.25);background:rgba(124,58,237,.10);">Fast</div>
+          </div>
+          <h3>Doctor fit that feels modern</h3>
+          <p>Guided scheduling with specialist matching—so you can move faster to care.</p>
+          <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+            <a class="btn btn-primary" href="/appointments/" style="padding:12px 14px;border-radius:16px;">
+              <i class="fas fa-calendar-check"></i> Book
+            </a>
+            <a class="btn btn-secondary" href="/appointments/" style="padding:12px 14px;border-radius:16px;">
+              <i class="fas fa-user-injured"></i> Choose specialist
+            </a>
+          </div>
+        </div>
+
+        <div class="service-card" data-reveal>
+          <div class="top">
+            <div class="tag" style="border-color:rgba(16,185,129,.25);background:rgba(16,185,129,.10);"><i class="fas fa-pills"></i> Medicines</div>
+            <div class="numbadge" style="border-color:rgba(16,185,129,.25);background:rgba(16,185,129,.10);">Ready</div>
+          </div>
+          <h3>Quick ordering, clean checkout</h3>
+          <p>Discover medicine options and order with a premium flow that stays out of your way.</p>
+          <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+            <a class="btn btn-primary" href="/medicines/" style="padding:12px 14px;border-radius:16px;">
+              <i class="fas fa-bag-shopping"></i> Browse
+            </a>
+            <a class="btn btn-secondary" href="/medicines/" style="padding:12px 14px;border-radius:16px;">
+              <i class="fas fa-receipt"></i> Checkout</a>
+          </div>
+        </div>
+
+        <div class="service-card" data-reveal>
+          <div class="top">
+            <div class="tag" style="border-color:rgba(245,158,11,.25);background:rgba(245,158,11,.10);"><i class="fas fa-file-medical"></i> Reports</div>
+            <div class="numbadge" style="border-color:rgba(245,158,11,.25);background:rgba(245,158,11,.10);">Clear</div>
+          </div>
+          <h3>Understand your report, better</h3>
+          <p>Readable explanations and next-step clarity built for real people, not complex jargon.</p>
+          <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+            <a class="btn btn-primary" href="/chat/" style="padding:12px 14px;border-radius:16px;">
+              <i class="fas fa-file-circle-check"></i> Analyze
+            </a>
+            <a class="btn btn-secondary" href="/chat/" style="padding:12px 14px;border-radius:16px;">
+              <i class="fas fa-comments"></i> Ask AI
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials (requested) -->
+  <section id="testimonials" class="anchor" style="padding-top:54px;">
+    <div class="container container-padded">
+      <div class="section-head" data-reveal>
+        <div class="eyebrow">Testimonials</div>
+        <h2 class="h2">Trusted by people who want clarity.</h2>
+        <div class="sub">A premium experience that reduces uncertainty and drives action.</div>
+      </div>
+
+      <div class="test-grid">
+        <div class="quote" data-reveal>
+          <div class="stars">★★★★★</div>
+          <p>“The guidance feels calm and structured. I knew what to do next without panicking.”</p>
+          <div class="who">
+            <div class="avatar">A</div>
+            <div>
+              <b>Arun S.</b>
+              <span>Symptom clarity</span>
+            </div>
+          </div>
+        </div>
+        <div class="quote" data-reveal>
+          <div class="stars">★★★★★</div>
+          <p>“Doctor booking was smooth. The UI is clean and premium—exactly what healthcare should feel like.”</p>
+          <div class="who">
+            <div class="avatar">R</div>
+            <div>
+              <b>Rekha K.</b>
+              <span>Specialist matching</span>
+            </div>
+          </div>
+        </div>
+        <div class="quote" data-reveal>
+          <div class="stars">★★★★★</div>
+          <p>“Ordering medicines was fast and understandable. The whole flow saves time.”</p>
+          <div class="who">
+            <div class="avatar">M</div>
+            <div>
+              <b>Manish P.</b>
+              <span>Medicine flow</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ (requested) -->
+  <section id="faq" class="anchor" style="padding-top:40px;">
+    <div class="container container-padded">
+      <div class="section-head" data-reveal>
+        <div class="eyebrow">FAQ</div>
+        <h2 class="h2">Questions, answered with clarity.</h2>
+        <div class="sub">Quick answers about how the AI experience and actions fit together.</div>
+      </div>
+
+      <div class="faq" data-reveal>
+        <div class="accordion" id="faqAcc" style="--bs-accordion-color: rgba(234,242,255,.95);">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="q1">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c1" aria-expanded="false" aria-controls="c1">
+                Is this a replacement for a doctor?
+              </button>
+            </h2>
+            <div id="c1" class="accordion-collapse collapse" aria-labelledby="q1" data-bs-parent="#faqAcc">
+              <div class="accordion-body">
+                No. This platform provides AI-assisted guidance for clarity and next steps. For diagnosis and treatment, consult a qualified healthcare professional.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="q2">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c2" aria-expanded="false" aria-controls="c2">
+                How does the AI triage work?
+              </button>
+            </h2>
+            <div id="c2" class="accordion-collapse collapse" aria-labelledby="q2" data-bs-parent="#faqAcc">
+              <div class="accordion-body">
+                You describe symptoms. The AI produces structured guidance (urgency hints and next actions) to help you decide whether to book a doctor or take safe interim steps.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="q3">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c3" aria-expanded="false" aria-controls="c3">
+                Can I book doctors from the same experience?
+              </button>
+            </h2>
+            <div id="c3" class="accordion-collapse collapse" aria-labelledby="q3" data-bs-parent="#faqAcc">
+              <div class="accordion-body">
+                Yes. The flow is designed to move from AI guidance to doctor booking seamlessly—so you can act quickly with confidence.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" style="margin-bottom:0;">
+            <h2 class="accordion-header" id="q4">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c4" aria-expanded="false" aria-controls="c4">
+                Is my data handled safely?
+              </button>
+            </h2>
+            <div id="c4" class="accordion-collapse collapse" aria-labelledby="q4" data-bs-parent="#faqAcc">
+              <div class="accordion-body">
+                The UX is built with privacy-first principles. Please follow platform policies and avoid sharing sensitive data beyond what’s required.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA section (requested) -->
+  <section class="cta anchor" id="cta">
+    <div class="container container-padded">
+      <div class="cta-card" data-reveal>
+        <div class="cta-row">
+          <div>
+            <div class="eyebrow" style="margin-bottom:8px;">Ready when you are</div>
+            <h2 class="display">Start with AI guidance—then take the next step.</h2>
+            <p>
+              Book a doctor when needed or order medicines with confidence. Premium experience for faster clarity.
+            </p>
+          </div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
+            <a class="btn btn-primary" href="/chat/" style="padding:14px 18px;border-radius:16px;">
+              <i class="fas fa-stethoscope"></i>
+              Consult Now
+            </a>
+            <a class="btn btn-secondary" href="/appointments/" style="padding:14px 18px;border-radius:16px;">
+              <i class="fas fa-calendar-check"></i>
+              Book Appointment
+            </a>
+          </div>
+        </div>
+        <div style="margin-top:16px;color:rgba(234,242,255,.55);font-weight:760;font-size:12.5px;line-height:1.7;">
+          ⚠️ This platform provides general health information only. Always consult a qualified doctor for medical diagnosis and treatment.
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  // Counterpart: ensure Bootstrap accordion works even if base template differs.
+  // No backend changes. Only UI enhancements.
+</script>
+{% endblock %}
+

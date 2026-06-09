@@ -1,68 +1,171 @@
 {% extends 'base.html' %}
 {% block title %}Order Medicine{% endblock %}
+
+{% block extra_css %}
+<style>
+  .order-wrap{ padding:34px 0 60px; }
+  .order-grid{ gap:18px; }
+
+  .medicine-hero{
+    background:linear-gradient(135deg,#0f172a,#0d6efd);
+    color:#fff;
+    border-radius:18px;
+    padding:18px;
+    border:1px solid rgba(255,255,255,.10);
+  }
+  .medicine-hero .title{ display:flex;align-items:center;gap:12px; }
+  .med-ico{
+    width:54px;height:54px;border-radius:18px;
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.18);
+    display:flex;align-items:center;justify-content:center;
+    font-size:26px;
+  }
+  .medicine-hero h4{margin:0;font-weight:900;}
+  .medicine-hero p{margin:0;color:rgba(255,255,255,.85);font-weight:800;font-size:13px;}
+
+  .place-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:22px;
+    box-shadow:0 18px 50px rgba(2,6,23,.05);
+    padding:22px;
+  }
+  .place-title{
+    color:var(--gold);
+    font-weight:900;
+    font-size:16px;
+    margin-bottom:16px;
+    display:flex;align-items:center;gap:10px;
+  }
+
+  .calc-box{
+    background:rgba(16,185,129,.08);
+    border:1px solid rgba(16,185,129,.18);
+    border-radius:16px;
+    padding:14px;
+    margin-top:10px;
+  }
+
+  .place-btn{
+    background:linear-gradient(135deg,var(--secondary),var(--accent));
+    border:none;
+    color:#fff;
+    width:100%;
+    padding:13px 16px;
+    border-radius:16px;
+    font-weight:900;
+    cursor:pointer;
+    transition:transform .2s ease, filter .2s ease, box-shadow .2s ease;
+    box-shadow:0 14px 34px rgba(6,182,212,.18);
+  }
+  .place-btn:hover{transform:translateY(-3px);filter:brightness(1.02);box-shadow:0 22px 60px rgba(6,182,212,.28)}
+
+  .step-note{color:var(--text-muted);font-weight:800;font-size:12px;margin-top:10px}
+
+  @media (max-width:767px){
+    .order-wrap{padding-top:20px;}
+  }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
+<div class="order-wrap">
+  <div class="container">
 
-            <div style="background:linear-gradient(135deg,#1a8a5a,#0d6efd);color:white;border-radius:15px;padding:20px;text-align:center;margin-bottom:20px;">
-                <div style="font-size:50px;">💊</div>
-                <h4>{{ medicine.name }}</h4>
-                <p class="mb-1">{{ medicine.category }}</p>
-                <h3>₹{{ medicine.price }} per unit</h3>
+    {% include 'medicines/templates/medicines/_checkout_steps_partial.html' with active_step='order' %}
+
+    <div class="row order-grid justify-content-center">
+      <div class="col-md-6">
+        <div class="medicine-hero">
+          <div class="title">
+            <div class="med-ico" aria-hidden="true">💊</div>
+            <div>
+              <h4>{{ medicine.name }}</h4>
+              <p>{{ medicine.category }}</p>
             </div>
+          </div>
 
-            <div class="card p-4" style="border-radius:15px;border:none;box-shadow:0 4px 15px rgba(0,0,0,0.1);">
-                <h5 class="fw-bold mb-4">🛒 Place Order</h5>
-                <form method="POST">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">👤 Your Name</label>
-                        <input type="text" name="patient_name" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">📞 Phone Number</label>
-                        <input type="tel" name="patient_phone" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">🏠 Delivery Address</label>
-                        <textarea name="patient_address" class="form-control" rows="3" required></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">🔢 Quantity</label>
-                        <input type="number" name="quantity" class="form-control" value="1" min="1" max="10" id="qty" oninput="updateTotal()" required>
-                    </div>
-                    <div class="mb-3 p-3" style="background:#e8f5e9;border-radius:10px;">
-                        <div class="d-flex justify-content-between">
-                            <span>Price per unit:</span>
-                            <strong>₹{{ medicine.price }}</strong>
-                        </div>
-                        <div class="d-flex justify-content-between mt-1">
-                            <span>Total Amount:</span>
-                            <strong id="totalPrice" style="color:#1a8a5a;font-size:18px;">₹{{ medicine.price }}</strong>
-                        </div>
-                        <hr>
-                        <div class="text-center">
-                            <span style="background:#fff3e0;color:#e65100;padding:4px 12px;border-radius:20px;font-size:13px;">💵 Cash on Delivery</span>
-                        </div>
-                    </div>
-                    <div class="d-grid">
-                        <button type="submit" style="background:linear-gradient(135deg,#1a8a5a,#0d6efd);border:none;color:white;padding:12px;border-radius:25px;font-size:16px;">✅ Place Order</button>
-                    </div>
-                </form>
+          <div style="margin-top:12px;display:flex;align-items:baseline;justify-content:space-between;gap:12px;">
+            <div>
+              <div style="color:rgba(255,214,10,.98);font-weight:900;font-size:24px;">₹{{ medicine.price }}</div>
+              <div style="color:rgba(255,255,255,.85);font-weight:900;font-size:12px;margin-top:4px;">per unit</div>
             </div>
-
+            <div style="background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);padding:10px 12px;border-radius:14px;">
+              <div style="font-size:12px;font-weight:900;color:rgba(255,255,255,.92);">Quality Promise</div>
+              <div style="font-size:12px;font-weight:800;color:rgba(255,255,255,.82);margin-top:4px;">Tata 1mg · Apollo · PharmEasy</div>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="place-card">
+          <div class="place-title">🛒 Place Order</div>
+
+          <form method="POST">
+            {% csrf_token %}
+
+            <div class="mb-3">
+              <label class="form-label fw-bold">👤 Your Name</label>
+              <input type="text" name="patient_name" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-bold">📞 Phone Number</label>
+              <input type="tel" name="patient_phone" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-bold">🏠 Delivery Address</label>
+              <textarea name="patient_address" class="form-control" rows="3" required></textarea>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-bold">🔢 Quantity</label>
+              <input type="number" name="quantity" class="form-control" value="1" min="1" max="10" id="qty" oninput="updateTotal()" required>
+              <div style="margin-top:8px;color:var(--text-muted);font-weight:800;font-size:12px;">Final amount updates instantly.</div>
+            </div>
+
+            <div class="calc-box">
+              <div class="d-flex justify-content-between" style="gap:12px;">
+                <span style="color:var(--text-muted);font-weight:900;font-size:13px;">Price per unit</span>
+                <strong style="color:var(--text);font-size:14px;">₹{{ medicine.price }}</strong>
+              </div>
+
+              <div class="d-flex justify-content-between mt-2" style="gap:12px;">
+                <span style="color:var(--text-muted);font-weight:900;font-size:13px;">Total Amount</span>
+                <strong id="totalPrice" style="color:var(--gold);font-size:20px;">₹{{ medicine.price }}</strong>
+              </div>
+
+              <hr style="border-top:1px solid rgba(15,23,42,.12);margin:12px 0;">
+
+              <div style="text-align:center;">
+                <span style="background:#fff3e0;color:#e65100;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:900;border:1px solid rgba(230,152,11,.18);">💵 Cash on Delivery</span>
+              </div>
+            </div>
+
+            <div class="d-grid" style="margin-top:16px;">
+              <button type="submit" class="place-btn">✅ Complete Order</button>
+            </div>
+
+            <div class="step-note">Checkout is processed exactly as before — UI-only redesign.</div>
+          </form>
+        </div>
+      </div>
+
     </div>
+  </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-const pricePerUnit = {{ medicine.price }};
-function updateTotal() {
+  const pricePerUnit = Number({{ medicine.price }});
+  function updateTotal(){ 
     const qty = document.getElementById('qty').value || 1;
     document.getElementById('totalPrice').textContent = '₹' + (pricePerUnit * qty);
-}
+  }
 </script>
 {% endblock %}
+
