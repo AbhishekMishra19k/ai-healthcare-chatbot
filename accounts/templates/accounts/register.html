@@ -1,0 +1,741 @@
+{% extends 'base.html' %}
+{% block title %}Register — AIHealthCare{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* ========== Auth (Premium SaaS) ========== */
+  .auth-page{
+    min-height: calc(100vh - 92px);
+    display:flex;
+    align-items:stretch;
+    padding: 28px 0;
+    background:
+      radial-gradient(1100px 520px at 10% -10%, rgba(6,182,212,.22), transparent 60%),
+      radial-gradient(900px 520px at 95% 0%, rgba(230,57,70,.18), transparent 60%),
+      radial-gradient(700px 520px at 50% 110%, rgba(16,185,129,.14), transparent 55%),
+      linear-gradient(180deg, rgba(2,6,23,.0), rgba(2,6,23,.18));
+  }
+
+  .auth-shell{
+    width:100%;
+    display:grid;
+    grid-template-columns: 1.03fr 0.97fr;
+    gap: 18px;
+    align-items: center;
+  }
+
+  @media (max-width: 992px){
+    .auth-shell{ grid-template-columns: 1fr; }
+  }
+
+  .auth-brand-panel{
+    border-radius: 26px;
+    overflow:hidden;
+    border: 1px solid rgba(6,182,212,.22);
+    background:
+      radial-gradient(900px 420px at 15% 15%, rgba(6,182,212,.28), transparent 60%),
+      radial-gradient(820px 460px at 85% 20%, rgba(239,68,68,.20), transparent 62%),
+      radial-gradient(780px 420px at 45% 95%, rgba(16,185,129,.16), transparent 60%),
+      linear-gradient(180deg, rgba(15,23,42,.92), rgba(2,6,23,.96));
+    box-shadow: 0 40px 120px rgba(2,6,23,.30);
+    position:relative;
+    min-height: 640px;
+  }
+
+  @media (max-width: 992px){
+    .auth-brand-panel{ min-height: auto; }
+  }
+
+  .auth-brand-panel:before{
+    content:"";
+    position:absolute;
+    inset:-2px;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.05) 1px, transparent 1px);
+    background-size: 72px 72px;
+    opacity: .22;
+    pointer-events:none;
+    mask-image: radial-gradient(700px 420px at 35% 0%, black 35%, transparent 70%);
+  }
+
+  .brand-inner{
+    position:relative;
+    z-index:1;
+    padding: 34px;
+    display:flex;
+    flex-direction:column;
+    height:100%;
+  }
+
+  .brand-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .brand-mark{ display:flex; gap: 12px; align-items:center; }
+
+  .brand-logo{
+    width: 46px;
+    height: 46px;
+    border-radius: 16px;
+    background: rgba(6,182,212,.14);
+    border: 1px solid rgba(6,182,212,.35);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color: #7dd3fc;
+    box-shadow: 0 18px 55px rgba(6,182,212,.20);
+  }
+
+  .brand-title{
+    font-weight: 1000;
+    letter-spacing: -0.03em;
+    color: rgba(255,255,255,.96);
+    font-family: 'Plus Jakarta Sans',sans-serif;
+    font-size: 18px;
+    margin:0;
+  }
+
+  .brand-pill{
+    padding: 10px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(148,163,184,.18);
+    color: rgba(229,231,235,.86);
+    font-weight: 900;
+    font-size: 12px;
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    white-space: nowrap;
+  }
+
+  .pulse-dot{
+    width:10px;
+    height:10px;
+    border-radius:999px;
+    background: rgba(6,182,212,.95);
+    box-shadow: 0 0 0 0 rgba(6,182,212,.45);
+    animation: authPulse 1.7s ease-out infinite;
+  }
+
+  @keyframes authPulse{
+    0%{ box-shadow:0 0 0 0 rgba(6,182,212,.40) }
+    100%{ box-shadow:0 0 0 18px rgba(6,182,212,0) }
+  }
+
+  .brand-copy{ margin-top: 14px; }
+
+  .brand-h1{
+    font-size: clamp(26px, 3vw, 44px);
+    line-height: 1.05;
+    font-weight: 1000;
+    color: #F8FAFC;
+    margin: 0 0 12px;
+  }
+  .brand-h1 span{ color: var(--accent); }
+
+  .brand-sub{
+    color: rgba(229,231,235,.72);
+    font-weight: 700;
+    line-height: 1.75;
+    max-width: 56ch;
+    font-size: 14px;
+    margin: 0;
+  }
+
+  .brand-trust{ display:flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+
+  .trust-card{
+    flex: 1 1 200px;
+    min-width: 200px;
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(148,163,184,.18);
+    border-radius: 20px;
+    padding: 14px;
+    box-shadow: 0 22px 75px rgba(2,6,23,.18);
+  }
+
+  .trust-row{ display:flex; gap: 12px; align-items:flex-start; }
+
+  .trust-ico{
+    width: 40px;
+    height: 40px;
+    border-radius: 16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background: rgba(6,182,212,.10);
+    border: 1px solid rgba(6,182,212,.25);
+    color: rgba(125,211,252,.95);
+  }
+
+  .trust-strong{ color: rgba(248,250,252,.95); font-weight: 1000; font-size: 13.5px; }
+  .trust-soft{ color: rgba(229,231,235,.66); font-weight: 800; font-size: 12.5px; margin-top: 2px; line-height: 1.35; }
+
+  .brand-visual{ margin-top:auto; padding-top: 18px; }
+
+  .visual-card{
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(148,163,184,.18);
+    border-radius: 24px;
+    padding: 16px;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .visual-mock{
+    border-radius: 20px;
+    border:1px solid rgba(148,163,184,.18);
+    background:
+      radial-gradient(620px 260px at 20% 0%, rgba(6,182,212,.26), transparent 55%),
+      radial-gradient(520px 300px at 80% 20%, rgba(124,58,237,.20), transparent 60%),
+      linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+    overflow:hidden;
+    position:relative;
+    min-height: 300px;
+    box-shadow: 0 30px 110px rgba(0,0,0,.40);
+  }
+
+  .visual-mock:after{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.06) 1px, transparent 1px);
+    background-size: 58px 58px;
+    opacity: .18;
+    mask-image: radial-gradient(430px 260px at 40% 10%, black 30%, transparent 70%);
+    pointer-events:none;
+  }
+
+  .visual-inner{ position:relative; z-index:1; padding: 16px; display:flex; flex-direction:column; gap: 12px; }
+
+  .visual-top{ display:flex; justify-content:space-between; align-items:center; gap: 12px; }
+
+  .visual-badge{
+    padding: 8px 10px;
+    border-radius: 999px;
+    background: rgba(6,182,212,.10);
+    border:1px solid rgba(6,182,212,.25);
+    color: rgba(125,211,252,.95);
+    font-weight: 1000;
+    font-size: 12px;
+    display:flex;
+    align-items:center;
+    gap: 10px;
+  }
+
+  .visual-kpis{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  @media (max-width: 1100px){ .visual-kpis{ grid-template-columns: repeat(2,1fr);} }
+
+  .kpi{ padding: 14px 12px; border-radius: 18px; background: rgba(255,255,255,.05); border:1px solid rgba(148,163,184,.16); }
+  .kpi .big{ font-weight: 1000; font-size: 22px; letter-spacing: -0.03em; color:#F8FAFC; }
+  .kpi .small{ margin-top: 6px; color: rgba(229,231,235,.66); font-weight: 800; font-size: 12.5px; line-height: 1.35; }
+
+  .visual-bottom{ margin-top:auto; display:grid; grid-template-columns: 1.1fr .9fr; gap: 10px; }
+  @media (max-width: 520px){ .visual-bottom{ grid-template-columns:1fr;} }
+
+  .mini-panel{ border-radius: 18px; background: rgba(255,255,255,.04); border:1px solid rgba(148,163,184,.16); padding: 12px; }
+  .mini-title{ color: rgba(248,250,252,.95); font-weight: 1000; font-size: 13px; display:flex; align-items:center; gap: 10px; }
+  .mini-title i{ color: var(--accent); }
+
+  .mini-items{ margin-top: 10px; display:flex; flex-direction:column; gap: 10px; }
+  .mini-item{ display:flex; gap: 10px; align-items:flex-start; }
+  .mini-item .dot{ width:10px;height: 10px;border-radius: 999px; background: rgba(6,182,212,.9); box-shadow: 0 0 0 5px rgba(6,182,212,.12); margin-top: 6px; }
+
+  .mini-item b{ color: rgba(248,250,252,.95); font-weight: 1000; font-size: 12.5px; }
+  .mini-item small{ display:block; color: rgba(229,231,235,.62); font-weight: 800; font-size: 12px; line-height: 1.35; margin-top: 3px; }
+
+  /* Form side */
+  .auth-form-card{
+    border-radius: 26px;
+    border: 1px solid rgba(6,182,212,.18);
+    background: rgba(255,255,255,.06);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 45px 120px rgba(2,6,23,.20);
+    padding: 26px;
+    overflow:hidden;
+  }
+
+  @media (max-width: 992px){ .auth-form-card{ padding: 22px; } }
+
+  .form-head{ display:flex; flex-direction:column; gap: 6px; margin-bottom: 18px; }
+  .form-head h2{ margin:0; font-family:'Plus Jakarta Sans',sans-serif; font-size: 24px; font-weight: 1000; color: rgba(255,255,255,.96); }
+  .form-head p{ margin:0; color: rgba(229,231,235,.70); font-weight: 750; font-size: 13.5px; }
+
+  .auth-message-stack{ display:flex; flex-direction:column; gap: 10px; margin: 12px 0 18px; }
+  .msg{ border-radius: 16px; padding: 12px 14px; border:1px solid rgba(148,163,184,.18); font-weight: 850; font-size: 13.5px; }
+  .msg.error{ background: rgba(239,68,68,.10); border-color: rgba(239,68,68,.26); color: rgba(239,68,68,.95); }
+  .msg.success{ background: rgba(16,185,129,.10); border-color: rgba(16,185,129,.26); color: rgba(16,185,129,.95); }
+
+  .form-grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 520px){ .form-grid{ grid-template-columns: 1fr; } }
+
+  .field{ position:relative; margin-bottom: 14px; }
+
+  .floating{
+    width:100%;
+    background: rgba(15,23,42,.55) !important;
+    border: 1.5px solid rgba(148,163,184,.22) !important;
+    border-radius: 16px !important;
+    color: rgba(248,250,252,.96) !important;
+    padding: 16px 16px 14px 46px !important;
+    font-size: 14px;
+    transition: all .2s ease;
+  }
+  .floating::placeholder{ color: transparent !important; }
+
+  .field-icon{
+    position:absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    width: 28px; height: 28px;
+    display:flex; align-items:center; justify-content:center;
+    border-radius: 12px;
+    background: rgba(6,182,212,.08);
+    border: 1px solid rgba(6,182,212,.20);
+    color: rgba(125,211,252,.95);
+    pointer-events:none;
+  }
+
+  .floating-label{
+    position:absolute;
+    left: 46px;
+    top: 14px;
+    color: rgba(148,163,184,.90);
+    font-weight: 850;
+    font-size: 12.5px;
+    pointer-events:none;
+    transition: all .15s ease;
+    opacity: .95;
+  }
+
+  .field .floating:focus{
+    border-color: rgba(6,182,212,.65) !important;
+    box-shadow: 0 0 0 4px rgba(6,182,212,.12) !important;
+  }
+
+  .field .floating:focus + .floating-label,
+  .field .floating:not(:placeholder-shown) + .floating-label{
+    top: 8px;
+    font-size: 11px;
+    opacity: .95;
+    color: rgba(125,211,252,.96);
+  }
+
+  .field.is-invalid .floating{
+    border-color: rgba(239,68,68,.60) !important;
+    box-shadow: 0 0 0 4px rgba(239,68,68,.12) !important;
+  }
+
+  .field .inline-hint{ margin-top: 8px; color: rgba(148,163,184,.72); font-weight: 800; font-size: 12.5px; line-height: 1.35; }
+  .field .inline-hint.error{ color: rgba(239,68,68,.95); }
+
+  .eye{ position:absolute; right: 12px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: rgba(148,163,184,.92); cursor:pointer; padding: 8px; border-radius: 12px; }
+  .eye:hover{ color: rgba(239,68,68,.95); background: rgba(239,68,68,.08); }
+
+  .actions{ display:flex; flex-direction:column; gap: 10px; margin-top: 8px; }
+
+  .primary-btn{
+    width:100%;
+    padding: 14px 18px;
+    border-radius: 16px;
+    border:none;
+    font-weight: 1000;
+    color: rgba(2,6,23,.96);
+    background: linear-gradient(135deg, rgba(6,182,212,.95), rgba(16,185,129,.95));
+    box-shadow: 0 18px 55px rgba(6,182,212,.18);
+    transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+  }
+  .primary-btn:hover{ transform: translateY(-2px); box-shadow: 0 28px 80px rgba(6,182,212,.25); filter: brightness(1.02); }
+
+  .secondary-link{ text-align:center; color: rgba(125,211,252,.95); font-weight: 950; font-size: 13.5px; text-decoration:none; }
+  .secondary-link:hover{ text-decoration: underline; }
+
+  .divider-row{ display:flex; align-items:center; gap: 12px; margin: 16px 0; opacity: .95; }
+  .divider-row:before, .divider-row:after{ content:""; height:1px; background: rgba(148,163,184,.18); flex:1; }
+  .divider-row span{ font-size: 12.5px; font-weight: 900; color: rgba(148,163,184,.80); }
+
+  .strength{ height: 8px; border-radius: 999px; background: rgba(148,163,184,.16); border: 1px solid rgba(148,163,184,.20); overflow:hidden; margin-top: 10px; }
+  .strength > i{ display:block; height:100%; width:0%; background: rgba(239,68,68,.95); transition: width .2s ease, background .2s ease; }
+
+  .strength-label{ margin-top: 8px; font-weight: 900; font-size: 12.5px; color: rgba(148,163,184,.72); }
+
+  @media (prefers-reduced-motion: reduce){ .pulse-dot{ animation:none } }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+  <div class="container">
+    <div class="auth-shell">
+
+      <aside class="auth-brand-panel" aria-label="Healthcare branding panel">
+        <div class="brand-inner">
+          <div class="brand-top">
+            <div class="brand-mark">
+              <div class="brand-logo" aria-hidden="true">🏥</div>
+              <div>
+                <p class="brand-title">AI<span style="color:var(--accent)">Health</span>Care</p>
+              </div>
+            </div>
+            <div class="brand-pill">
+              <span class="pulse-dot" aria-hidden="true"></span>
+              Premium onboarding
+            </div>
+          </div>
+
+          <div class="brand-copy">
+            <h1 class="brand-h1">Create your <span>premium</span> care account.</h1>
+            <p class="brand-sub">Join AIHealthCare with a modern, healthcare-grade SaaS sign-up experience.</p>
+
+            <div class="brand-trust" aria-hidden="true">
+              <div class="trust-card">
+                <div class="trust-row">
+                  <div class="trust-ico"><i class="fas fa-shield-alt"></i></div>
+                  <div>
+                    <div class="trust-strong">Secure UX</div>
+                    <div class="trust-soft">Glass UI + focus rings</div>
+                  </div>
+                </div>
+              </div>
+              <div class="trust-card">
+                <div class="trust-row">
+                  <div class="trust-ico"><i class="fas fa-heart-pulse" style="color:rgba(16,185,129,.95)"></i></div>
+                  <div>
+                    <div class="trust-strong">Care-first design</div>
+                    <div class="trust-soft">Calm, conversion-friendly</div>
+                  </div>
+                </div>
+              </div>
+              <div class="trust-card">
+                <div class="trust-row">
+                  <div class="trust-ico"><i class="fas fa-brain" style="color:rgba(124,58,237,.95)"></i></div>
+                  <div>
+                    <div class="trust-strong">AI guidance</div>
+                    <div class="trust-soft">Structured next steps</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="brand-visual">
+            <div class="visual-card">
+              <div class="visual-mock" role="img" aria-label="AI healthcare dashboard mockup">
+                <div class="visual-inner">
+                  <div class="visual-top">
+                    <div class="visual-badge"><span class="pulse-dot" aria-hidden="true" style="width:9px;height:9px"></span>Onboarding</div>
+                    <div class="inline-pill"><i class="fas fa-user-plus" aria-hidden="true" style="color:var(--accent)"></i>Ready</div>
+                  </div>
+
+                  <div class="visual-kpis">
+                    <div class="kpi"><div class="big">1</div><div class="small">Account setup</div></div>
+                    <div class="kpi"><div class="big">2m</div><div class="small">Triage-ready flow</div></div>
+                    <div class="kpi"><div class="big">AI</div><div class="small">Actionable guidance</div></div>
+                  </div>
+
+                  <div class="visual-bottom">
+                    <div class="mini-panel">
+                      <div class="mini-title"><i class="fas fa-user-doctor" aria-hidden="true"></i> Doctor Fit</div>
+                      <div class="mini-items">
+                        <div class="mini-item"><span class="dot" aria-hidden="true"></span><div><b>Right specialist</b><small>Better routing + clarity</small></div></div>
+                      </div>
+                    </div>
+
+                    <div class="mini-panel">
+                      <div class="mini-title"><i class="fas fa-pills" aria-hidden="true"></i> Premium Checkout</div>
+                      <div class="mini-items">
+                        <div class="mini-item"><span class="dot" aria-hidden="true" style="background:rgba(16,185,129,.92);box-shadow:0 0 0 5px rgba(16,185,129,.12)"></span><div><b>Fast medicine orders</b><small>Fewer clicks, clean UI</small></div></div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </aside>
+
+      <section class="auth-form-card" aria-label="Register form">
+        <div class="form-head">
+          <h2>Create account</h2>
+          <p>It takes less than a minute to start.</p>
+        </div>
+
+        <div class="auth-message-stack" aria-live="polite">
+          {% if messages %}
+            {% for message in messages %}
+              <div class="msg {% if message.tags == 'error' %}error{% else %}success{% endif %}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        <form method="POST" id="registerForm" novalidate>
+          {% csrf_token %}
+
+          <div class="form-grid">
+            <div class="field" id="field-first_name">
+              <div class="field-icon" aria-hidden="true">👤</div>
+              <input class="floating" type="text" name="first_name" id="first_name" placeholder="First name" required />
+              <label class="floating-label" for="first_name">First name</label>
+              <div class="inline-hint" id="hint-first_name" style="display:none"></div>
+            </div>
+
+            <div class="field" id="field-last_name">
+              <div class="field-icon" aria-hidden="true">👤</div>
+              <input class="floating" type="text" name="last_name" id="last_name" placeholder="Last name" />
+              <label class="floating-label" for="last_name">Last name</label>
+              <div class="inline-hint" id="hint-last_name" style="display:none"></div>
+            </div>
+          </div>
+
+          <div class="field" id="field-username">
+            <div class="field-icon" aria-hidden="true">@</div>
+            <input class="floating" type="text" name="username" id="username" placeholder="Username" required autocomplete="username" />
+            <label class="floating-label" for="username">Username</label>
+            <div class="inline-hint" id="hint-username" style="display:none"></div>
+          </div>
+
+          <div class="field" id="field-email">
+            <div class="field-icon" aria-hidden="true">📧</div>
+            <input class="floating" type="email" name="email" id="email" placeholder="Email address" required autocomplete="email" />
+            <label class="floating-label" for="email">Email address</label>
+            <div class="inline-hint" id="hint-email" style="display:none"></div>
+          </div>
+
+          <div class="field" id="field-password">
+            <div class="field-icon" aria-hidden="true">🔒</div>
+            <input class="floating" type="password" name="password" id="password" placeholder="Password" required autocomplete="new-password" />
+            <label class="floating-label" for="password">Password</label>
+            <button class="eye" type="button" id="toggleEye1" aria-label="Toggle password visibility">
+              <i class="fas fa-eye" aria-hidden="true"></i>
+            </button>
+            <div class="inline-hint" id="hint-password" style="display:none"></div>
+
+            <div class="strength" aria-hidden="true"><i id="strengthFill" style="width:0%"></i></div>
+            <div class="strength-label" id="strengthText">Password strength</div>
+          </div>
+
+          <div class="field" id="field-confirm_password">
+            <div class="field-icon" aria-hidden="true">🔒</div>
+            <input class="floating" type="password" name="confirm_password" id="confirm_password" placeholder="Confirm password" required autocomplete="new-password" />
+            <label class="floating-label" for="confirm_password">Confirm password</label>
+            <button class="eye" type="button" id="toggleEye2" aria-label="Toggle confirm password visibility">
+              <i class="fas fa-eye" aria-hidden="true"></i>
+            </button>
+            <div class="inline-hint" id="hint-confirm_password" style="display:none"></div>
+            <div class="inline-hint" id="matchText" style="margin-top:10px;display:block"></div>
+          </div>
+
+          <div class="actions">
+            <button type="submit" class="primary-btn">✨ Create Account</button>
+            <div class="divider-row"><span>or</span></div>
+            <a class="secondary-link" href="/accounts/login/">Already have an account? Login →</a>
+          </div>
+        </form>
+
+      </section>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  (function(){
+    const form = document.getElementById('registerForm');
+    if(!form) return;
+
+    const get = (id) => document.getElementById(id);
+
+    const firstName = get('first_name');
+    const lastName = get('last_name');
+    const username = get('username');
+    const email = get('email');
+    const password = get('password');
+    const confirmPassword = get('confirm_password');
+
+    const strengthFill = get('strengthFill');
+    const strengthText = get('strengthText');
+
+    const matchText = get('matchText');
+
+    const fieldEls = {
+      first_name: get('field-first_name'),
+      last_name: get('field-last_name'),
+      username: get('field-username'),
+      email: get('field-email'),
+      password: get('field-password'),
+      confirm_password: get('field-confirm_password'),
+    };
+
+    const hints = {
+      first_name: get('hint-first_name'),
+      last_name: get('hint-last_name'),
+      username: get('hint-username'),
+      email: get('hint-email'),
+      password: get('hint-password'),
+      confirm_password: get('hint-confirm_password'),
+    };
+
+    const showError = (key, msg) => {
+      const f = fieldEls[key];
+      const h = hints[key];
+      if(!f || !h) return;
+      f.classList.add('is-invalid');
+      h.textContent = msg;
+      h.classList.add('error');
+      h.style.display = 'block';
+      h.setAttribute('role','alert');
+    };
+
+    const clearError = (key) => {
+      const f = fieldEls[key];
+      const h = hints[key];
+      if(!f || !h) return;
+      f.classList.remove('is-invalid');
+      h.textContent = '';
+      h.classList.remove('error');
+      h.style.display = 'none';
+    };
+
+    const isValidEmail = (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(val).trim());
+
+    const passwordScore = (val) => {
+      let score = 0;
+      if(val.length >= 6) score++;
+      if(val.length >= 10) score++;
+      if(/[A-Z]/.test(val)) score++;
+      if(/[0-9]/.test(val)) score++;
+      if(/[^A-Za-z0-9]/.test(val)) score++;
+      return Math.min(score,5);
+    };
+
+    const updateStrength = () => {
+      const val = password.value || '';
+      const s = passwordScore(val);
+
+      const colors = ['', '#e63946', '#ff9800', '#ffd60a', '#28a745', '#10b981'];
+      const labels = ['', 'Bahut Weak','Weak','Good','Strong','Strong'];
+      const widths = ['0%','20%','40%','60%','80%','100%'];
+
+      const width = widths[s] || '0%';
+      const color = colors[s] || 'rgba(239,68,68,.95)';
+
+      if(strengthFill) strengthFill.style.width = width;
+      if(strengthFill) strengthFill.style.background = color;
+      if(strengthText) {
+        strengthText.textContent = labels[s] ? ('Strength: ' + labels[s]) : 'Password strength';
+        strengthText.style.color = s>=4 ? 'rgba(16,185,129,.95)' : (s>=2 ? 'rgba(245,158,11,.95)' : 'rgba(239,68,68,.95)');
+      }
+    };
+
+    const updateMatch = () => {
+      const p = password.value || '';
+      const c = confirmPassword.value || '';
+
+      if(!c.length){
+        matchText.textContent = '';
+        matchText.style.color = 'rgba(148,163,184,.72)';
+        clearError('confirm_password');
+        return;
+      }
+
+      if(p === c){
+        matchText.textContent = '✅ Passwords match!';
+        matchText.style.color = 'rgba(16,185,129,.95)';
+        clearError('confirm_password');
+      } else {
+        matchText.textContent = '❌ Passwords do not match.';
+        matchText.style.color = 'rgba(239,68,68,.95)';
+        showError('confirm_password', 'Passwords do not match');
+      }
+    };
+
+    const validate = () => {
+      let ok = true;
+
+      const fn = (firstName.value||'').trim();
+      if(!fn){ showError('first_name', 'First name is required'); ok=false; }
+      else clearError('first_name');
+
+      const un = (username.value||'').trim();
+      if(!un){ showError('username', 'Username is required'); ok=false; }
+      else clearError('username');
+
+      const em = (email.value||'').trim();
+      if(!em){ showError('email', 'Email is required'); ok=false; }
+      else if(!isValidEmail(em)) { showError('email', 'Enter a valid email address'); ok=false; }
+      else clearError('email');
+
+      const p = password.value || '';
+      if(!p){ showError('password', 'Password is required'); ok=false; }
+      else clearError('password');
+
+      const c = confirmPassword.value || '';
+      if(!c){ showError('confirm_password', 'Confirm password is required'); ok=false; }
+      else if(p !== c){ showError('confirm_password', 'Passwords do not match'); ok=false; }
+      else clearError('confirm_password');
+
+      return ok;
+    };
+
+    // Real-time feedback
+    [firstName, username, email].forEach((el) => {
+      if(!el) return;
+      el.addEventListener('input', () => {
+        const key = el.id === 'first_name' ? 'first_name' : (el.id === 'username' ? 'username' : 'email');
+        if((el.value||'').trim().length){ clearError(key); }
+      });
+    });
+
+    password.addEventListener('input', () => {
+      updateStrength();
+      if((confirmPassword.value||'').length){ updateMatch(); }
+    });
+
+    confirmPassword.addEventListener('input', () => updateMatch());
+
+    form.addEventListener('submit', (e) => {
+      const ok = validate();
+      if(!ok) e.preventDefault();
+    });
+
+    // password visibility toggles
+    const toggleEye1 = get('toggleEye1');
+    const toggleEye2 = get('toggleEye2');
+
+    if(toggleEye1){
+      toggleEye1.addEventListener('click', () => {
+        const icon = toggleEye1.querySelector('i');
+        const isPw = password.type === 'password';
+        password.type = isPw ? 'text' : 'password';
+        if(icon){ icon.classList.toggle('fa-eye', !isPw); icon.classList.toggle('fa-eye-slash', isPw); }
+      });
+    }
+
+    if(toggleEye2){
+      toggleEye2.addEventListener('click', () => {
+        const icon = toggleEye2.querySelector('i');
+        const isPw = confirmPassword.type === 'password';
+        confirmPassword.type = isPw ? 'text' : 'password';
+        if(icon){ icon.classList.toggle('fa-eye', !isPw); icon.classList.toggle('fa-eye-slash', isPw); }
+      });
+    }
+
+    updateStrength();
+    updateMatch();
+  })();
+</script>
+{% endblock %}
+

@@ -1,0 +1,312 @@
+{% extends 'base.html' %}
+{% block title %}Checkout — AIHealthCare{% endblock %}
+
+{% block extra_css %}
+<style>
+  .checkout-hero{
+    background:linear-gradient(135deg,#0a0a00,#1a1500);
+    border-bottom:2px solid var(--gold);
+    padding:46px 0 36px;
+    text-align:center;
+  }
+  .checkout-shell{
+    background:var(--black);
+    min-height:80vh;
+    padding:26px 0 60px;
+  }
+
+  .panel{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:22px;
+    padding:22px;
+  }
+
+  .section-heading{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    margin-bottom:14px;
+  }
+  .section-heading .h{
+    color:var(--gold);
+    font-weight:900;
+    font-size:16px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .section-heading .sub{
+    color:var(--text-muted);
+    font-size:12px;
+    font-weight:800;
+  }
+
+  /* form styling */
+  .form-label{color:var(--text-muted);font-size:13px;font-weight:800;margin-bottom:6px;display:block}
+  .form-control{
+    background:var(--dark)!important;
+    border:1px solid var(--border)!important;
+    color:var(--text)!important;
+    border-radius:14px!important;
+    padding:12px 15px!important;
+  }
+  .form-control:focus{
+    border-color:rgba(255,214,10,.9)!important;
+    box-shadow:0 0 0 3px rgba(255,214,10,.10)!important;
+    color:var(--text)!important;
+  }
+  .form-control::placeholder{color:var(--text-muted)!important}
+
+  .step-panels{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+
+  .step-panel{
+    display:none;
+    animation:fadeIn .18s ease;
+  }
+  .step-panel.is-active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+  .divider-line{height:1px;background:var(--border);margin:14px 0;}
+
+  .order-review-grid{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap:12px;
+  }
+
+  .review-item{
+    display:flex;justify-content:space-between;gap:12px;align-items:flex-start;
+    padding:12px 12px;
+    border-radius:16px;
+    border:1px solid rgba(6,182,212,.14);
+    background:rgba(6,182,212,.06);
+  }
+  .review-item-left{min-width:0}
+  .review-name{font-weight:900;color:var(--text);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px}
+  .review-meta{color:var(--text-muted);font-weight:800;font-size:12px;margin-top:4px}
+  .review-price{color:var(--gold);font-weight:900;font-size:14px;white-space:nowrap}
+
+  .step-actions{
+    display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end;margin-top:16px;
+  }
+  .btn-step{
+    border-radius:16px;
+    padding:12px 16px;
+    font-weight:900;
+    border:1px solid rgba(6,182,212,.25);
+    background:rgba(6,182,212,.08);
+    color:var(--secondary);
+    text-decoration:none;
+    cursor:pointer;
+  }
+  .btn-step:hover{background:rgba(6,182,212,.16);transform:translateY(-2px)}
+
+  .btn-submit{
+    background:var(--gold);
+    border:none;
+    color:var(--black);
+    border-radius:16px;
+    padding:12px 18px;
+    font-weight:900;
+    cursor:pointer;
+    text-decoration:none;
+    transition:all .25s ease;
+  }
+  .btn-submit:hover{background:#e6c200;transform:translateY(-3px)}
+
+  .summary-wrap{position:sticky;top:92px;}
+
+  @media (max-width:991px){
+    .summary-wrap{position:relative;top:auto}
+    .checkout-shell{padding-top:10px}
+  }
+  @media (max-width:767px){
+    .panel{padding:18px}
+    .section-heading{flex-direction:column;align-items:flex-start}
+    .review-name{max-width:200px}
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="checkout-hero">
+  <div class="container">
+    <div class="page-title-pill">📦 PREMIUM CHECKOUT</div>
+    <h2 style="font-size:40px;font-weight:900;color:var(--text);margin-top:14px;">Place Your <span style="color:var(--gold);">Order</span></h2>
+    <div style="color:var(--text-muted);font-weight:800;margin-top:8px;">Tata 1mg · Apollo · PharmEasy — Secure & fast checkout</div>
+  </div>
+
+  {% include 'medicines/_checkout_steps_partial.html' with active_step='checkout' %}
+</div>
+
+<div class="checkout-shell">
+  <div class="container">
+    <div class="row g-4 align-items-start">
+      <div class="col-lg-7">
+        <div class="panel">
+          <div class="section-heading">
+            <div class="h">🧾 <span>Checkout Flow</span></div>
+            <div class="sub">Frontend step UI — one submission</div>
+          </div>
+
+          <form id="checkoutForm" method="POST">
+            {% csrf_token %}
+
+            <!-- Step 1: Cart Review (visual) -->
+            <div class="step-panel is-active" id="step1" data-step="1">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+                <div>
+                  <div style="color:var(--text);font-weight:900;font-size:16px;">1) Cart Review</div>
+                  <div style="color:var(--text-muted);font-weight:800;font-size:12px;margin-top:6px;">Confirm items before entering delivery details.</div>
+                </div>
+              </div>
+
+              <div class="divider-line"></div>
+
+              <div class="order-review-grid">
+                {% for item in cart_items %}
+                  <div class="review-item">
+                    <div class="review-item-left">
+                      <div class="review-name" title="{{ item.name }}">{{ item.name }}</div>
+                      <div class="review-meta">Qty: <strong style="color:var(--gold)">{{ item.quantity }}</strong></div>
+                    </div>
+                    <div class="review-price">₹{{ item.subtotal }}</div>
+                  </div>
+                {% endfor %}
+
+                {% if not cart_items %}
+                  <div style="color:var(--text-muted);font-weight:800;">Cart is empty.</div>
+                {% endif %}
+              </div>
+
+              <div class="step-actions">
+                <a href="/medicines/" class="btn-step">← Back to Cart</a>
+                <button type="button" class="btn-submit" onclick="goStep(2)">Continue →</button>
+              </div>
+            </div>
+
+            <!-- Step 2: Shipping/Customer Details (visual) -->
+            <div class="step-panel" id="step2" data-step="2">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+                <div>
+                  <div style="color:var(--text);font-weight:900;font-size:16px;">2) Delivery & Customer Details</div>
+                  <div style="color:var(--text-muted);font-weight:800;font-size:12px;margin-top:6px;">We’ll use this info for order confirmation.</div>
+                </div>
+              </div>
+
+              <div class="divider-line"></div>
+
+              <div class="mb-3">
+                <label class="form-label">👤 Full Name</label>
+                <input type="text" name="patient_name" class="form-control" placeholder="Aapka naam" required>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">📱 Phone Number</label>
+                <input type="tel" name="patient_phone" class="form-control" placeholder="10 digit number" required>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">📧 Email (confirmation ke liye)</label>
+                <input type="email" name="patient_email" class="form-control" placeholder="aapka@email.com">
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">🏠 Delivery Address</label>
+                <textarea name="patient_address" class="form-control" rows="3" placeholder="Ghar ka address likhein" required></textarea>
+              </div>
+
+              <div style="margin-top:14px;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.18);border-radius:16px;padding:14px;">
+                <div style="color:rgba(16,185,129,.98);font-weight:900;font-size:12px;">✅ Promise</div>
+                <div style="color:var(--text-muted);font-weight:800;font-size:12px;margin-top:6px;">
+                  Cash on Delivery · Free delivery above ₹500 · Genuine medicines guaranteed
+                </div>
+              </div>
+
+              <div class="step-actions">
+                <button type="button" class="btn-step" onclick="goStep(1)">← Back</button>
+                <button type="button" class="btn-submit" onclick="goStep(3)">Review Order →</button>
+              </div>
+            </div>
+
+            <!-- Step 3: Order Review (visual) -->
+            <div class="step-panel" id="step3" data-step="3">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+                <div>
+                  <div style="color:var(--text);font-weight:900;font-size:16px;">3) Order Review</div>
+                  <div style="color:var(--text-muted);font-weight:800;font-size:12px;margin-top:6px;">Check once before placing the order.</div>
+                </div>
+              </div>
+
+              <div class="divider-line"></div>
+
+              <div class="order-review-grid">
+                {% for item in cart_items %}
+                  <div class="review-item">
+                    <div class="review-item-left">
+                      <div class="review-name" title="{{ item.name }}">{{ item.name }}</div>
+                      <div class="review-meta">Qty: <strong style="color:var(--gold)">{{ item.quantity }}</strong></div>
+                    </div>
+                    <div class="review-price">₹{{ item.subtotal }}</div>
+                  </div>
+                {% endfor %}
+
+                <div class="review-item" style="background:rgba(255,214,10,.08);border-color:rgba(255,214,10,.22);">
+                  <div class="review-item-left">
+                    <div class="review-name">Total</div>
+                    <div class="review-meta">Cash on Delivery</div>
+                  </div>
+                  <div class="review-price" style="color:var(--gold);font-size:18px;">₹{{ total }}</div>
+                </div>
+              </div>
+
+              <div style="margin-top:14px;">
+                <div style="color:var(--text-muted);font-weight:900;font-size:12px;letter-spacing:.2px;">Delivery details (will be submitted)</div>
+                <div style="margin-top:8px;background:rgba(6,182,212,.06);border:1px solid rgba(6,182,212,.14);border-radius:16px;padding:14px;">
+                  <div style="color:var(--text);font-weight:900;font-size:13px;">👤 Customer details (from form)</div>
+
+                  <div style="color:var(--text-muted);font-weight:800;font-size:12px;margin-top:6px;">📱 Phone: <span style="color:var(--gold);font-weight:900">(from form)</span></div>
+                  <div style="color:var(--text-muted);font-weight:800;font-size:12px;margin-top:6px;">🏠 Address: <span style="color:var(--gold);font-weight:900">(from form)</span></div>
+                </div>
+              </div>
+
+              <div class="step-actions">
+                <button type="button" class="btn-step" onclick="goStep(2)">← Back</button>
+                <button type="submit" class="btn-submit">✅ Complete Order — ₹{{ total }}</button>
+              </div>
+
+              <div style="margin-top:12px;color:var(--text-muted);font-size:12px;font-weight:800;">
+                By clicking “Complete Order”, your order will be placed via the existing checkout endpoint.
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-lg-5">
+        <div class="summary-wrap">
+          {% include 'medicines/_order_summary_partial.html' with variant='checkout' %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const panels = ['step1','step2','step3'].map(id => document.getElementById(id)).filter(Boolean);
+
+  function goStep(n){
+    const stepId = 'step' + n;
+    panels.forEach(p => p.classList.remove('is-active'));
+    const el = document.getElementById(stepId);
+    if(el){
+      el.classList.add('is-active');
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+  }
+</script>
+{% endblock %}
+

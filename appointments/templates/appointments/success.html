@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Appointment Confirmed — AIHealthCare{% endblock %}
+
+{% block content %}
+<div style="background:var(--black);min-height:90vh;display:flex;align-items:center;padding:40px 0;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div style="background:var(--card);border:1px solid var(--border);border-radius:24px;padding:50px;text-align:center;">
+                    <div style="font-size:80px;margin-bottom:20px;">✅</div>
+                    <h2 style="color:var(--text);font-weight:900;margin-bottom:10px;">Appointment <span style="color:#28a745;">Confirmed!</span></h2>
+                    <p style="color:var(--text-muted);font-size:16px;">Aapka appointment successfully book ho gaya hai!</p>
+                    <p style="color:var(--text-muted);font-size:14px;">Doctor aapko confirm karne ke liye call karenge.</p>
+                    <div style="background:rgba(40,167,69,0.1);border:1px solid rgba(40,167,69,0.3);border-radius:12px;padding:15px;margin:25px 0;">
+                        <p style="color:#28a745;margin:0;font-size:14px;">📞 Confirmation call 24 hours mein aayegi</p>
+                    </div>
+                    <div class="d-grid gap-3 mt-4">
+                        <a href="/appointments/" class="btn-red" style="padding:13px;font-size:15px;font-weight:700;border-radius:12px;text-align:center;">👨‍⚕️ View All Doctors</a>
+                        <a href="/" class="btn-outline-red" style="padding:13px;font-size:15px;border-radius:12px;text-align:center;">🏠 Back to Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

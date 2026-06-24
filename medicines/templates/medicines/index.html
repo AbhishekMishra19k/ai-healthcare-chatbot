@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% block title %}Medicine Shop — AIHealthCare{% endblock %}
+
+{% block extra_css %}
+<style>
+.med-hero{background:linear-gradient(135deg,#0a0a0a,#1a0a00);border-bottom:2px solid var(--gold);padding:60px 0;text-align:center;position:relative;overflow:hidden}
+.med-hero::before{content:'';position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(255,214,10,.08) 0%,transparent 70%);top:-200px;right:-100px;border-radius:50%;animation:pulse 4s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.1);opacity:1}}
+.med-tag{background:rgba(255,214,10,.15);color:var(--gold);border:1px solid rgba(255,214,10,.3);padding:6px 20px;border-radius:25px;font-size:12px;font-weight:700;letter-spacing:1.5px;display:inline-block;margin-bottom:18px}
+.filter-scroll{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:35px}
+.filter-btn{background:var(--card);border:1px solid var(--border);color:var(--text-muted);padding:7px 18px;border-radius:25px;font-size:12px;cursor:pointer;transition:all .3s;text-decoration:none;white-space:nowrap}
+.filter-btn:hover,.filter-btn.active{background:var(--gold);color:var(--black);border-color:var(--gold);font-weight:700;transform:translateY(-2px);text-decoration:none}
+.med-card{background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:all .35s cubic-bezier(.175,.885,.32,1.275);height:100%;position:relative}
+.med-card:hover{border-color:var(--gold);transform:translateY(-10px);box-shadow:0 20px 50px rgba(255,214,10,.12)}
+.med-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--gold);transform:scaleX(0);transition:transform .3s;transform-origin:left}
+.med-card:hover::after{transform:scaleX(1)}
+.med-img{background:linear-gradient(135deg,#111,#1a1a1a);padding:28px;text-align:center;font-size:52px;border-bottom:1px solid var(--border);transition:transform .3s}
+.med-card:hover .med-img{transform:scale(1.05)}
+.med-body{padding:18px}
+.med-name{font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px}
+.cat-badge{background:rgba(255,214,10,.12);color:var(--gold);border:1px solid rgba(255,214,10,.25);padding:3px 10px;border-radius:15px;font-size:11px;font-weight:600}
+.med-desc{color:var(--text-muted);font-size:12px;line-height:1.6;margin:10px 0}
+.med-footer{padding:14px 18px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.price{font-size:20px;font-weight:800;color:var(--gold)}
+.add-btn{background:var(--gold);color:var(--black);border:none;padding:8px 16px;border-radius:10px;font-size:12px;font-weight:800;cursor:pointer;transition:all .3s;text-decoration:none;display:inline-block}
+.add-btn:hover{background:#e6c200;color:var(--black);transform:scale(1.05);box-shadow:0 5px 15px rgba(255,214,10,.4);text-decoration:none}
+.add-btn:active{transform:scale(.95)}
+.search-wrap{background:var(--card);border:1px solid var(--border);border-radius:50px;padding:10px 20px;display:flex;align-items:center;gap:10px;max-width:500px;margin:0 auto 30px;transition:all .3s}
+.search-wrap:focus-within{border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,214,10,.1)}
+.search-inp{background:transparent!important;border:none!important;color:var(--text)!important;font-size:14px;flex:1;outline:none}
+.search-inp::placeholder{color:var(--text-muted)!important}
+.cart-float{position:fixed;bottom:28px;right:28px;background:var(--gold);color:var(--black);border:none;border-radius:50px;padding:14px 22px;font-size:15px;font-weight:800;z-index:999;box-shadow:0 8px 30px rgba(255,214,10,.45);text-decoration:none;display:flex;align-items:center;gap:8px;transition:all .3s}
+.cart-float:hover{transform:translateY(-4px) scale(1.05);background:#e6c200;color:var(--black);text-decoration:none}
+.cart-count{background:#e63946;color:white;border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:800}
+.med-section{background:var(--black);min-height:80vh;padding:40px 0}
+</style>
+{% endblock %}
+
+{% block content %}
+
+{% if messages %}
+<div style="position:fixed;top:75px;right:20px;z-index:9999;">
+{% for message in messages %}
+<div style="background:#0f2a0f;border:1px solid #28a745;color:#5fdb5f;padding:12px 20px;border-radius:12px;margin-bottom:8px;font-weight:600;font-size:14px;box-shadow:0 5px 20px rgba(0,0,0,.4)">
+✅ {{ message }}
+</div>
+{% endfor %}
+</div>
+<script>setTimeout(()=>document.querySelectorAll('[style*="top:75px"]').forEach(e=>e.remove()),3000)</script>
+{% endif %}
+
+<div class="med-hero">
+  <div class="container position-relative">
+    <div class="med-tag">💊 MEDICINE SHOP</div>
+    <h2 style="font-size:44px;font-weight:900;color:var(--text);margin:10px 0;">Order <span style="color:var(--gold);">Medicines</span> Online</h2>
+    <p style="color:var(--text-muted);font-size:16px;">Genuine medicines · Fast delivery · Cash on Delivery</p>
+  </div>
+</div>
+
+<div class="med-section">
+  <div class="container">
+
+    <div class="search-wrap">
+      <span style="color:var(--text-muted);">🔍</span>
+      <input type="text" class="search-inp" id="searchInput" placeholder="Search medicines..." onkeyup="searchMed()">
+    </div>
+
+    <div class="filter-scroll">
+      <a href="/medicines/" class="filter-btn {% if not selected_category %}active{% endif %}">All</a>
+      {% for value, label in categories %}
+      <a href="/medicines/?category={{ value }}" class="filter-btn {% if selected_category == value %}active{% endif %}">{{ label }}</a>
+      {% endfor %}
+    </div>
+
+    <div class="row g-4" id="medGrid">
+      {% for medicine in medicines %}
+      <div class="col-lg-3 col-md-4 col-sm-6 med-item">
+        <div class="med-card">
+          <div class="med-img">💊</div>
+          <div class="med-body">
+            <div class="med-name">{{ medicine.name }}</div>
+            <span class="cat-badge">{{ medicine.category }}</span>
+            <div class="med-desc">{{ medicine.description|truncatechars:65 }}</div>
+          </div>
+          <div class="med-footer">
+            <div>
+              <div class="price">₹{{ medicine.price }}</div>
+              <span style="font-size:11px;color:#28a745;">✅ In Stock</span>
+            </div>
+            <a href="/medicines/cart/add/{{ medicine.id }}/" class="add-btn">🛒 Add</a>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center py-5">
+        <div style="font-size:60px;margin-bottom:20px;">💊</div>
+        <h4 style="color:var(--text);">Koi medicine nahi mili</h4>
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</div>
+
+<a href="/medicines/cart/" class="cart-float">
+  🛒 Cart
+  {% if cart_count > 0 %}<span class="cart-count">{{ cart_count }}</span>{% endif %}
+</a>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function searchMed(){
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  document.querySelectorAll('.med-item').forEach(el=>{
+    el.style.display=el.querySelector('.med-name').textContent.toLowerCase().includes(q)?'block':'none';
+  });
+}
+</script>
+{% endblock %}

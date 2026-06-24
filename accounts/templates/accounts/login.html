@@ -1,0 +1,824 @@
+{% extends 'base.html' %}
+{% block title %}Login — AIHealthCare{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* ========== Auth (Premium SaaS) ========== */
+  .auth-page{
+    min-height: calc(100vh - 92px);
+    display:flex;
+    align-items:stretch;
+    padding: 28px 0;
+    background:
+      radial-gradient(1100px 520px at 10% -10%, rgba(6,182,212,.22), transparent 60%),
+      radial-gradient(900px 520px at 95% 0%, rgba(230,57,70,.18), transparent 60%),
+      radial-gradient(700px 520px at 50% 110%, rgba(16,185,129,.14), transparent 55%),
+      linear-gradient(180deg, rgba(2,6,23,.0), rgba(2,6,23,.18));
+  }
+
+  .auth-shell{
+    width:100%;
+    display:grid;
+    grid-template-columns: 1.03fr 0.97fr;
+    gap: 18px;
+    align-items: center;
+  }
+
+  @media (max-width: 992px){
+    .auth-shell{ grid-template-columns: 1fr; }
+  }
+
+  .auth-brand-panel{
+    border-radius: 26px;
+    overflow:hidden;
+    border: 1px solid rgba(6,182,212,.22);
+    background:
+      radial-gradient(900px 420px at 15% 15%, rgba(6,182,212,.28), transparent 60%),
+      radial-gradient(820px 460px at 85% 20%, rgba(239,68,68,.20), transparent 62%),
+      radial-gradient(780px 420px at 45% 95%, rgba(16,185,129,.16), transparent 60%),
+      linear-gradient(180deg, rgba(15,23,42,.92), rgba(2,6,23,.96));
+    box-shadow: 0 40px 120px rgba(2,6,23,.30);
+    position:relative;
+    min-height: 640px;
+  }
+
+  @media (max-width: 992px){
+    .auth-brand-panel{ min-height: auto; }
+  }
+
+  .auth-brand-panel:before{
+    content:"";
+    position:absolute;
+    inset:-2px;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.05) 1px, transparent 1px);
+    background-size: 72px 72px;
+    opacity: .22;
+    pointer-events:none;
+    mask-image: radial-gradient(700px 420px at 35% 0%, black 35%, transparent 70%);
+  }
+
+  .brand-inner{
+    position:relative;
+    z-index:1;
+    padding: 34px;
+    display:flex;
+    flex-direction:column;
+    height:100%;
+  }
+
+  .brand-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .brand-mark{
+    display:flex;
+    gap: 12px;
+    align-items:center;
+  }
+
+  .brand-logo{
+    width:46px;height:46px;
+    border-radius:16px;
+    background: rgba(6,182,212,.14);
+    border:1px solid rgba(6,182,212,.35);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#7dd3fc;
+    box-shadow: 0 18px 55px rgba(6,182,212,.20);
+  }
+
+  .brand-title{
+    font-weight: 1000;
+    letter-spacing: -0.03em;
+    color: rgba(255,255,255,.96);
+    font-family: 'Plus Jakarta Sans',sans-serif;
+    font-size: 18px;
+    margin:0;
+  }
+
+  .brand-pill{
+    padding: 10px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(148,163,184,.18);
+    color: rgba(229,231,235,.86);
+    font-weight: 900;
+    font-size: 12px;
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    white-space:nowrap;
+  }
+
+  .pulse-dot{
+    width:10px;height:10px;border-radius:999px;
+    background: rgba(6,182,212,.95);
+    box-shadow: 0 0 0 0 rgba(6,182,212,.45);
+    animation: authPulse 1.7s ease-out infinite;
+  }
+
+  @keyframes authPulse{
+    0%{box-shadow:0 0 0 0 rgba(6,182,212,.40)}
+    100%{box-shadow:0 0 0 18px rgba(6,182,212,0)}
+  }
+
+  .brand-copy{
+    margin-top: 14px;
+  }
+
+  .brand-h1{
+    font-size: clamp(26px, 3vw, 44px);
+    line-height: 1.05;
+    font-weight: 1000;
+    color: #F8FAFC;
+    margin: 0 0 12px;
+  }
+
+  .brand-h1 span{ color: var(--accent); }
+
+  .brand-sub{
+    color: rgba(229,231,235,.72);
+    font-weight: 700;
+    line-height: 1.75;
+    max-width: 56ch;
+    font-size: 14px;
+    margin: 0;
+  }
+
+  .brand-trust{
+    display:flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 22px;
+  }
+
+  .trust-card{
+    flex: 1 1 200px;
+    min-width: 200px;
+    background: rgba(255,255,255,.05);
+    border:1px solid rgba(148,163,184,.18);
+    border-radius: 20px;
+    padding: 14px;
+    box-shadow: 0 22px 75px rgba(2,6,23,.18);
+  }
+
+  .trust-row{
+    display:flex;
+    gap: 12px;
+    align-items:flex-start;
+  }
+
+  .trust-ico{
+    width:40px;height:40px;border-radius:16px;
+    display:flex;align-items:center;justify-content:center;
+    background: rgba(6,182,212,.10);
+    border:1px solid rgba(6,182,212,.25);
+    color: rgba(125,211,252,.95);
+  }
+
+  .trust-strong{
+    color: rgba(248,250,252,.95);
+    font-weight: 1000;
+    font-size: 13.5px;
+  }
+
+  .trust-soft{
+    color: rgba(229,231,235,.66);
+    font-weight: 800;
+    font-size: 12.5px;
+    margin-top: 2px;
+    line-height: 1.35;
+  }
+
+  .brand-visual{
+    margin-top:auto;
+    padding-top: 18px;
+  }
+
+  .visual-card{
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(148,163,184,.18);
+    border-radius: 24px;
+    padding: 16px;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .visual-mock{
+    border-radius: 20px;
+    border:1px solid rgba(148,163,184,.18);
+    background:
+      radial-gradient(620px 260px at 20% 0%, rgba(6,182,212,.26), transparent 55%),
+      radial-gradient(520px 300px at 80% 20%, rgba(124,58,237,.20), transparent 60%),
+      linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+    overflow:hidden;
+    position:relative;
+    min-height: 300px;
+    box-shadow: 0 30px 110px rgba(0,0,0,.40);
+  }
+
+  .visual-mock:after{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.06) 1px, transparent 1px);
+    background-size: 58px 58px;
+    opacity: .18;
+    mask-image: radial-gradient(430px 260px at 40% 10%, black 30%, transparent 70%);
+    pointer-events:none;
+  }
+
+  .visual-inner{
+    position:relative;
+    z-index:1;
+    padding: 16px;
+    display:flex;
+    flex-direction:column;
+    gap: 12px;
+  }
+
+  .visual-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap: 12px;
+  }
+
+  .visual-badge{
+    padding: 8px 10px;
+    border-radius: 999px;
+    background: rgba(6,182,212,.10);
+    border:1px solid rgba(6,182,212,.25);
+    color: rgba(125,211,252,.95);
+    font-weight: 1000;
+    font-size: 12px;
+    display:flex;
+    align-items:center;
+    gap: 10px;
+  }
+
+  .visual-kpis{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  @media (max-width: 1100px){ .visual-kpis{ grid-template-columns: repeat(2,1fr);} }
+
+  .kpi{
+    padding: 14px 12px;
+    border-radius: 18px;
+    background: rgba(255,255,255,.05);
+    border:1px solid rgba(148,163,184,.16);
+  }
+
+  .kpi .big{
+    font-weight: 1000;
+    font-size: 22px;
+    letter-spacing: -0.03em;
+    color:#F8FAFC;
+  }
+
+  .kpi .small{
+    margin-top: 6px;
+    color: rgba(229,231,235,.66);
+    font-weight: 800;
+    font-size: 12.5px;
+    line-height: 1.35;
+  }
+
+  .visual-bottom{
+    margin-top:auto;
+    display:grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap: 10px;
+  }
+
+  @media (max-width: 520px){ .visual-bottom{ grid-template-columns:1fr;} }
+
+  .mini-panel{
+    border-radius: 18px;
+    background: rgba(255,255,255,.04);
+    border:1px solid rgba(148,163,184,.16);
+    padding: 12px;
+  }
+
+  .mini-title{
+    color: rgba(248,250,252,.95);
+    font-weight: 1000;
+    font-size: 13px;
+    display:flex;
+    align-items:center;
+    gap: 10px;
+  }
+
+  .mini-title i{ color: var(--accent); }
+
+  .mini-items{
+    margin-top: 10px;
+    display:flex;
+    flex-direction:column;
+    gap: 10px;
+  }
+
+  .mini-item{
+    display:flex;
+    gap: 10px;
+    align-items:flex-start;
+  }
+
+  .mini-item .dot{
+    width: 10px;height: 10px;border-radius: 999px;
+    background: rgba(6,182,212,.9);
+    box-shadow: 0 0 0 5px rgba(6,182,212,.12);
+    margin-top: 6px;
+  }
+
+  .mini-item b{
+    color: rgba(248,250,252,.95);
+    font-weight: 1000;
+    font-size: 12.5px;
+  }
+
+  .mini-item small{
+    display:block;
+    color: rgba(229,231,235,.62);
+    font-weight: 800;
+    font-size: 12px;
+    line-height: 1.35;
+    margin-top: 3px;
+  }
+
+  /* ========== Form side ========== */
+  .auth-form-card{
+    border-radius: 26px;
+    border: 1px solid rgba(6,182,212,.18);
+    background: rgba(255,255,255,.06);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 45px 120px rgba(2,6,23,.20);
+    padding: 26px;
+    overflow:hidden;
+  }
+
+  @media (max-width: 992px){
+    .auth-form-card{ padding: 22px; }
+  }
+
+  .form-head{
+    display:flex;
+    flex-direction:column;
+    gap: 6px;
+    margin-bottom: 18px;
+  }
+
+  .form-head h2{
+    margin:0;
+    font-family:'Plus Jakarta Sans',sans-serif;
+    font-size: 24px;
+    font-weight: 1000;
+    color: rgba(255,255,255,.96);
+  }
+
+  .form-head p{
+    margin:0;
+    color: rgba(229,231,235,.70);
+    font-weight: 750;
+    font-size: 13.5px;
+  }
+
+  .auth-message-stack{
+    display:flex;
+    flex-direction:column;
+    gap: 10px;
+    margin: 12px 0 18px;
+  }
+
+  .msg{
+    border-radius: 16px;
+    padding: 12px 14px;
+    border:1px solid rgba(148,163,184,.18);
+    font-weight: 850;
+    font-size: 13.5px;
+  }
+
+  .msg.error{background: rgba(239,68,68,.10); border-color: rgba(239,68,68,.26); color: rgba(239,68,68,.95)}
+  .msg.success{background: rgba(16,185,129,.10); border-color: rgba(16,185,129,.26); color: rgba(16,185,129,.95)}
+
+  /* Floating labels */
+  .field{
+    position:relative;
+    margin-bottom: 14px;
+  }
+
+  .floating{
+    width:100%;
+    background: rgba(15,23,42,.55) !important;
+    border: 1.5px solid rgba(148,163,184,.22) !important;
+    border-radius: 16px !important;
+    color: rgba(248,250,252,.96) !important;
+    padding: 16px 16px 14px 46px !important;
+    font-size: 14px;
+    transition: all .2s ease;
+  }
+
+  .floating::placeholder{ color: transparent !important; }
+
+  .field-icon{
+    position:absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28px; height: 28px;
+    display:flex; align-items:center; justify-content:center;
+    border-radius: 12px;
+    background: rgba(6,182,212,.08);
+    border: 1px solid rgba(6,182,212,.20);
+    color: rgba(125,211,252,.95);
+    pointer-events:none;
+  }
+
+  .floating-label{
+    position:absolute;
+    left: 46px;
+    top: 14px;
+    color: rgba(148,163,184,.90);
+    font-weight: 850;
+    font-size: 12.5px;
+    pointer-events:none;
+    transition: all .15s ease;
+    opacity: .95;
+  }
+
+  .field .floating:focus{
+    border-color: rgba(6,182,212,.65) !important;
+    box-shadow: 0 0 0 4px rgba(6,182,212,.12) !important;
+  }
+
+  .field .floating:focus + .floating-label,
+  .field .floating:not(:placeholder-shown) + .floating-label{
+    top: 8px;
+    font-size: 11px;
+    opacity: .95;
+    color: rgba(125,211,252,.96);
+  }
+
+  .field.is-invalid .floating{
+    border-color: rgba(239,68,68,.60) !important;
+    box-shadow: 0 0 0 4px rgba(239,68,68,.12) !important;
+  }
+
+  .field .inline-hint{
+    margin-top: 8px;
+    color: rgba(148,163,184,.72);
+    font-weight: 800;
+    font-size: 12.5px;
+    line-height: 1.35;
+  }
+
+  .field .inline-hint.error{
+    color: rgba(239,68,68,.95);
+  }
+
+  /* password eye */
+  .eye{
+    position:absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: rgba(148,163,184,.92);
+    cursor:pointer;
+    padding: 8px;
+    border-radius: 12px;
+  }
+  .eye:hover{ color: rgba(239,68,68,.95); background: rgba(239,68,68,.08); }
+
+  /* actions */
+  .actions{
+    display:flex;
+    flex-direction:column;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  .primary-btn{
+    width:100%;
+    padding: 14px 18px;
+    border-radius: 16px;
+    border:none;
+    font-weight: 1000;
+    color: rgba(2,6,23,.96);
+    background: linear-gradient(135deg, rgba(6,182,212,.95), rgba(16,185,129,.95));
+    box-shadow: 0 18px 55px rgba(6,182,212,.18);
+    transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+  }
+  .primary-btn:hover{ transform: translateY(-2px); box-shadow: 0 28px 80px rgba(6,182,212,.25); filter: brightness(1.02); }
+
+  .secondary-link{
+    text-align:center;
+    color: rgba(125,211,252,.95);
+    font-weight: 950;
+    font-size: 13.5px;
+    text-decoration:none;
+  }
+
+  .secondary-link:hover{ text-decoration: underline; }
+
+  .divider-row{
+    display:flex;
+    align-items:center;
+    gap: 12px;
+    margin: 16px 0;
+    opacity: .95;
+  }
+
+  .divider-row:before, .divider-row:after{
+    content:"";
+    height:1px;
+    background: rgba(148,163,184,.18);
+    flex: 1;
+  }
+
+  .divider-row span{
+    font-size: 12.5px;
+    font-weight: 900;
+    color: rgba(148,163,184,.80);
+  }
+
+  /* Submit validation state on password/username strength */
+  .inline-pill{
+    display:inline-flex;
+    align-items:center;
+    gap: 8px;
+    padding: 9px 10px;
+    border-radius: 999px;
+    font-weight: 900;
+    border:1px solid rgba(148,163,184,.18);
+    background: rgba(255,255,255,.05);
+    color: rgba(229,231,235,.80);
+    font-size: 12.5px;
+  }
+
+  /* reduce motion */
+  @media (prefers-reduced-motion: reduce){
+    .pulse-dot{ animation:none }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+  <div class="container">
+    <div class="auth-shell">
+
+      <!-- Premium brand panel (split-screen left) -->
+      <aside class="auth-brand-panel" aria-label="Healthcare branding panel">
+        <div class="brand-inner">
+          <div class="brand-top">
+            <div class="brand-mark">
+              <div class="brand-logo" aria-hidden="true">🏥</div>
+              <div>
+                <p class="brand-title">AI<span style="color:var(--accent)">Health</span>Care</p>
+              </div>
+            </div>
+            <div class="brand-pill">
+              <span class="pulse-dot" aria-hidden="true"></span>
+              Secure by design
+            </div>
+          </div>
+
+          <div class="brand-copy">
+            <h1 class="brand-h1">Sign in for <span>calm</span> healthcare guidance.</h1>
+            <p class="brand-sub">
+              Premium authentication UX built for clarity—protecting your journey from login to next steps.
+            </p>
+
+            <div class="brand-trust" aria-hidden="true">
+              <div class="trust-card">
+                <div class="trust-row">
+                  <div class="trust-ico"><i class="fas fa-shield-alt"></i></div>
+                  <div>
+                    <div class="trust-strong">Privacy-first flow</div>
+                    <div class="trust-soft">Minimal friction, maximum trust</div>
+                  </div>
+                </div>
+              </div>
+              <div class="trust-card">
+                <div class="trust-row">
+                  <div class="trust-ico"><i class="fas fa-heart-pulse" style="color:rgba(16,185,129,.95)"></i></div>
+                  <div>
+                    <div class="trust-strong">Healthcare-grade UI</div>
+                    <div class="trust-soft">Glass panels + soft glow accents</div>
+                  </div>
+                </div>
+              </div>
+              <div class="trust-card">
+                <div class="trust-row">
+                  <div class="trust-ico"><i class="fas fa-brain" style="color:rgba(124,58,237,.95)"></i></div>
+                  <div>
+                    <div class="trust-strong">AI-led next steps</div>
+                    <div class="trust-soft">Structured guidance that feels premium</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="brand-visual">
+            <div class="visual-card">
+              <div class="visual-mock" role="img" aria-label="AI healthcare dashboard mockup">
+                <div class="visual-inner">
+                  <div class="visual-top">
+                    <div class="visual-badge"><span class="pulse-dot" aria-hidden="true" style="width:9px;height:9px"></span>Live Guidance</div>
+                    <div class="inline-pill"><i class="fas fa-lock" aria-hidden="true" style="color:var(--accent)"></i>Encrypted</div>
+                  </div>
+
+                  <div class="visual-kpis">
+                    <div class="kpi"><div class="big">2m</div><div class="small">From symptoms to next steps</div></div>
+                    <div class="kpi"><div class="big">24/7</div><div class="small">AI support anytime</div></div>
+                    <div class="kpi"><div class="big">Safe</div><div class="small">Confidence-first guidance</div></div>
+                  </div>
+
+                  <div class="visual-bottom">
+                    <div class="mini-panel">
+                      <div class="mini-title"><i class="fas fa-wave-square" aria-hidden="true"></i> Triage Pulse</div>
+                      <div class="mini-items">
+                        <div class="mini-item"><span class="dot" aria-hidden="true"></span><div><b>Urgency hints</b><small>Calm escalation signals</small></div></div>
+                        <div class="mini-item"><span class="dot" aria-hidden="true" style="background:rgba(16,185,129,.92);box-shadow:0 0 0 5px rgba(16,185,129,.12)"></span><div><b>Actionable steps</b><small>What to do next, clearly</small></div></div>
+                      </div>
+                    </div>
+
+                    <div class="mini-panel">
+                      <div class="mini-title"><i class="fas fa-file-medical" aria-hidden="true"></i> Premium Clarity</div>
+                      <div class="mini-items">
+                        <div class="mini-item"><span class="dot" aria-hidden="true" style="background:rgba(124,58,237,.92);box-shadow:0 0 0 5px rgba(124,58,237,.12)"></span><div><b>Structured output</b><small>Readable, scannable UX</small></div></div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </aside>
+
+      <!-- Form side (right) -->
+      <section class="auth-form-card" aria-label="Login form">
+        <div class="form-head">
+          <h2>Welcome back</h2>
+          <p>Sign in to continue your healthcare journey.</p>
+        </div>
+
+        <div class="auth-message-stack" aria-live="polite">
+          {% if messages %}
+            {% for message in messages %}
+              <div class="msg {% if message.tags == 'error' %}error{% else %}success{% endif %}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        <form method="POST" id="loginForm" novalidate>
+          {% csrf_token %}
+
+          <div class="field" id="field-username">
+            <div class="field-icon" aria-hidden="true">👤</div>
+            <input
+              class="floating"
+              type="text"
+              name="username"
+              id="username"
+              placeholder="Username"
+              required
+              autocomplete="username"
+            />
+            <label class="floating-label" for="username">Username</label>
+            <div class="inline-hint" id="hint-username" style="display:none"></div>
+          </div>
+
+          <div class="field" id="field-password">
+            <div class="field-icon" aria-hidden="true">🔒</div>
+            <input
+              class="floating"
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Password"
+              required
+              autocomplete="current-password"
+            />
+            <label class="floating-label" for="password">Password</label>
+            <button class="eye" type="button" id="toggleEye" aria-label="Toggle password visibility">
+              <i class="fas fa-eye" aria-hidden="true"></i>
+            </button>
+            <div class="inline-hint" id="hint-password" style="display:none"></div>
+          </div>
+
+          <div class="actions">
+            <button type="submit" class="primary-btn">🚀 Login</button>
+            <div class="divider-row"><span>or</span></div>
+            <a class="secondary-link" href="/accounts/register/">Need an account? Register →</a>
+          </div>
+        </form>
+      </section>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  (function(){
+    const form = document.getElementById('loginForm');
+    if(!form) return;
+
+    const username = document.getElementById('username');
+    const password = document.getElementById('password');
+
+    const fieldUsername = document.getElementById('field-username');
+    const fieldPassword = document.getElementById('field-password');
+
+    const hintUsername = document.getElementById('hint-username');
+    const hintPassword = document.getElementById('hint-password');
+
+    const showError = (fieldEl, hintEl, msg) => {
+      fieldEl.classList.add('is-invalid');
+      hintEl.textContent = msg;
+      hintEl.classList.add('error');
+      hintEl.style.display = 'block';
+      hintEl.setAttribute('role','alert');
+      hintEl.setAttribute('aria-live','polite');
+    };
+
+    const clearError = (fieldEl, hintEl) => {
+      fieldEl.classList.remove('is-invalid');
+      hintEl.textContent = '';
+      hintEl.classList.remove('error');
+      hintEl.style.display = 'none';
+    };
+
+    const validateRequired = (input, msg) => {
+      return (input.value || '').trim().length > 0;
+    };
+
+    const validate = () => {
+      let ok = true;
+
+      if(!validateRequired(username, 'Username is required')){
+        showError(fieldUsername, hintUsername, 'Username is required');
+        ok = false;
+      } else {
+        clearError(fieldUsername, hintUsername);
+      }
+
+      if(!validateRequired(password, 'Password is required')){
+        showError(fieldPassword, hintPassword, 'Password is required');
+        ok = false;
+      } else {
+        clearError(fieldPassword, hintPassword);
+      }
+
+      return ok;
+    };
+
+    // real-time feedback
+    username && username.addEventListener('input', () => {
+      if((username.value||'').trim().length){ clearError(fieldUsername, hintUsername);} 
+    });
+    password && password.addEventListener('input', () => {
+      if((password.value||'').trim().length){ clearError(fieldPassword, hintPassword);} 
+    });
+
+    form.addEventListener('submit', (e) => {
+      const ok = validate();
+      if(!ok) e.preventDefault();
+    });
+
+    // password visibility
+    const btn = document.getElementById('toggleEye');
+    const icon = btn ? btn.querySelector('i') : null;
+    if(btn && icon){
+      btn.addEventListener('click', () => {
+        const isPassword = password.type === 'password';
+        password.type = isPassword ? 'text' : 'password';
+        icon.classList.toggle('fa-eye', !isPassword);
+        icon.classList.toggle('fa-eye-slash', isPassword);
+      });
+    }
+  })();
+</script>
+{% endblock %}
