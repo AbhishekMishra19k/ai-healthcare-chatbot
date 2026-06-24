@@ -1,347 +1,810 @@
 {% extends 'base.html' %}
-{% block title %}AIHealthCare — Your Health, Answered Instantly{% endblock %}
+{% block title %}AIHealthCare — Your AI Powered Healthcare Companion{% endblock %}
 
 {% block extra_css %}
 <style>
-    .hero{
-        position:relative;
-        padding:80px 0 90px;
-        background:radial-gradient(ellipse 900px 500px at 85% -10%, var(--green-soft) 0%, transparent 60%), var(--white);
-        overflow:hidden;
-    }
-    .hero .row{align-items:center;}
-    .eyebrow{
-        display:inline-flex;align-items:center;gap:8px;
-        background:var(--green-soft);color:var(--green-deep);
-        font-size:13px;font-weight:600;padding:7px 14px;border-radius:100px;
-        margin-bottom:22px;opacity:0;animation:riseIn .7s ease forwards;animation-delay:.1s;
-    }
-    .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--amber);animation:pulseDot 2s infinite;}
-    .hero h1{
-        font-size:clamp(36px,5vw,60px);line-height:1.08;color:var(--ink);
-        opacity:0;animation:riseIn .8s ease forwards;animation-delay:.22s;
-    }
-    .hero h1 em{font-style:normal;color:var(--green-deep);}
-    .hero p.lede{
-        margin-top:22px;font-size:17.5px;line-height:1.65;color:var(--ink-soft);max-width:480px;
-        opacity:0;animation:riseIn .8s ease forwards;animation-delay:.34s;
-    }
-    .hero-ctas{margin-top:32px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;
-        opacity:0;animation:riseIn .8s ease forwards;animation-delay:.46s;}
-    .btn-primary-cta{
-        background:var(--green-deep);color:#fff;padding:15px 26px;border-radius:100px;
-        font-weight:600;font-size:15px;display:inline-flex;align-items:center;gap:8px;
-        transition:transform .25s, box-shadow .25s;
-    }
-    .btn-primary-cta:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(14,124,90,0.3);color:#fff;}
-    .btn-ghost-cta{
-        color:var(--ink);font-weight:600;font-size:15px;padding:15px 4px;
-        display:inline-flex;align-items:center;gap:8px;border-bottom:2px solid transparent;
-        transition:border-color .25s;
-    }
-    .btn-ghost-cta:hover{border-color:var(--green-deep);color:var(--ink);}
-    .hero-stats{margin-top:42px;display:flex;gap:36px;flex-wrap:wrap;
-        opacity:0;animation:riseIn .8s ease forwards;animation-delay:.58s;}
-    .stat-num{font-family:'Fraunces',serif;font-size:26px;font-weight:600;color:var(--green-deep);}
-    .stat-label{font-size:12.5px;color:var(--ink-soft);margin-top:2px;}
+  /* Hospital-grade Green/White Home (GSAP/AOS animations) */
+  :root{
+    --primary:#1b5e20;
+    --secondary:#2e7d32;
+    --accent:#43a047;
+    --bg:#f1f8e9;
+    --card:#ffffff;
+    --text:#1a1a1a;
+  }
 
-    .hero-visual{position:relative;height:480px;
-        opacity:0;animation:riseIn 1s ease forwards;animation-delay:.4s;}
-    .pulse-card{
-        position:absolute;inset:0;background:var(--white);border-radius:26px;border:1px solid var(--line);
-        box-shadow:0 30px 80px -20px rgba(14,124,90,0.18);padding:30px;display:flex;flex-direction:column;
-    }
-    .pulse-card-head{display:flex;justify-content:space-between;align-items:center;}
-    .pulse-tag{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--green-deep);}
-    .live-dot{width:8px;height:8px;border-radius:50%;background:var(--green-mid);animation:liveDot 1.8s infinite;}
-    .ecg-wrap{flex:1;display:flex;align-items:center;justify-content:center;}
-    .ecg-line{width:100%;height:130px;}
-    .pulse-foot{display:flex;justify-content:space-between;align-items:flex-end;}
-    .bpm{font-family:'Fraunces',serif;font-size:44px;font-weight:600;color:var(--ink);}
-    .bpm span{font-size:13px;color:var(--ink-soft);font-family:'Inter',sans-serif;font-weight:500;}
-    .float-chip{
-        position:absolute;background:#fff;border:1px solid var(--line);border-radius:16px;
-        padding:13px 16px;box-shadow:0 16px 40px -10px rgba(14,124,90,0.2);
-        display:flex;align-items:center;gap:10px;font-size:12.5px;font-weight:600;color:var(--ink);
-    }
-    .chip-1{top:-14px;right:18px;animation:floatY 5s ease-in-out infinite;}
-    .chip-2{bottom:20px;left:-18px;animation:floatY 6s ease-in-out infinite reverse;}
-    .chip-icon{width:28px;height:28px;border-radius:8px;background:var(--green-soft);display:flex;align-items:center;justify-content:center;}
+  .bb-hero{
+    position:relative;
+    overflow:hidden;
+    background: radial-gradient(900px 420px at 10% 0%, rgba(67,160,71,.18), transparent 55%),
+                radial-gradient(850px 420px at 90% 10%, rgba(46,125,50,.14), transparent 60%),
+                radial-gradient(800px 520px at 40% 100%, rgba(67,160,71,.10), transparent 55%),
+                linear-gradient(180deg, rgba(241,248,233,1), rgba(241,248,233,.78));
+    padding:78px 0 44px;
+  }
 
-    @keyframes riseIn{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
-    @keyframes pulseDot{0%,100%{opacity:1;}50%{opacity:.3;}}
-    @keyframes liveDot{0%{box-shadow:0 0 0 0 rgba(18,151,104,0.45);}70%{box-shadow:0 0 0 10px rgba(18,151,104,0);}100%{box-shadow:0 0 0 0 rgba(18,151,104,0);}}
-    @keyframes floatY{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+  /* Parallax blob layer */
+  .bb-hero-blobs{
+    position:absolute; inset:-40px;
+    pointer-events:none;
+    opacity:.9;
+  }
+  .bb-blob{
+    position:absolute;
+    width:520px; height:520px;
+    border-radius:45% 55% 62% 38% / 45% 45% 55% 55%;
+    filter: blur(30px);
+    mix-blend-mode:multiply;
+    opacity:.35;
+  }
+  .bb-blob.b1{ left:-140px; top:-120px; background: rgba(67,160,71,.45); }
+  .bb-blob.b2{ right:-160px; top:30px; background: rgba(46,125,50,.28); }
+  .bb-blob.b3{ left:15%; bottom:-240px; width:640px; height:640px; background: rgba(16,185,129,.22); }
 
-    .trust{
-        padding:28px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
-        display:flex;justify-content:center;gap:54px;flex-wrap:wrap;background:var(--green-pale);
-    }
-    .trust-item{display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:600;color:var(--ink-soft);}
-    .trust-item i{color:var(--green-deep);font-size:16px;}
+  .bb-hero-inner{ position:relative; z-index:2; }
 
-    .section-pad{padding:90px 0;}
-    .section-head{max-width:620px;margin:0 auto 56px;text-align:center;}
-    .section-eyebrow{font-size:12.5px;font-weight:700;color:var(--green-deep);letter-spacing:.06em;text-transform:uppercase;}
-    .section-head h2{font-size:clamp(28px,3.4vw,40px);margin-top:12px;line-height:1.15;}
-    .section-head p{margin-top:14px;font-size:16px;color:var(--ink-soft);line-height:1.6;}
+  .bb-pill{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:10px 14px;border-radius:999px;
+    background: rgba(67,160,71,.10);
+    border:1px solid rgba(67,160,71,.22);
+    color: var(--primary);
+    font-weight:800;
+    letter-spacing:.2px;
+    font-size:13px;
+  }
 
-    .feature-card{
-        background:var(--white);border:1px solid var(--line);border-radius:22px;padding:32px 28px;height:100%;
-        transition:transform .35s ease, box-shadow .35s ease;
-        opacity:0;transform:translateY(24px);
-    }
-    .feature-card.in-view{opacity:1;transform:translateY(0);}
-    .feature-card:hover{transform:translateY(-8px);box-shadow:0 24px 50px -16px rgba(14,124,90,0.2);}
-    .feature-icon{
-        width:50px;height:50px;border-radius:14px;background:var(--green-soft);
-        display:flex;align-items:center;justify-content:center;margin-bottom:20px;
-        transition:background .35s, transform .35s;font-size:20px;color:var(--green-deep);
-    }
-    .feature-card:hover .feature-icon{background:var(--green-deep);transform:rotate(-6deg) scale(1.05);color:#fff;}
-    .feature-card h3{font-size:18.5px;margin-bottom:10px;}
-    .feature-card p{font-size:14.5px;color:var(--ink-soft);line-height:1.6;margin:0;}
+  .bb-hero-grid{ display:grid; grid-template-columns: 1.1fr .9fr; gap:42px; align-items:center; }
+  @media (max-width:991px){ .bb-hero-grid{ grid-template-columns:1fr; gap:24px; } }
 
-    .how-section{background:var(--green-pale);}
-    .how-step{text-align:center;padding:0 14px;opacity:0;transform:translateY(20px);}
-    .how-step.in-view{opacity:1;transform:translateY(0);}
-    .how-num{
-        width:52px;height:52px;border-radius:50%;background:#fff;border:2px solid var(--green-deep);
-        color:var(--green-deep);font-family:'Fraunces',serif;font-weight:600;font-size:19px;
-        display:flex;align-items:center;justify-content:center;margin:0 auto 18px;
-    }
-    .how-step h3{font-size:16px;margin-bottom:8px;}
-    .how-step p{font-size:13.5px;color:var(--ink-soft);line-height:1.55;margin:0;}
+  .bb-h1{ font-size:56px; font-weight:1000; line-height:1.02; letter-spacing:-.03em; margin-top:16px; }
+  @media (max-width:767px){ .bb-h1{ font-size:38px; } }
 
-    .signature-section{
-        background:linear-gradient(160deg,#0E7C5A 0%,#0A5C43 100%);color:#fff;
-        padding:90px 0;position:relative;overflow:hidden;
-    }
-    .signature-section::before{
-        content:'';position:absolute;width:560px;height:560px;border-radius:50%;
-        background:radial-gradient(circle,rgba(255,255,255,0.08),transparent 70%);top:-200px;right:-200px;
-    }
-    .sig-inner{max-width:740px;margin:0 auto;text-align:center;position:relative;z-index:2;}
-    .sig-inner .quote-mark{font-family:'Fraunces',serif;font-size:56px;color:rgba(255,255,255,0.35);line-height:1;}
-    .sig-inner h2{color:#fff;font-size:clamp(22px,2.8vw,32px);line-height:1.4;font-weight:500;margin-top:4px;}
-    .sig-author{margin-top:28px;display:flex;align-items:center;justify-content:center;gap:12px;}
-    .sig-avatar{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px;}
-    .sig-author-name{font-size:13.5px;font-weight:600;}
-    .sig-author-role{font-size:12.5px;color:rgba(255,255,255,0.72);}
+  .bb-h1 span{ color: var(--secondary); }
 
-    .slogan-bar{
-        background:var(--green-soft);border:1px solid var(--line);border-radius:18px;
-        padding:18px 24px;display:flex;align-items:center;gap:14px;margin:0 auto 50px;max-width:640px;
-    }
-    .slogan-bar .icon{font-size:26px;}
-    .slogan-bar .txt{font-size:14.5px;color:var(--ink);font-weight:500;}
-    .slogan-bar .hindi{font-size:13px;color:var(--ink-soft);margin-top:2px;}
+  .bb-sub{
+    max-width:560px;
+    color: rgba(26,26,26,.68);
+    font-size:16px;
+    line-height:1.9;
+    margin-top:14px;
+    margin-bottom:26px;
+    font-weight:700;
+  }
 
-    .cta-box{
-        max-width:780px;margin:0 auto;background:var(--green-soft);border-radius:30px;
-        padding:56px 44px;text-align:center;
-    }
-    .cta-box h2{font-size:clamp(26px,3.2vw,36px);}
-    .cta-box p{margin-top:12px;font-size:15.5px;color:var(--ink-soft);}
-    .cta-box .hero-ctas{justify-content:center;margin-top:28px;opacity:1;}
+  .bb-btn{
+    position:relative;
+    overflow:hidden;
+    display:inline-flex; align-items:center; gap:10px;
+    padding:14px 18px;
+    border-radius:16px;
+    font-weight:900;
+    border:none;
+    text-decoration:none;
+    transition: transform .2s ease, box-shadow .2s ease;
+    user-select:none;
+  }
 
-    @media(max-width:991px){
-        .hero-visual{height:380px;margin-top:40px;}
-        .trust{gap:24px;}
-    }
+  .bb-btn-primary{
+    color:#fff;
+    background: linear-gradient(135deg, var(--secondary), var(--accent));
+    box-shadow: 0 14px 40px rgba(46,125,50,.22);
+  }
+  .bb-btn-primary:hover{ transform: translateY(-2px); box-shadow: 0 20px 55px rgba(46,125,50,.28); }
+
+  .bb-btn-ghost{
+    color: var(--secondary);
+    background: rgba(255,255,255,.65);
+    border:1px solid rgba(67,160,71,.22);
+    box-shadow: 0 10px 28px rgba(67,160,71,.10);
+  }
+  .bb-btn-ghost:hover{ transform: translateY(-2px); background: rgba(255,255,255,.92); }
+
+  /* Click ripple */
+  .bb-btn::after{
+    content:'';
+    position:absolute;
+    width:14px; height:14px;
+    left:var(--x,50%); top:var(--y,50%);
+    background: rgba(255,255,255,.35);
+    border-radius:50%;
+    transform:translate(-50%,-50%) scale(0);
+    opacity:.9;
+    pointer-events:none;
+  }
+  .bb-btn.bb-ripple-on:active::after{
+    animation: bbRipple .65s ease-out;
+  }
+  @keyframes bbRipple{
+    0%{ transform:translate(-50%,-50%) scale(0); opacity:.9; }
+    100%{ transform:translate(-50%,-50%) scale(18); opacity:0; }
+  }
+
+  /* Antigravity cards */
+  .bb-float-wrap{ position:relative; height:440px; display:flex; align-items:center; justify-content:center; }
+  @media (max-width:991px){ .bb-float-wrap{ height:360px; } }
+
+  .bb-antigrav-card{
+    position:absolute;
+    width: 100%;
+    max-width: 460px;
+    border-radius: 24px;
+    background: rgba(255,255,255,.72);
+    border:1px solid rgba(67,160,71,.22);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 22px 70px rgba(46,125,50,.18);
+    padding:18px;
+    transform-style:preserve-3d;
+  }
+
+  .bb-antigrav-card.c1{ transform: translateY(0px) translateZ(0px); }
+  .bb-antigrav-card.c2{ max-width: 360px; right:-6%; top:18%; padding:16px; opacity:.96; }
+  .bb-antigrav-card.c3{ max-width: 320px; left:-5%; bottom:12%; padding:14px; opacity:.96; }
+
+  /* 3D tilt on hover */
+  .bb-tilt{
+    perspective: 1000px;
+    transform: translateZ(0);
+  }
+  .bb-tilt:hover{ box-shadow: 0 34px 95px rgba(46,125,50,.24); }
+
+  .bb-tilt-inner{ transition: transform .15s ease; will-change: transform; }
+
+  .bb-card-glow{
+    position:relative;
+  }
+  .bb-card-glow::before{
+    content:''; position:absolute; inset:-2px;
+    border-radius: 26px;
+    background: radial-gradient(220px 120px at 20% 20%, rgba(67,160,71,.22), transparent 60%),
+                radial-gradient(220px 140px at 80% 50%, rgba(46,125,50,.16), transparent 60%);
+    opacity:.9;
+    pointer-events:none;
+  }
+  .bb-card-glow > *{ position:relative; z-index:1; }
+
+  .bb-float-badge{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:10px 12px;border-radius:16px;
+    background: rgba(255,255,255,.75);
+    border:1px solid rgba(67,160,71,.22);
+    font-weight:900; color: var(--secondary);
+    box-shadow: 0 16px 45px rgba(67,160,71,.10);
+  }
+
+  .bb-scanline{
+    width:100%; height:10px; border-radius: 999px;
+    background: linear-gradient(90deg, transparent, rgba(67,160,71,.35), transparent);
+    opacity:.7;
+    transform: translateX(-45%);
+    animation: bbScan 3.2s ease-in-out infinite;
+  }
+  @keyframes bbScan{ 0%,100%{ transform:translateX(-45%);} 50%{ transform:translateX(45%);} }
+
+  /* Stats */
+  .bb-stat-row{ display:flex; gap:16px; flex-wrap:wrap; margin-top:26px; }
+  .bb-stat-card{
+    flex:1 1 160px; min-width:160px;
+    padding:16px;
+    border-radius:18px;
+    background: rgba(255,255,255,.72);
+    border:1px solid rgba(67,160,71,.20);
+    box-shadow: 0 12px 34px rgba(67,160,71,.10);
+  }
+  .bb-stat-num{ font-size:26px; font-weight:1000; color: var(--secondary); }
+  .bb-stat-label{ font-size:13px; color: rgba(26,26,26,.62); margin-top:6px; font-weight:800; }
+
+  /* Sections */
+  .bb-section{ padding:66px 0; }
+
+  /* Scroll reveal (AOS + fallback) */
+  [data-aos]{ will-change: transform, opacity; }
+  .bb-reveal-fallback{
+    opacity:0;
+    transform: translateY(18px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .bb-reveal-fallback.is-visible{ opacity:1; transform: translateY(0); }
+
+  /* Hero particles */
+  .bb-particles-canvas{ position:absolute; inset:0; z-index:1; pointer-events:none; opacity:.85; }
+
+  /* Heartbeat line */
+  .bb-heartbeat{
+    width:100%; max-width:520px;
+    height:auto;
+  }
+
+  /* Staggered grid animations */
+  .bb-stagger{ opacity:0; transform: translateY(18px) scale(.98); }
+  .bb-stagger.is-visible{ opacity:1; transform: translateY(0) scale(1); transition: opacity .65s ease, transform .65s cubic-bezier(.2,.9,.2,1.05); }
+
+  .bb-cta-row{ display:flex; gap:16px; flex-wrap:wrap; margin-top:20px; }
+
 </style>
 {% endblock %}
 
 {% block content %}
 
-<section class="hero">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6">
-                <span class="eyebrow"><span class="dot"></span>Online now — 24x7 AI doctor</span>
-                <h1>Your health,<br><em>answered instantly</em>.</h1>
-                <p class="lede">Symptom checks, doctor bookings and medicines — all in one calm, caring place. Speak in Hindi, English or Hinglish, just like talking to family.</p>
-                <div class="hero-ctas">
-                    <a class="btn-primary-cta" href="/chat/">
-                        Start a consultation
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
-                    <a class="btn-ghost-cta" href="/appointments/">Book a doctor →</a>
-                </div>
-                <div class="hero-stats">
-                    <div><div class="stat-num">24/7</div><div class="stat-label">Always available</div></div>
-                    <div><div class="stat-num">120+</div><div class="stat-label">Verified doctors</div></div>
-                    <div><div class="stat-num">98%</div><div class="stat-label">Patient satisfaction</div></div>
-                </div>
+<section class="bb-hero" id="top">
+  <canvas class="bb-particles-canvas" id="bbParticles" aria-hidden="true"></canvas>
+
+  <div class="bb-hero-blobs" aria-hidden="true">
+    <div class="bb-blob b1"></div>
+    <div class="bb-blob b2"></div>
+    <div class="bb-blob b3"></div>
+  </div>
+
+  <div class="container bb-hero-inner">
+    <div class="bb-hero-grid">
+      <div>
+        <div class="bb-pill" data-aos="fade-up" data-aos-delay="50">
+          <i class="fas fa-shield-heart" aria-hidden="true"></i>
+          Hospital-grade AI healthcare • 24/7
+        </div>
+
+        <h1 class="bb-h1" data-aos="fade-up" data-aos-delay="120">
+          Your AI Powered<br/>
+          <span>Healthcare Companion</span>
+        </h1>
+
+        <p class="bb-sub" data-aos="fade-up" data-aos-delay="160">
+          Instant symptom guidance, trusted doctor recommendations, medicine ordering, and report insights — designed to feel calm, safe, and premium.
+        </p>
+
+        <div class="bb-cta-row" data-aos="fade-up" data-aos-delay="220">
+          <a href="/chat/" class="bb-btn bb-btn-primary bb-ripple-on" aria-label="Start Health Consultation" data-shine>
+            <i class="fas fa-stethoscope" aria-hidden="true"></i>
+            Start Health Consultation
+          </a>
+          <a href="/appointments/" class="bb-btn bb-btn-ghost bb-ripple-on" aria-label="Book Appointment" data-shine>
+            <i class="fas fa-calendar-check" aria-hidden="true"></i>
+            Book Appointment
+          </a>
+        </div>
+
+        <div class="bb-stat-row" aria-label="Platform statistics">
+          <div class="bb-stat-card bb-stagger" data-stagger="0" data-aos="none">
+            <div class="bb-stat-num" data-count="1000">0</div>
+            <div class="bb-stat-label">Trusted Doctors</div>
+          </div>
+          <div class="bb-stat-card bb-stagger" data-stagger="1" data-aos="none">
+            <div class="bb-stat-num" data-count="24">0</div>
+            <div class="bb-stat-label">Hours Support (24/7)</div>
+          </div>
+          <div class="bb-stat-card bb-stagger" data-stagger="2" data-aos="none">
+            <div class="bb-stat-num" data-count="500">0</div>
+            <div class="bb-stat-label">Medicines Ready</div>
+          </div>
+          <div class="bb-stat-card bb-stagger" data-stagger="3" data-aos="none">
+            <div class="bb-stat-num" data-count="0">0</div>
+            <div class="bb-stat-label">Transparent Experience</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bb-float-wrap bb-tilt" aria-label="Hero illustration">
+        <div class="bb-pulse-dot" aria-hidden="true"></div>
+
+        <div class="bb-antigrav-card c2 bb-card-glow" data-antigrav="1">
+          <div class="d-flex align-items-center justify-content-between gap-3">
+            <div class="bb-float-badge"><i class="fas fa-syringe" aria-hidden="true"></i> Calm Triage</div>
+            <div style="width:42px;height:42px;border-radius:16px;background:rgba(67,160,71,.14);border:1px solid rgba(67,160,71,.25);display:flex;align-items:center;justify-content:center;box-shadow:0 18px 45px rgba(46,125,50,.16);">
+              <i class="fas fa-hospital" style="color:var(--secondary)" aria-hidden="true"></i>
+            </div>
+          </div>
+          <div style="margin-top:12px" class="bb-scanline" aria-hidden="true"></div>
+        </div>
+
+        <div class="bb-antigrav-card c1 bb-card-glow" data-antigrav="0">
+          <div class="bb-tilt-inner">
+            <div class="d-flex align-items-center gap-3">
+              <div style="width:56px;height:56px;border-radius:20px;background:rgba(67,160,71,.14);border:1px solid rgba(67,160,71,.25);display:flex;align-items:center;justify-content:center;box-shadow:0 18px 45px rgba(46,125,50,.16);">
+                <i class="fas fa-heart-pulse" style="color:var(--secondary)" aria-hidden="true"></i>
+              </div>
+              <div>
+                <div style="font-weight:1000;color:var(--text);font-size:16px;">AI Clinic Console</div>
+                <div style="color:rgba(26,26,26,.68);font-size:13px;font-weight:800;">Calm guidance • Clear next steps</div>
+              </div>
             </div>
 
-            <div class="col-lg-6">
-                <div class="hero-visual">
-                    <div class="pulse-card">
-                        <div class="pulse-card-head">
-                            <span class="pulse-tag"><span class="live-dot"></span>Live vitals</span>
-                            <i class="fas fa-clock" style="color:var(--green-deep);"></i>
-                        </div>
-                        <div class="ecg-wrap">
-                            <svg class="ecg-line" viewBox="0 0 400 140" preserveAspectRatio="none">
-                                <polyline id="ecgPath" points="0,70 40,70 55,70 65,30 75,110 85,70 110,70 130,70 145,40 155,100 165,70 400,70"
-                                    fill="none" stroke="#0E7C5A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </div>
-                        <div class="pulse-foot">
-                            <div class="bpm">72<span> bpm</span></div>
-                            <i class="fas fa-heart-pulse" style="font-size:30px;color:var(--amber);"></i>
-                        </div>
-                    </div>
-                    <div class="float-chip chip-1">
-                        <span class="chip-icon"><i class="fas fa-check" style="color:var(--green-deep);font-size:13px;"></i></span>
-                        Prescription ready
-                    </div>
-                    <div class="float-chip chip-2">
-                        <span class="chip-icon"><i class="fas fa-calendar-check" style="color:var(--green-deep);font-size:13px;"></i></span>
-                        Appointment at 4:30 PM
-                    </div>
+            <div class="mt-4">
+              <svg class="bb-heartbeat" viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Animated heartbeat line">
+                <defs>
+                  <linearGradient id="hb" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0" stop-color="#1b5e20" stop-opacity="0.2"/>
+                    <stop offset="0.5" stop-color="#43a047" stop-opacity="0.9"/>
+                    <stop offset="1" stop-color="#2e7d32" stop-opacity="0.25"/>
+                  </linearGradient>
+                </defs>
+                <path d="M10 140 C 60 140, 80 40, 120 40 C 160 40, 170 170, 210 170 C 250 170, 265 60, 310 60 C 355 60, 370 140, 410 140 C 450 140, 470 80, 510 80 C 550 80, 570 150, 610 150" fill="none" stroke="url(#hb)" stroke-width="5" stroke-linecap="round"/>
+                <path class="bb-hb-path" d="M10 140 C 60 140, 80 40, 120 40 C 160 40, 170 170, 210 170 C 250 170, 265 60, 310 60 C 355 60, 370 140, 410 140 C 450 140, 470 80, 510 80 C 550 80, 570 150, 610 150" fill="none" stroke="#43a047" stroke-width="4" stroke-linecap="round"/>
+
+                <circle cx="120" cy="40" r="6" fill="#43a047" opacity=".8" class="bb-hb-dot"/>
+                <circle cx="310" cy="60" r="6" fill="#43a047" opacity=".8" class="bb-hb-dot2"/>
+                <circle cx="510" cy="80" r="6" fill="#43a047" opacity=".8" class="bb-hb-dot3"/>
+              </svg>
+
+              <div style="margin-top:12px" class="d-flex justify-content-between flex-wrap gap-3">
+                <div style="flex:1" class="p-3 rounded" aria-hidden="true">
+                  <div style="font-weight:1000;color:var(--secondary);">AI Triage</div>
+                  <div style="font-size:12px;color:rgba(26,26,26,.62);margin-top:6px;font-weight:800;">Symptom clarity</div>
                 </div>
+                <div style="flex:1" class="p-3 rounded">
+                  <div style="font-weight:1000;color:var(--secondary);">Doctor Fit</div>
+                  <div style="font-size:12px;color:rgba(26,26,26,.62);margin-top:6px;font-weight:800;">Specialization match</div>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
+
+        <div class="bb-antigrav-card c3 bb-card-glow" data-antigrav="2">
+          <div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="width:46px;height:46px;border-radius:18px;background:rgba(67,160,71,.12);border:1px solid rgba(67,160,71,.25);display:flex;align-items:center;justify-content:center;">
+                <i class="fas fa-file-medical" style="color:var(--secondary)" aria-hidden="true"></i>
+              </div>
+              <div style="font-weight:1000;color:var(--secondary);">Report Insights</div>
+            </div>
+            <div style="margin-top:10px;color:rgba(26,26,26,.66);font-weight:800;font-size:13px;line-height:1.7;">Turn your medical info into readable, next-step guidance.</div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </section>
 
-<div class="trust">
-    <div class="trust-item"><i class="fas fa-shield-halved"></i>Data encrypted end-to-end</div>
-    <div class="trust-item"><i class="fas fa-user-doctor"></i>MCI-registered doctors</div>
-    <div class="trust-item"><i class="fas fa-bolt"></i>Average reply in 4 sec</div>
-</div>
-
-<section class="section-pad" id="services">
-    <div class="container">
-
-        <div class="slogan-bar">
-            <span class="icon">{{ slogan.icon }}</span>
-            <div>
-                <div class="txt">{{ slogan.text }}</div>
-                <div class="hindi">{{ slogan.hindi }}</div>
-            </div>
-        </div>
-
-        <div class="section-head">
-            <span class="section-eyebrow">What we offer</span>
-            <h2>Care that meets you where you are</h2>
-            <p>From a 2 a.m. fever to a routine check-up — one calm place for every step of your care.</p>
-        </div>
-
-        <div class="row g-4">
-            <div class="col-lg-4 col-md-6">
-                <div class="feature-card" data-reveal>
-                    <div class="feature-icon"><i class="fas fa-comment-medical"></i></div>
-                    <h3>AI symptom chat</h3>
-                    <p>Describe how you feel in your own words — get home remedies, medicine guidance and a sense of urgency, instantly.</p>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="feature-card" data-reveal>
-                    <div class="feature-icon"><i class="fas fa-calendar-check"></i></div>
-                    <h3>Doctor appointments</h3>
-                    <p>Browse specialists by city and speciality, pick a slot that fits your day, and get instant confirmation.</p>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="feature-card" data-reveal>
-                    <div class="feature-icon"><i class="fas fa-pills"></i></div>
-                    <h3>Online pharmacy</h3>
-                    <p>Order genuine medicines with cash on delivery, free shipping above ₹500, and real-time order tracking.</p>
-                </div>
-            </div>
-        </div>
+<section class="bb-section" id="services">
+  <div class="container">
+    <div class="text-center">
+      <div class="bb-pill justify-content-center mx-auto" data-aos="fade-up" data-aos-delay="40">
+        <i class="fas fa-syringe" aria-hidden="true"></i> Services
+      </div>
+      <div class="section-title2 mt-3" style="font-size:34px;font-weight:1000;color:var(--text);" data-aos="fade-up" data-aos-delay="80">Everything you need to feel better</div>
+      <div class="mt-3 mx-auto" style="color:rgba(26,26,26,.66);font-weight:800;max-width:720px;line-height:1.8;font-size:15px;" data-aos="fade-up" data-aos-delay="120">
+        Symptom checker, AI assistance, medicine recommendations, doctor consultations, report analysis, and emergency support.
+      </div>
     </div>
+
+    <div class="row g-4 mt-4">
+      {% for i in "123456" %}
+      {% endfor %}
+      <div class="col-lg-4 col-md-6">
+        <div class="bg-white border" style="border-radius:22px; border:1px solid rgba(67,160,71,.20); box-shadow:0 16px 50px rgba(67,160,71,.10); padding:18px;" data-aos="fade-up" data-aos-delay="0">
+          <div style="width:52px;height:52px;border-radius:18px;display:flex;align-items:center;justify-content:center;background:rgba(67,160,71,.12);border:1px solid rgba(67,160,71,.22);">
+            <i class="fas fa-clipboard-check" style="color:var(--secondary)" aria-hidden="true"></i>
+          </div>
+          <div style="margin-top:14px;font-weight:1000;">Symptom Checker</div>
+          <div style="margin-top:8px;color:rgba(26,26,26,.66);font-weight:800;line-height:1.7;font-size:13px;">Guidance based on your symptoms with clear next steps.</div>
+          <div class="mt-3">
+            <a href="/chat/" class="bb-btn bb-btn-ghost bb-ripple-on" style="padding:12px 16px;border-radius:14px;">
+              <i class="fas fa-stethoscope" aria-hidden="true"></i> Open
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6">
+        <div class="bg-white border" style="border-radius:22px; border:1px solid rgba(67,160,71,.20); box-shadow:0 16px 50px rgba(67,160,71,.10); padding:18px;" data-aos="fade-up" data-aos-delay="80">
+          <div style="width:52px;height:52px;border-radius:18px;display:flex;align-items:center;justify-content:center;background:rgba(67,160,71,.12);border:1px solid rgba(67,160,71,.22);">
+            <i class="fas fa-brain" style="color:var(--secondary)" aria-hidden="true"></i>
+          </div>
+          <div style="margin-top:14px;font-weight:1000;">AI Medical Assistant</div>
+          <div style="margin-top:8px;color:rgba(26,26,26,.66);font-weight:800;line-height:1.7;font-size:13px;">24/7 support for questions, diet tips, and remedies.</div>
+          <div class="mt-3">
+            <a href="/chat/" class="bb-btn bb-btn-primary bb-ripple-on" style="padding:12px 16px;border-radius:14px;">
+              <i class="fas fa-wave-square" aria-hidden="true"></i> Consult
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6">
+        <div class="bg-white border" style="border-radius:22px; border:1px solid rgba(67,160,71,.20); box-shadow:0 16px 50px rgba(67,160,71,.10); padding:18px;" data-aos="fade-up" data-aos-delay="140">
+          <div style="width:52px;height:52px;border-radius:18px;display:flex;align-items:center;justify-content:center;background:rgba(67,160,71,.12);border:1px solid rgba(67,160,71,.22);">
+            <i class="fas fa-capsules" style="color:var(--secondary)" aria-hidden="true"></i>
+          </div>
+          <div style="margin-top:14px;font-weight:1000;">Medicine Recommendation</div>
+          <div style="margin-top:8px;color:rgba(26,26,26,.66);font-weight:800;line-height:1.7;font-size:13px;">Recommended options and quick ordering flow.</div>
+          <div class="mt-3">
+            <a href="/medicines/" class="bb-btn bb-btn-ghost bb-ripple-on" style="padding:12px 16px;border-radius:14px;">
+              <i class="fas fa-pills" aria-hidden="true"></i> Browse
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6">
+        <div class="bg-white border" style="border-radius:22px; border:1px solid rgba(67,160,71,.20); box-shadow:0 16px 50px rgba(67,160,71,.10); padding:18px;" data-aos="fade-up" data-aos-delay="200">
+          <div style="width:52px;height:52px;border-radius:18px;display:flex;align-items:center;justify-content:center;background:rgba(67,160,71,.12);border:1px solid rgba(67,160,71,.22);">
+            <i class="fas fa-user-doctor" style="color:var(--secondary)" aria-hidden="true"></i>
+          </div>
+          <div style="margin-top:14px;font-weight:1000;">Doctor Consultation</div>
+          <div style="margin-top:8px;color:rgba(26,26,26,.66);font-weight:800;line-height:1.7;font-size:13px;">Book specialist appointments in a guided UI.</div>
+          <div class="mt-3">
+            <a href="/appointments/" class="bb-btn bb-btn-primary bb-ripple-on" style="padding:12px 16px;border-radius:14px;">
+              <i class="fas fa-calendar-check" aria-hidden="true"></i> Book
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6">
+        <div class="bg-white border" style="border-radius:22px; border:1px solid rgba(67,160,71,.20); box-shadow:0 16px 50px rgba(67,160,71,.10); padding:18px;" data-aos="fade-up" data-aos-delay="260">
+          <div style="width:52px;height:52px;border-radius:18px;display:flex;align-items:center;justify-content:center;background:rgba(67,160,71,.12);border:1px solid rgba(67,160,71,.22);">
+            <i class="fas fa-file-medical" style="color:var(--secondary)" aria-hidden="true"></i>
+          </div>
+          <div style="margin-top:14px;font-weight:1000;">Medical Report Analysis</div>
+          <div style="margin-top:8px;color:rgba(26,26,26,.66);font-weight:800;line-height:1.7;font-size:13px;">Turn reports into understandable insights (UI-first).</div>
+          <div class="mt-3">
+            <a href="/" class="bb-btn bb-btn-ghost bb-ripple-on" style="padding:12px 16px;border-radius:14px;">
+              <i class="fas fa-file-alt" aria-hidden="true"></i> Learn
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6">
+        <div class="bg-white border" style="border-radius:22px; border:1px solid rgba(67,160,71,.20); box-shadow:0 16px 50px rgba(67,160,71,.10); padding:18px;" data-aos="fade-up" data-aos-delay="320">
+          <div style="width:52px;height:52px;border-radius:18px;display:flex;align-items:center;justify-content:center;background:rgba(67,160,71,.12);border:1px solid rgba(67,160,71,.22);">
+            <i class="fas fa-truck-medical" style="color:var(--secondary)" aria-hidden="true"></i>
+          </div>
+          <div style="margin-top:14px;font-weight:1000;">Emergency Support</div>
+          <div style="margin-top:8px;color:rgba(26,26,26,.66);font-weight:800;line-height:1.7;font-size:13px;">Quick emergency cues and contact information.</div>
+          <div class="mt-3">
+            <a href="/" class="bb-btn bb-btn-ghost bb-ripple-on" style="padding:12px 16px;border-radius:14px;">
+              <i class="fas fa-phone-alt" aria-hidden="true"></i> Contact
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
 </section>
 
-<section class="section-pad how-section">
-    <div class="container">
-        <div class="section-head">
-            <span class="section-eyebrow">How it works</span>
-            <h2>From symptom to solution in minutes</h2>
+<!-- ===================== AI CONSULTATION SHOWCASE (green-theme illustration) ===================== -->
+<section class="bb-section" id="ai-showcase" style="padding-top:10px;">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6" data-aos="fade-right">
+        <div class="bb-pill" data-aos="fade-up" data-aos-delay="20">
+          <i class="fas fa-microchip" aria-hidden="true"></i> AI-Integrated Healthcare
         </div>
-        <div class="row g-4">
-            <div class="col-md-3 col-6">
-                <div class="how-step" data-reveal>
-                    <div class="how-num">1</div>
-                    <h3>Tell us how you feel</h3>
-                    <p>Type your symptoms in Hindi, English or Hinglish — no forms, just conversation.</p>
-                </div>
+        <h2 style="font-size:32px;font-weight:1000;color:var(--text);margin-top:16px;" data-aos="fade-up" data-aos-delay="60">
+          Personalized care,<br/>powered by AI diagnostics
+        </h2>
+        <p style="color:rgba(26,26,26,.66);font-weight:700;font-size:15px;line-height:1.85;margin-top:14px;max-width:480px;" data-aos="fade-up" data-aos-delay="100">
+          Every consultation combines doctor expertise with AI-driven health analytics — giving you clear, optimal outcomes without the wait.
+        </p>
+        <div class="mt-4 d-flex flex-column gap-3" data-aos="fade-up" data-aos-delay="140">
+          <div class="d-flex align-items-center gap-3">
+            <div style="width:40px;height:40px;border-radius:14px;background:rgba(67,160,71,.12);border:1px solid rgba(67,160,71,.25);display:flex;align-items:center;justify-content:center;flex:0 0 auto;">
+              <i class="fas fa-check" style="color:var(--secondary)"></i>
             </div>
-            <div class="col-md-3 col-6">
-                <div class="how-step" data-reveal>
-                    <div class="how-num">2</div>
-                    <h3>Get instant guidance</h3>
-                    <p>Receive home remedies, medicine suggestions and a clear sense of urgency.</p>
-                </div>
+            <span style="font-weight:800;color:var(--text);font-size:14px;">Real-time AI health analytics dashboard</span>
+          </div>
+          <div class="d-flex align-items-center gap-3">
+            <div style="width:40px;height:40px;border-radius:14px;background:rgba(67,160,71,.12);border:1px solid rgba(67,160,71,.25);display:flex;align-items:center;justify-content:center;flex:0 0 auto;">
+              <i class="fas fa-check" style="color:var(--secondary)"></i>
             </div>
-            <div class="col-md-3 col-6">
-                <div class="how-step" data-reveal>
-                    <div class="how-num">3</div>
-                    <h3>Book if needed</h3>
-                    <p>If symptoms need a doctor, book the right specialist in two taps.</p>
-                </div>
+            <span style="font-weight:800;color:var(--text);font-size:14px;">Personalized health plans for every patient</span>
+          </div>
+          <div class="d-flex align-items-center gap-3">
+            <div style="width:40px;height:40px;border-radius:14px;background:rgba(67,160,71,.12);border:1px solid rgba(67,160,71,.25);display:flex;align-items:center;justify-content:center;flex:0 0 auto;">
+              <i class="fas fa-check" style="color:var(--secondary)"></i>
             </div>
-            <div class="col-md-3 col-6">
-                <div class="how-step" data-reveal>
-                    <div class="how-num">4</div>
-                    <h3>Recover, supported</h3>
-                    <p>Order medicines and track your care, all from the same place.</p>
-                </div>
-            </div>
+            <span style="font-weight:800;color:var(--text);font-size:14px;">Optimal outcomes through compassionate AI care</span>
+          </div>
         </div>
+      </div>
+
+      <div class="col-lg-6" data-aos="fade-left" data-aos-delay="60">
+        <div style="position:relative;border-radius:28px;overflow:hidden;background:linear-gradient(160deg,#E8F7EE,#F4FBF6);border:1px solid rgba(67,160,71,.20);box-shadow:0 24px 60px rgba(14,124,90,.14);padding:28px;">
+          <svg viewBox="0 0 480 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AI-integrated healthcare consultation illustration" style="width:100%;height:auto;">
+            <defs>
+              <linearGradient id="docCoat" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#FFFFFF"/>
+                <stop offset="1" stop-color="#EAF6EE"/>
+              </linearGradient>
+              <linearGradient id="heartGlow" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#43A047"/>
+                <stop offset="1" stop-color="#0E7C5A"/>
+              </linearGradient>
+            </defs>
+
+            <!-- room backdrop -->
+            <rect x="0" y="0" width="480" height="360" rx="20" fill="#F7FCF8"/>
+            <rect x="20" y="20" width="440" height="180" rx="14" fill="#EDF7F0" opacity="0.6"/>
+
+            <!-- patient figure (left) -->
+            <circle cx="120" cy="150" r="34" fill="#F2C9A0"/>
+            <path d="M70 260 Q70 190 120 190 Q170 190 170 260 Z" fill="#D9D9D9"/>
+            <path d="M95 130 Q120 105 145 130 L145 150 Q120 165 95 150 Z" fill="#6B4226"/>
+
+            <!-- doctor figure (right) -->
+            <circle cx="330" cy="148" r="34" fill="#C98A5B"/>
+            <path d="M280 260 Q280 188 330 188 Q380 188 380 260 Z" fill="url(#docCoat)" stroke="#BFE3CC" stroke-width="2"/>
+            <rect x="312" y="205" width="36" height="40" rx="6" fill="#0E7C5A" opacity="0.85"/>
+            <path d="M300 128 Q330 100 360 128 L356 145 Q330 158 304 145 Z" fill="#2B1B12"/>
+
+            <!-- floating health dashboard card -->
+            <g>
+              <rect x="150" y="40" width="200" height="118" rx="16" fill="#FFFFFF" stroke="#BFE3CC" stroke-width="1.5"/>
+              <text x="166" y="64" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#0E7C5A">HEALTH OVERVIEW</text>
+              <circle cx="190" cy="100" r="22" fill="none" stroke="#D7EFDF" stroke-width="6"/>
+              <circle cx="190" cy="100" r="22" fill="none" stroke="url(#heartGlow)" stroke-width="6" stroke-dasharray="94" stroke-dashoffset="18" stroke-linecap="round" transform="rotate(-90 190 100)"/>
+              <text x="190" y="104" font-family="Inter, sans-serif" font-size="11" font-weight="800" fill="#0E7C5A" text-anchor="middle">94%</text>
+              <rect x="226" y="84" width="100" height="8" rx="4" fill="#E3F4E8"/>
+              <rect x="226" y="84" width="78" height="8" rx="4" fill="#43A047"/>
+              <rect x="226" y="100" width="100" height="8" rx="4" fill="#E3F4E8"/>
+              <rect x="226" y="100" width="58" height="8" rx="4" fill="#0E7C5A"/>
+              <rect x="226" y="116" width="100" height="8" rx="4" fill="#E3F4E8"/>
+              <rect x="226" y="116" width="88" height="8" rx="4" fill="#43A047"/>
+              <text x="166" y="140" font-family="Inter, sans-serif" font-size="9.5" font-weight="700" fill="#5B7367">AI DIAGNOSTICS · OPTIMAL OUTCOMES</text>
+            </g>
+
+            <!-- small heart pulse chip -->
+            <g>
+              <rect x="200" y="170" width="80" height="46" rx="14" fill="#0E7C5A" opacity="0.95"/>
+              <path d="M212 196 h10 l5 -10 l6 16 l5 -10 h12" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+
+            <!-- desk -->
+            <rect x="20" y="280" width="440" height="14" rx="6" fill="#DCEFE3"/>
+          </svg>
+
+          <div style="position:absolute;top:18px;left:18px;background:rgba(14,124,90,.92);color:#fff;padding:6px 14px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.4px;">
+            AI-INTEGRATED HEALTHCARE
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </section>
 
-<section class="signature-section" id="reports">
-    <div class="container">
-        <div class="sig-inner">
-            <div class="quote-mark">"</div>
-            <h2>It felt like texting a doctor friend at 11pm — not filling out a form.</h2>
-            <div class="sig-author">
-                <div class="sig-avatar">RP</div>
-                <div style="text-align:left;">
-                    <div class="sig-author-name">Riya Patel</div>
-                    <div class="sig-author-role">Patient, Indore</div>
-                </div>
-            </div>
-        </div>
+<!-- ===================== HOW IT WORKS ===================== -->
+<section class="bb-section" id="how-it-works" style="background:rgba(67,160,71,.04);">
+  <div class="container">
+    <div class="text-center">
+      <div class="bb-pill justify-content-center mx-auto" data-aos="fade-up" data-aos-delay="20">
+        <i class="fas fa-route" aria-hidden="true"></i> How it works
+      </div>
+      <div class="section-title2 mt-3" style="font-size:32px;font-weight:1000;color:var(--text);" data-aos="fade-up" data-aos-delay="60">
+        Get care in three simple steps
+      </div>
     </div>
+
+    <div class="row g-4 mt-4">
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="0">
+        <div class="bg-white" style="border-radius:22px;border:1px solid rgba(67,160,71,.20);box-shadow:0 16px 50px rgba(67,160,71,.10);padding:28px;height:100%;">
+          <div style="width:48px;height:48px;border-radius:16px;background:linear-gradient(135deg,#0E7C5A,#43A047);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:18px;">1</div>
+          <div style="margin-top:16px;font-weight:1000;font-size:16px;">Describe symptoms</div>
+          <div style="margin-top:8px;color:rgba(26,26,26,.66);font-weight:700;font-size:13.5px;line-height:1.8;">Tell our AI assistant what you're feeling — in your own words.</div>
+        </div>
+      </div>
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="bg-white" style="border-radius:22px;border:1px solid rgba(67,160,71,.20);box-shadow:0 16px 50px rgba(67,160,71,.10);padding:28px;height:100%;">
+          <div style="width:48px;height:48px;border-radius:16px;background:linear-gradient(135deg,#0E7C5A,#43A047);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:18px;">2</div>
+          <div style="margin-top:16px;font-weight:1000;font-size:16px;">Get instant guidance</div>
+          <div style="margin-top:8px;color:rgba(26,26,26,.66);font-weight:700;font-size:13.5px;line-height:1.8;">Receive AI-backed insight, remedies, and recommended next steps.</div>
+        </div>
+      </div>
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="bg-white" style="border-radius:22px;border:1px solid rgba(67,160,71,.20);box-shadow:0 16px 50px rgba(67,160,71,.10);padding:28px;height:100%;">
+          <div style="width:48px;height:48px;border-radius:16px;background:linear-gradient(135deg,#0E7C5A,#43A047);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:18px;">3</div>
+          <div style="margin-top:16px;font-weight:1000;font-size:16px;">Book or order</div>
+          <div style="margin-top:8px;color:rgba(26,26,26,.66);font-weight:700;font-size:13.5px;line-height:1.8;">Schedule a doctor visit or get medicines delivered — all in one place.</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<section class="section-pad" id="contact">
-    <div class="container">
-        <div class="cta-box">
-            <h2>Your health can't wait for office hours.</h2>
-            <p>Start a free conversation with Dr. AI right now — no signup needed to begin.</p>
-            <div class="hero-ctas">
-                <a class="btn-primary-cta" href="/chat/">
-                    Chat with Dr. AI
-                    <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
+<!-- ===================== TRUST / EMERGENCY BANNER ===================== -->
+<section class="bb-section" id="trust-banner">
+  <div class="container">
+    <div style="background:linear-gradient(135deg,#0E7C5A,#0A5C43);border-radius:28px;padding:42px;position:relative;overflow:hidden;" data-aos="zoom-in">
+      <div style="position:absolute;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,0.06);top:-100px;right:-60px;"></div>
+      <div class="row align-items-center g-4" style="position:relative;z-index:1;">
+        <div class="col-lg-8">
+          <div style="color:#fff;font-weight:1000;font-size:24px;">In a medical emergency?</div>
+          <div style="color:rgba(255,255,255,.82);font-weight:700;font-size:14.5px;margin-top:8px;">Call immediately — every second matters. Our platform supports you, but always seek direct emergency help first.</div>
         </div>
+        <div class="col-lg-4 text-lg-end">
+          <a href="tel:108" style="background:#fff;color:#0A5C43;padding:14px 28px;border-radius:14px;font-weight:1000;text-decoration:none;display:inline-flex;align-items:center;gap:10px;font-size:15px;">
+            <i class="fas fa-phone-volume"></i> Call 108 Now
+          </a>
+        </div>
+      </div>
     </div>
+  </div>
 </section>
+
 
 <script>
-    var ecg = document.getElementById('ecgPath');
-    var basePoints = "0,70 40,70 55,70 65,30 75,110 85,70 110,70 130,70 145,40 155,100 165,70 400,70";
-    var offset = 0;
-    function animateECG(){
-        offset = (offset + 2) % 400;
-        var shifted = basePoints.split(' ').map(function(p){
-            var parts = p.split(',').map(Number);
-            var nx = parts[0] - offset;
-            if(nx < -20) nx += 420;
-            return nx + ',' + parts[1];
-        }).join(' ');
-        if(ecg) ecg.setAttribute('points', shifted);
-        requestAnimationFrame(animateECG);
-    }
-    if(ecg) animateECG();
-</script>
+  (function(){
+    // Count up when visible
+    const statEls = document.querySelectorAll('[data-count]');
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(!e.isIntersecting) return;
+        const el = e.target;
+        const to = parseInt(el.getAttribute('data-count')||'0',10);
+        const from = 0;
+        const dur = 1100;
+        const start = performance.now();
+        function tick(now){
+          const t = Math.min(1,(now-start)/dur);
+          const val = Math.round(from + (to-from)*t);
+          el.textContent = String(val);
+          if(t<1) requestAnimationFrame(tick);
+          else io.unobserve(el);
+        }
+        requestAnimationFrame(tick);
+      });
+    },{threshold:0.35});
+    statEls.forEach(el=>io.observe(el));
 
+    // Antigravity + heartbeat SVG animation + parallax
+    const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(prefersReduced) return;
+
+    const cards = document.querySelectorAll('[data-antigrav]');
+    if(window.gsap && cards.length){
+      cards.forEach((card, idx)=>{
+        const y = idx===0 ? -10 : (idx===1 ? -18 : -12);
+        const dur = 2.9 + idx*0.25;
+        gsap.to(card, {
+          y: y,
+          duration: dur,
+          yoyo: true,
+          repeat: -1,
+          ease: 'power1.inOut',
+          delay: idx*0.08
+        });
+      });
+
+      // Heartbeat path stroke-dash
+      const hb = document.querySelector('.bb-hb-path');
+      if(hb){
+        const len = hb.getTotalLength();
+        hb.style.strokeDasharray = len;
+        hb.style.strokeDashoffset = len;
+        gsap.to(hb, {
+          strokeDashoffset: 0,
+          duration: 1.4,
+          repeat: -1,
+          yoyo: true,
+          ease: 'power2.inOut',
+          delay: 0.2
+        });
+      }
+
+      // Blob morph via scale/translate (approx)
+      const blobs = document.querySelectorAll('.bb-blob');
+      blobs.forEach((b, i)=>{
+        gsap.to(b, {
+          scale: 1.06,
+          x: i===0 ? 16 : (i===1 ? -18 : 10),
+          y: i===2 ? -16 : 12,
+          duration: 5.2 + i*0.6,
+          yoyo: true,
+          repeat: -1,
+          ease: 'sine.inOut'
+        });
+      });
+    }
+
+    // Hero particles (canvas)
+    const canvas = document.getElementById('bbParticles');
+    if(canvas && canvas.getContext){
+      const ctx = canvas.getContext('2d');
+      let w,h,particles;
+      const dpr = Math.min(window.devicePixelRatio||1,2);
+
+      function resize(){
+        const rect = canvas.getBoundingClientRect();
+        w = Math.floor(rect.width);
+        h = Math.floor(rect.height);
+        canvas.width = Math.floor(w*dpr);
+        canvas.height = Math.floor(h*dpr);
+        ctx.setTransform(dpr,0,0,dpr,0,0);
+      }
+
+      function make(){
+        particles = [];
+        const count = Math.max(70, Math.floor((window.innerWidth/1000)*90));
+        for(let i=0;i<count;i++){
+          particles.push({
+            x: Math.random()*w,
+            y: Math.random()*h,
+            r: 1.2 + Math.random()*2.3,
+            vx: (Math.random()-.5)*0.22,
+            vy: -0.18 - Math.random()*0.45,
+            a: 0.22 + Math.random()*0.55,
+          });
+        }
+      }
+
+      function draw(){
+        ctx.clearRect(0,0,w,h);
+        ctx.globalCompositeOperation = 'source-over';
+        for(const p of particles){
+          p.x += p.vx;
+          p.y += p.vy;
+          if(p.y < -20){ p.y = h+20; p.x = Math.random()*w; }
+          ctx.beginPath();
+          ctx.fillStyle = `rgba(67,160,71,${p.a})`;
+          ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+          ctx.fill();
+        }
+        requestAnimationFrame(draw);
+      }
+
+      const ro = new ResizeObserver(()=>{ resize(); make(); });
+      ro.observe(canvas);
+      resize(); make(); draw();
+    }
+
+    // Parallax on hero blobs
+    const hero = document.querySelector('.bb-hero');
+    const blobs = document.querySelectorAll('.bb-blob');
+    if(hero && blobs.length && window.gsap){
+      window.addEventListener('scroll', ()=>{
+        const rect = hero.getBoundingClientRect();
+        const progress = Math.min(1, Math.max(0, (window.innerHeight - rect.top) / (window.innerHeight + rect.height)));
+        blobs.forEach((b,i)=>{
+          const tx = (i===0? 24 : i===1? -22 : 12) * (progress-0.5) * 0.6;
+          const ty = (i===2? -18 : 14) * (progress-0.5) * 0.6;
+          gsap.set(b, { x: tx, y: ty });
+        });
+      }, {passive:true});
+    }
+
+    // Stagger grid cards reveal using IO
+    const stagger = document.querySelectorAll('.bb-stagger');
+    if(stagger.length){
+      const io2 = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{
+          if(e.isIntersecting){
+            const el = e.target;
+            const d = parseInt(el.getAttribute('data-stagger')||'0',10);
+            el.style.transitionDelay = (d*90) + 'ms';
+            el.classList.add('is-visible');
+            io2.unobserve(el);
+          }
+        });
+      },{threshold:0.25});
+      stagger.forEach(el=>io2.observe(el));
+    }
+
+    // Reveal fallback if AOS not present
+    const revealEls = document.querySelectorAll('[data-aos], .bb-reveal-fallback');
+    if(!window.AOS){
+      const io3 = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{
+          if(e.isIntersecting){
+            e.target.classList.add('is-visible');
+            io3.unobserve(e.target);
+          }
+        });
+      },{threshold:0.15});
+      revealEls.forEach(el=>{ if(el.classList.contains('bb-reveal-fallback')) io3.observe(el); });
+    }
+
+    // Button shine sweep ripple click coordinate
+    document.querySelectorAll('.bb-btn').forEach(btn=>{
+      btn.addEventListener('pointerdown', (ev)=>{
+        const rect = btn.getBoundingClientRect();
+        const x = ((ev.clientX - rect.left) / rect.width) * 100;
+        const y = ((ev.clientY - rect.top) / rect.height) * 100;
+        btn.style.setProperty('--x', x+'%');
+        btn.style.setProperty('--y', y+'%');
+      });
+    });
+  })();
+</script>
 {% endblock %}

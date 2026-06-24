@@ -52,7 +52,14 @@
         html{overflow-x:hidden;scroll-behavior:smooth}
         body{
             font-family:'Inter','Segoe UI',sans-serif;
-            background:var(--white);
+            background-color:var(--white);
+            background-image:
+                radial-gradient(circle at 8% 12%, rgba(14,124,90,0.05) 0%, transparent 38%),
+                radial-gradient(circle at 92% 8%, rgba(14,124,90,0.045) 0%, transparent 40%),
+                radial-gradient(circle at 50% 100%, rgba(14,124,90,0.04) 0%, transparent 45%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%230E7C5A' stroke-opacity='0.06' stroke-width='1.4'%3E%3Cpath d='M60 18v24M60 78v24M18 60h24M78 60h24'/%3E%3Ccircle cx='60' cy='60' r='34'/%3E%3C/g%3E%3C/svg%3E");
+            background-attachment:fixed;
+            background-size:auto, auto, auto, 120px 120px;
             color:var(--ink);
             overflow-x:hidden;
             min-height:100vh;
@@ -153,7 +160,7 @@
         /* ===== FOOTER ===== */
         .main-footer{
             background:linear-gradient(160deg,#0E7C5A 0%,#0A5C43 100%);
-            color:#fff;padding:64px 0 0;margin-top:60px;position:relative;overflow:hidden;
+            color:#fff;padding:26px 0;margin-top:60px;position:relative;overflow:hidden;
         }
         .main-footer::before{
             content:'';position:absolute;width:500px;height:500px;border-radius:50%;
@@ -291,74 +298,11 @@
 
     <footer class="main-footer" role="contentinfo">
         <div class="container">
-            <div class="row g-4">
-                <div class="col-lg-4 col-md-6">
-                    <div class="footer-brand">
-                        <span style="color:#9FE1CB;">AI</span><span style="color:#fff;">Health</span>Care
-                    </div>
-                    <p style="color:rgba(255,255,255,.7);font-size:14px;line-height:1.85;margin-bottom:20px;">
-                        An AI-powered healthcare platform providing 24/7 symptom checking, doctor consultations, and medicine ordering — built for the people of Madhya Pradesh.
-                    </p>
-                    <div style="display:flex;gap:10px;">
-                        <a href="mailto:support@aihealthcare.com"
-                            style="width:38px;height:38px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.85);text-decoration:none;transition:all .3s;"
-                            onmouseover="this.style.background='rgba(255,255,255,.2)'"
-                            onmouseout="this.style.background='rgba(255,255,255,.1)'">
-                            <i class="fas fa-envelope"></i>
-                        </a>
-                        <a href="https://github.com/AbhishekMishra19k/ai-healthcare-chatbot" target="_blank" rel="noopener"
-                            style="width:38px;height:38px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.85);text-decoration:none;transition:all .3s;"
-                            onmouseover="this.style.background='rgba(255,255,255,.2)'"
-                            onmouseout="this.style.background='rgba(255,255,255,.1)'">
-                            <i class="fab fa-github"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="col-lg-2 col-md-3 col-6">
-                    <h6 style="color:#9FE1CB;font-weight:700;margin-bottom:18px;font-size:13px;letter-spacing:1px;font-family:'Inter',sans-serif;">QUICK LINKS</h6>
-                    <a class="footer-link" href="/"><i class="fas fa-home me-2"></i>Home</a>
-                    <a class="footer-link" href="/chat/"><i class="fas fa-robot me-2"></i>AI Chat</a>
-                    <a class="footer-link" href="/appointments/"><i class="fas fa-user-md me-2"></i>Doctors</a>
-                    <a class="footer-link" href="/medicines/"><i class="fas fa-pills me-2"></i>Medicines</a>
-                    <a class="footer-link" href="/accounts/register/"><i class="fas fa-user-plus me-2"></i>Register</a>
-                </div>
-
-                <div class="col-lg-3 col-md-3 col-6">
-                    <h6 style="color:#9FE1CB;font-weight:700;margin-bottom:18px;font-size:13px;letter-spacing:1px;font-family:'Inter',sans-serif;">CONTACT US</h6>
-                    <p style="color:rgba(255,255,255,.7);font-size:14px;line-height:2.2;margin:0;">
-                        <i class="fas fa-envelope me-2" style="color:#9FE1CB;"></i>support@aihealthcare.com<br>
-                        <i class="fas fa-phone me-2" style="color:#9FE1CB;"></i>+91 78980 XXXXX<br>
-                        <i class="fas fa-map-marker-alt me-2" style="color:#9FE1CB;"></i>Sagar, Madhya Pradesh
-                    </p>
-                </div>
-
-                <div class="col-lg-3 col-md-6">
-                    <h6 style="color:#9FE1CB;font-weight:700;margin-bottom:18px;font-size:13px;letter-spacing:1px;font-family:'Inter',sans-serif;">EMERGENCY</h6>
-                    <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:16px;">
-                        <p style="color:rgba(255,255,255,.85);font-size:14px;line-height:2.3;margin:0;">
-                            <i class="fas fa-triangle-exclamation" style="color:#F0997B;"></i> Medical Emergency: <strong style="color:#F0997B;">108</strong><br>
-                            <i class="fas fa-truck-medical" style="color:#F0997B;"></i> Ambulance: <strong style="color:#F0997B;">102</strong><br>
-                            <i class="fas fa-phone" style="color:#9FE1CB;"></i> Health Helpline: <strong style="color:#9FE1CB;">104</strong><br>
-                            <i class="fas fa-hospital" style="color:#9FE1CB;"></i> Ayushman Bharat: <strong style="color:#9FE1CB;">14555</strong>
-                        </p>
-                    </div>
-                    <div style="margin-top:14px;">
-                        <span class="badge-green me-2" style="font-size:11px;">HIPAA Compliant</span>
-                        <span class="badge-gold" style="font-size:11px;">AI Powered</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="footer-bottom">
-                <p style="margin:0;font-size:13.5px;">
+            <div class="footer-bottom" style="border-top:none;margin-top:0;padding-top:0;text-align:center;">
+                <p style="margin:0;font-size:13.5px;color:rgba(255,255,255,.85);">
                     © 2026 <span style="color:#9FE1CB;">AI</span><span style="color:#fff;">Health</span>Care &nbsp;|&nbsp;
                     Developed by <span style="color:#9FE1CB;font-weight:700;">Abhishek Mishra</span>,
-                    Arpit Asati, Srashti Mishra, Arpit Yadav &nbsp;|&nbsp;
-                    <span style="color:rgba(255,255,255,.45);">Gyan Sagar College of Engineering, Sagar MP</span>
-                </p>
-                <p style="margin:8px 0 0;font-size:12px;color:rgba(255,255,255,.4);">
-                    This platform provides general health information only. Always consult a qualified doctor for medical diagnosis and treatment.
+                    Arpit Asati, Srashti Mishra, Arpit Yadav
                 </p>
             </div>
         </div>
