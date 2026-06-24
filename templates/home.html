@@ -1,1489 +1,347 @@
 {% extends 'base.html' %}
-
-{% block title %}AIHealthCare — Premium AI Healthcare Platform{% endblock %}
+{% block title %}AIHealthCare — Your Health, Answered Instantly{% endblock %}
 
 {% block extra_css %}
 <style>
-  :root{
-    --bg0:#040611;
-    --bg1:#06162A;
-    --text:#EAF2FF;
-    --muted:rgba(234,242,255,.72);
-    --muted2:rgba(234,242,255,.55);
-
-    --card:rgba(255,255,255,.07);
-    --card2:rgba(255,255,255,.05);
-    --stroke:rgba(148,163,184,.20);
-    --stroke2:rgba(94,234,212,.26);
-
-    --accent:#06B6D4;
-    --accent2:#10B981;
-    --violet:#7C3AED;
-    --warning:#F59E0B;
-
-    --shadow:0 40px 120px rgba(0,0,0,.55);
-    --shadow2:0 18px 60px rgba(0,0,0,.35);
-
-    --radius-xl:28px;
-    --radius-lg:20px;
-    --radius-md:16px;
-
-    --container-pad:16px;
-    --grid-gap:18px;
-  }
-
-  html,body{height:100%}
-
-  .landing-premium{
-    min-height:100vh;
-    background:
-      radial-gradient(1200px 650px at 15% -10%, rgba(6,182,212,.28), transparent 60%),
-      radial-gradient(980px 520px at 90% 15%, rgba(124,58,237,.24), transparent 55%),
-      radial-gradient(980px 520px at 35% 85%, rgba(16,185,129,.18), transparent 58%),
-      linear-gradient(180deg, var(--bg0), #050816 35%, #040611 100%);
-    color:var(--text);
-    position:relative;
-    overflow:hidden;
-  }
-
-  /* Ambient grid */
-  .landing-premium .bg-grid{
-    position:absolute;
-    inset:-2px;
-    pointer-events:none;
-    background-image:
-      linear-gradient(to right, rgba(255,255,255,.06) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255,255,255,.06) 1px, transparent 1px);
-    background-size:66px 66px;
-    opacity:.35;
-    mask-image:radial-gradient(700px 380px at 50% 0%, black 35%, transparent 70%);
-  }
-
-  /* Floating particles */
-  .particle-layer{
-    position:absolute;
-    inset:0;
-    pointer-events:none;
-    z-index:0;
-  }
-
-  .particle{
-    position:absolute;
-    width:10px;
-    height:10px;
-    border-radius:50%;
-    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.9), rgba(6,182,212,.35) 40%, rgba(6,182,212,0) 70%);
-    filter: blur(.2px);
-    opacity:.55;
-    animation: drift 10s linear infinite;
-  }
-
-  @keyframes drift{
-    0%{ transform: translate3d(0,0,0) scale(1); }
-    50%{ transform: translate3d(20px,-28px,0) scale(1.12); }
-    100%{ transform: translate3d(0,0,0) scale(1); }
-  }
-
-  @media (prefers-reduced-motion: reduce){
-    .particle{animation:none}
-    *{scroll-behavior:auto !important}
-  }
-
-  .container-padded{padding-left:var(--container-pad);padding-right:var(--container-pad)}
-
-  /* Typography */
-  .display{
-    font-family:'Plus Jakarta Sans',system-ui,-apple-system,Segoe UI,sans-serif;
-    font-weight:1000;
-    letter-spacing:-0.04em;
-    line-height:1.02;
-    font-size:clamp(40px,4.4vw,72px);
-  }
-  h2,h3{font-family:'Plus Jakarta Sans',system-ui,-apple-system,Segoe UI,sans-serif; font-weight:1000; letter-spacing:-0.03em}
-
-  .eyebrow{
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-    padding:10px 14px;
-    border-radius:999px;
-    border:1px solid rgba(94,234,212,.28);
-    background:rgba(6,182,212,.10);
-    color:rgba(234,242,255,.96);
-    font-weight:950;
-    font-size:13px;
-    box-shadow:0 18px 60px rgba(0,0,0,.18);
-  }
-
-  /* Glass primitives */
-  .glass{
-    background:linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.05));
-    border:1px solid rgba(148,163,184,.20);
-    border-radius:var(--radius-xl);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    box-shadow:var(--shadow2);
-  }
-
-  .glass-soft{
-    background:rgba(255,255,255,.06);
-    border:1px solid rgba(148,163,184,.16);
-    border-radius:var(--radius-lg);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-  }
-
-  /* Buttons */
-  .btn-pill{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    gap:10px;
-    padding:13px 18px;
-    border-radius:16px;
-    font-weight:950;
-    text-decoration:none;
-    border:1px solid transparent;
-    transition:transform .22s ease, box-shadow .22s ease, background .22s ease, border-color .22s ease;
-    user-select:none;
-  }
-  .btn-primary{
-    background:linear-gradient(135deg, rgba(6,182,212,.95), rgba(16,185,129,.95));
-    color:#001018;
-    box-shadow:0 18px 55px rgba(6,182,212,.22);
-  }
-  .btn-primary:hover{transform:translateY(-3px); box-shadow:0 28px 80px rgba(6,182,212,.30)}
-
-  .btn-secondary{
-    background:rgba(255,255,255,.06);
-    border-color:rgba(148,163,184,.24);
-    color:rgba(234,242,255,.95);
-  }
-  .btn-secondary:hover{transform:translateY(-3px); background:rgba(255,255,255,.09); border-color:rgba(94,234,212,.38)}
-
-  .btn-ghost{
-    background:transparent;
-    border-color:rgba(94,234,212,.35);
-    color:rgba(234,242,255,.95);
-  }
-  .btn-ghost:hover{transform:translateY(-3px); background:rgba(6,182,212,.10)}
-
-  /* HERO */
-  .hero{
-    position:relative;
-    z-index:1;
-    min-height:calc(100vh - 72px);
-    display:flex;
-    align-items:center;
-    padding:84px 0 58px;
-  }
-
-  .hero-grid{
-    display:grid;
-    grid-template-columns: 1.05fr .95fr;
-    gap:34px;
-    align-items:center;
-  }
-  @media (max-width: 980px){
-    .hero-grid{grid-template-columns:1fr; gap:22px}
-  }
-
-  .hero-left p{max-width:60ch; font-size:16px; line-height:1.9; color:var(--muted)}
-
-  .trust-row{
-    margin-top:18px;
-    display:flex;
-    flex-wrap:wrap;
-    gap:12px;
-  }
-  .trust-item{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:10px 12px;
-    border-radius:16px;
-    border:1px solid rgba(148,163,184,.18);
-    background:rgba(255,255,255,.05);
-  }
-  .trust-item i{color:var(--accent)}
-  .trust-item strong{font-weight:1000}
-  .trust-item span{color:var(--muted2); font-weight:750; font-size:13px; display:block; margin-top:2px}
-
-  /* Dashboard mock */
-  .dashboard-wrap{
-    position:relative;
-    height:560px;
-  }
-  @media (max-width: 980px){ .dashboard-wrap{height:500px} }
-
-  .dashboard-card{
-    position:absolute;
-    inset:0;
-    padding:18px;
-  }
-
-  .dashboard{
-    position:absolute;
-    inset:0;
-    border-radius:var(--radius-xl);
-    border:1px solid rgba(148,163,184,.20);
-    background:
-      radial-gradient(900px 380px at 20% 0%, rgba(6,182,212,.26), transparent 58%),
-      radial-gradient(820px 420px at 80% 20%, rgba(124,58,237,.22), transparent 60%),
-      linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    box-shadow:var(--shadow);
-    overflow:hidden;
-  }
-
-  .dashboard:before{
-    content:"";
-    position:absolute;
-    inset:-2px;
-    background:
-      radial-gradient(420px 220px at 20% 10%, rgba(6,182,212,.28), transparent 55%),
-      radial-gradient(360px 240px at 90% 30%, rgba(124,58,237,.20), transparent 60%);
-    opacity:.9;
-    pointer-events:none;
-  }
-
-  .dash-inner{
-    position:absolute;
-    inset:0;
-    padding:18px;
-    display:flex;
-    flex-direction:column;
-    gap:14px;
-  }
-
-  .dash-top{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-  }
-  .dash-badge{
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-    padding:10px 12px;
-    border-radius:16px;
-    background:rgba(255,255,255,.06);
-    border:1px solid rgba(148,163,184,.18);
-    font-weight:1000;
-  }
-  .pulse-dot{
-    width:10px;height:10px;border-radius:999px;
-    background:rgba(6,182,212,.95);
-    box-shadow:0 0 0 0 rgba(6,182,212,.45);
-    animation:pulse 1.6s ease-out infinite;
-  }
-  @keyframes pulse{
-    0%{box-shadow:0 0 0 0 rgba(6,182,212,.38)}
-    100%{box-shadow:0 0 0 18px rgba(6,182,212,0)}
-  }
-
-  .dash-kpis{
-    display:grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap:12px;
-  }
-  @media (max-width: 520px){ .dash-kpis{grid-template-columns:1fr} }
-
-  .kpi{
-    padding:14px;
-    border-radius:20px;
-    background:rgba(255,255,255,.05);
-    border:1px solid rgba(148,163,184,.16);
-  }
-  .kpi .big{font-weight:1000; font-size:24px; letter-spacing:-0.03em}
-  .kpi .small{color:var(--muted2); font-weight:800; font-size:13px; margin-top:4px; line-height:1.4}
-  .kpi.one .big{color:rgba(94,234,212,.98)}
-  .kpi.two .big{color:rgba(16,185,129,.98)}
-  .kpi.three .big{color:rgba(124,58,237,.98)}
-
-  .dash-bottom{
-    display:grid;
-    grid-template-columns: 1.15fr .85fr;
-    gap:12px;
-    flex:1;
-    min-height:0;
-  }
-  @media (max-width: 520px){ .dash-bottom{grid-template-columns:1fr} }
-
-  .pane{
-    border-radius:20px;
-    background:rgba(255,255,255,.05);
-    border:1px solid rgba(148,163,184,.16);
-    padding:14px;
-    overflow:hidden;
-  }
-
-  .mini-list{display:flex; flex-direction:column; gap:10px}
-  .mini-row{
-    display:flex; align-items:flex-start; gap:10px;
-    padding:12px 12px;
-    border-radius:18px;
-    border:1px solid rgba(148,163,184,.14);
-    background:rgba(255,255,255,.04);
-  }
-  .mini-row i{color:var(--accent); margin-top:3px}
-  .mini-row b{font-weight:1000}
-  .mini-row small{display:block; color:var(--muted2); font-weight:750; margin-top:3px; line-height:1.5}
-
-  /* Floating cards + metrics */
-  .float-card{
-    position:absolute;
-    width:220px;
-    padding:14px;
-    border-radius:22px;
-    border:1px solid rgba(148,163,184,.18);
-    background:rgba(255,255,255,.06);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    box-shadow:0 20px 70px rgba(0,0,0,.35);
-    animation: floaty 6.2s ease-in-out infinite;
-  }
-  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
-
-  .float-card .t{display:flex; align-items:center; gap:10px; font-weight:1000}
-  .float-card .t i{color:var(--accent)}
-  .float-card .v{margin-top:8px; font-size:26px; font-weight:1000; letter-spacing:-0.03em}
-  .float-card .s{color:var(--muted2); font-weight:800; font-size:13px; margin-top:4px; line-height:1.4}
-
-  .float-1{left:-10px; top:88px; animation-duration:6.4s}
-  .float-2{right:-12px; top:50px; animation-duration:8.1s; border-color:rgba(124,58,237,.22)}
-  .float-3{left:10px; bottom:44px; animation-duration:7.5s; border-color:rgba(16,185,129,.22)}
-
-  .health-widget{
-    position:absolute;
-    right:-10px;
-    bottom:122px;
-    width:250px;
-    padding:16px;
-    border-radius:24px;
-    border:1px solid rgba(148,163,184,.18);
-    background:rgba(255,255,255,.05);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    box-shadow:0 20px 70px rgba(0,0,0,.35);
-    animation: widget 8.4s ease-in-out infinite;
-  }
-  @keyframes widget{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-12px) rotate(-.6deg)}}
-
-  .widget-head{display:flex; align-items:center; justify-content:space-between; gap:10px}
-  .widget-head b{font-weight:1000}
-  .widget-head .pill{font-size:12px; padding:6px 10px; border-radius:999px; border:1px solid rgba(94,234,212,.24); background:rgba(6,182,212,.10); color:rgba(234,242,255,.95)}
-
-  .bars{margin-top:14px; display:flex; gap:10px; align-items:flex-end; height:120px}
-  .bar{
-    flex:1;
-    border-radius:14px;
-    background:linear-gradient(180deg, rgba(6,182,212,.55), rgba(124,58,237,.22));
-    border:1px solid rgba(94,234,212,.22);
-    position:relative;
-    overflow:hidden;
-  }
-  .bar:after{
-    content:"";
-    position:absolute;
-    inset:0;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,.22), transparent);
-    transform: translateX(-120%);
-    animation: shimmer 2.2s ease-in-out infinite;
-    opacity:.7;
-  }
-  @keyframes shimmer{
-    0%{transform:translateX(-120%)}50%{transform:translateX(120%)}100%{transform:translateX(120%)}
-  }
-
-  /* Sections */
-  section{position:relative; z-index:1}
-
-  .section-pad{padding:72px 0}
-  .section-head{margin-bottom:28px}
-  .section-head .k{color:rgba(94,234,212,.95); font-weight:1000; letter-spacing:.14em; text-transform:uppercase; font-size:12px; margin-bottom:10px}
-  .section-head h2{margin:0; font-size:clamp(28px,3.3vw,46px); line-height:1.12}
-  .section-head p{margin-top:10px; color:var(--muted); max-width:70ch; line-height:1.9; font-weight:750}
-
-  /* Trust bar */
-  .trust-bar{
-    border-top:1px solid rgba(148,163,184,.18);
-    border-bottom:1px solid rgba(148,163,184,.18);
-    background:rgba(255,255,255,.03);
-  }
-  .trust-bar-grid{
-    display:grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap:14px;
-    padding:24px 0;
-  }
-  @media (max-width: 980px){ .trust-bar-grid{grid-template-columns:repeat(2,1fr)} }
-  @media (max-width: 520px){ .trust-bar-grid{grid-template-columns:1fr} }
-
-  .trust-metric{
-    padding:18px 16px;
-    border-radius:22px;
-    background:rgba(255,255,255,.04);
-    border:1px solid rgba(148,163,184,.16);
-    transition: transform .22s ease, border-color .22s ease, background .22s ease;
-  }
-  .trust-metric:hover{transform:translateY(-4px); border-color:rgba(94,234,212,.35); background:rgba(255,255,255,.06)}
-  .trust-metric .top{display:flex; align-items:center; gap:10px}
-  .trust-metric i{color:var(--accent)}
-  .trust-metric .lbl{font-weight:900; color:rgba(234,242,255,.92)}
-  .trust-metric .num{margin-top:12px; font-size:32px; font-weight:1000; letter-spacing:-0.03em}
-  .trust-metric .sub{margin-top:6px; color:var(--muted2); font-weight:800; font-size:13px; line-height:1.4}
-
-  /* Features (6) */
-  .feature-grid{
-    display:grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap:var(--grid-gap);
-  }
-  @media (max-width: 980px){ .feature-grid{grid-template-columns:repeat(2,1fr)} }
-  @media (max-width: 560px){ .feature-grid{grid-template-columns:1fr} }
-
-  .feature-card{
-    position:relative;
-    padding:22px;
-    border-radius:var(--radius-xl);
-    background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
-    border:1px solid rgba(148,163,184,.20);
-    overflow:hidden;
-    transition: transform .22s ease, border-color .22s ease, background .22s ease;
-    min-height:200px;
-  }
-
-  .feature-card:before{
-    content:"";
-    position:absolute;
-    inset:-2px;
-    background:
-      radial-gradient(520px 220px at 20% 0%, rgba(6,182,212,.24), transparent 55%),
-      radial-gradient(460px 260px at 90% 30%, rgba(124,58,237,.18), transparent 60%);
-    opacity:0;
-    transition: opacity .25s ease;
-  }
-  .feature-card:hover{transform:translateY(-6px); border-color:rgba(94,234,212,.40)}
-  .feature-card:hover:before{opacity:1}
-  .feature-card > *{position:relative; z-index:1}
-
-  .feature-icon{
-    width:58px;height:58px;
-    border-radius:22px;
-    background:rgba(6,182,212,.10);
-    border:1px solid rgba(94,234,212,.26);
-    display:flex;align-items:center;justify-content:center;
-    box-shadow:0 18px 60px rgba(6,182,212,.10);
-    margin-bottom:14px;
-  }
-
-  .feature-icon i{font-size:20px; color:rgba(234,242,255,.95)}
-
-  .feature-card h3{font-size:18px; margin:0}
-  .feature-card p{margin-top:10px; color:var(--muted); line-height:1.9; font-weight:750}
-
-  /* Platform showcase alternating */
-  .showcase{
-    display:flex;
-    flex-direction:column;
-    gap:18px;
-  }
-
-  .show-row{
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    gap:28px;
-    align-items:center;
-  }
-  @media (max-width: 980px){ .show-row{grid-template-columns:1fr} }
-
-  .show-row.reverse{grid-template-columns:1fr 1fr}
-  @media (max-width: 980px){ .show-row.reverse{grid-template-columns:1fr} }
-
-  .show-text{
-    padding:18px;
-  }
-  .show-text .pill{
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-    padding:10px 14px;
-    border-radius:999px;
-    border:1px solid rgba(148,163,184,.18);
-    background:rgba(255,255,255,.04);
-    color:rgba(234,242,255,.94);
-    font-weight:950;
-    font-size:13px;
-    margin-bottom:12px;
-  }
-
-  .show-text p{color:var(--muted); font-weight:750; line-height:1.9; margin-top:12px; max-width:64ch}
-
-  .show-text h3{margin:0; font-size:26px; line-height:1.15}
-
-  .show-image{
-    border-radius:var(--radius-xl);
-    border:1px solid rgba(148,163,184,.20);
-    background:
-      radial-gradient(820px 380px at 18% 0%, rgba(6,182,212,.24), transparent 60%),
-      radial-gradient(760px 420px at 88% 25%, rgba(124,58,237,.18), transparent 62%),
-      linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
-    min-height:360px;
-    box-shadow:0 30px 110px rgba(0,0,0,.48);
-    overflow:hidden;
-    position:relative;
-  }
-
-  .show-image .gridline{
-    position:absolute;
-    inset:0;
-    background-image:
-      linear-gradient(to right, rgba(255,255,255,.06) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255,255,255,.06) 1px, transparent 1px);
-    background-size:58px 58px;
-    opacity:.22;
-    mask-image:radial-gradient(500px 260px at 50% 15%, black 30%, transparent 70%);
-  }
-
-  .show-image .mock {
-    position:absolute;
-    left:18px; right:18px; top:18px; bottom:18px;
-    border-radius:22px;
-    border:1px solid rgba(148,163,184,.18);
-    background:rgba(255,255,255,.04);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    padding:16px;
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-  }
-
-  .mock .barrow{display:flex; gap:10px}
-  .mock .chip{
-    height:36px;
-    border-radius:999px;
-    background:rgba(255,255,255,.06);
-    border:1px solid rgba(148,163,184,.16);
-    flex:1;
-  }
-
-  .mock .cards{flex:1; display:grid; grid-template-columns:1fr 1fr; gap:10px}
-  @media (max-width: 520px){ .mock .cards{grid-template-columns:1fr} }
-
-  .mock .mc{
-    border-radius:18px;
-    border:1px solid rgba(148,163,184,.16);
-    background:rgba(255,255,255,.05);
-    padding:12px;
-  }
-  .mock .mc .h{height:10px; width:70%; border-radius:999px; background:rgba(255,255,255,.10)}
-  .mock .mc .b{height:10px; width:90%; border-radius:999px; background:rgba(255,255,255,.06); margin-top:10px}
-
-  /* Services grid (8) */
-  .services-grid{
-    display:grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap:var(--grid-gap);
-  }
-  @media (max-width: 1100px){ .services-grid{grid-template-columns:repeat(2,1fr)} }
-
-  .service-card{
-    padding:22px;
-    border-radius:var(--radius-xl);
-    background:rgba(255,255,255,.05);
-    border:1px solid rgba(148,163,184,.18);
-    transition: transform .22s ease, border-color .22s ease, background .22s ease;
-    min-height:180px;
-  }
-  .service-card:hover{transform:translateY(-8px); border-color:rgba(94,234,212,.40); background:rgba(255,255,255,.07)}
-  .service-card .top{display:flex; align-items:center; justify-content:space-between; gap:12px}
-  .service-card i{color:var(--accent)}
-  .service-card .badge{font-size:12px; padding:6px 10px; border-radius:999px; border:1px solid rgba(94,234,212,.24); background:rgba(6,182,212,.10); color:rgba(234,242,255,.95); font-weight:950}
-  .service-card h3{margin:12px 0 10px; font-size:18px}
-  .service-card p{margin:0; color:var(--muted); font-weight:750; line-height:1.9}
-
-  /* Testimonials */
-  .testimonials-grid{
-    display:grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap:var(--grid-gap);
-  }
-  @media (max-width: 980px){ .testimonials-grid{grid-template-columns:repeat(2,1fr)} }
-  @media (max-width: 560px){ .testimonials-grid{grid-template-columns:1fr} }
-
-  .testimonial{
-    padding:22px;
-    border-radius:var(--radius-xl);
-    background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
-    border:1px solid rgba(148,163,184,.20);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    box-shadow:0 24px 85px rgba(0,0,0,.35);
-    transition: transform .22s ease, border-color .22s ease;
-    min-height:220px;
-  }
-  .testimonial:hover{transform:translateY(-7px); border-color:rgba(94,234,212,.40)}
-
-  .testimonial .stars{color:#FDE68A; letter-spacing:2px; font-weight:1000}
-  .testimonial p{margin-top:14px; color:var(--muted); font-weight:750; line-height:1.9}
-  .t-person{margin-top:auto; display:flex; align-items:center; gap:12px; padding-top:16px}
-  .avatar{
-    width:44px; height:44px;
-    border-radius:18px;
-    background:rgba(6,182,212,.12);
-    border:1px solid rgba(94,234,212,.26);
-    display:flex; align-items:center; justify-content:center;
-    font-weight:1000;
-  }
-  .t-person b{font-weight:1000}
-  .t-person span{display:block; color:var(--muted2); font-weight:800; margin-top:2px; font-size:13px}
-
-  /* FAQ accordion */
-  .faq-card{
-    padding:18px;
-    border-radius:var(--radius-xl);
-    background:rgba(255,255,255,.04);
-    border:1px solid rgba(148,163,184,.18);
-  }
-
-  .faq-item{
-    border-radius:18px;
-    overflow:hidden;
-    border:1px solid rgba(148,163,184,.14);
-    background:rgba(255,255,255,.03);
-    margin-bottom:12px;
-  }
-
-  .faq-q{
-    width:100%;
-    text-align:left;
-    padding:14px 16px;
-    background:rgba(255,255,255,.04);
-    color:rgba(234,242,255,.98);
-    border:none;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:14px;
-    cursor:pointer;
-    font-weight:1000;
-  }
-  .faq-q i{color:var(--accent)}
-
-  .faq-a{
-    max-height:0;
-    overflow:hidden;
-    transition:max-height .28s ease;
-  }
-  .faq-a .inner{padding:0 16px 14px; color:var(--muted); font-weight:750; line-height:1.9}
-  .faq-item.open{border-color:rgba(94,234,212,.35)}
-
-  /* Final CTA */
-  .final-cta{
-    padding:78px 0 84px;
-  }
-
-  .cta-card{
-    border-radius:calc(var(--radius-xl) + 6px);
-    border:1px solid rgba(94,234,212,.32);
-    background:
-      radial-gradient(860px 340px at 15% 20%, rgba(6,182,212,.30), transparent 60%),
-      radial-gradient(780px 360px at 85% 25%, rgba(124,58,237,.22), transparent 62%),
-      radial-gradient(720px 360px at 35% 110%, rgba(16,185,129,.18), transparent 60%),
-      rgba(255,255,255,.04);
-    box-shadow:0 50px 170px rgba(0,0,0,.55);
-    padding:28px;
-    position:relative;
-    overflow:hidden;
-  }
-
-  .cta-card:after{
-    content:"";
-    position:absolute;
-    inset:-2px;
-    background: linear-gradient(120deg, rgba(6,182,212,.25), rgba(16,185,129,.12), rgba(124,58,237,.20));
-    opacity:.16;
-    pointer-events:none;
-  }
-
-  .cta-card > *{position:relative; z-index:1}
-
-  .cta-grid{
-    display:grid;
-    grid-template-columns: 1.1fr .9fr;
-    gap:18px;
-    align-items:center;
-  }
-  @media (max-width: 980px){ .cta-grid{grid-template-columns:1fr} }
-
-  .cta-card h2{font-size:clamp(28px,3.2vw,46px); margin:0; line-height:1.12}
-  .cta-card p{margin-top:12px; color:var(--muted); font-weight:760; line-height:1.9; max-width:72ch}
-
-  /* Landing footer (local content) */
-  .landing-footer{
-    padding:56px 0 24px;
-    border-top:1px solid rgba(148,163,184,.18);
-    background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00));
-  }
-  .footer-grid{
-    display:grid;
-    grid-template-columns: 1.2fr 1fr 1fr 1.1fr;
-    gap:18px;
-    align-items:start;
-  }
-  @media (max-width: 980px){ .footer-grid{grid-template-columns:1fr 1fr} }
-  @media (max-width: 560px){ .footer-grid{grid-template-columns:1fr} }
-
-  .footer-title{font-weight:1000; color:rgba(234,242,255,.95); margin-bottom:14px}
-  .footer-link{
-    display:block;
-    color:var(--muted);
-    font-weight:750;
-    text-decoration:none;
-    margin:10px 0;
-    transition: transform .22s ease, color .22s ease;
-  }
-  .footer-link:hover{transform:translateX(4px); color:rgba(234,242,255,.95)}
-
-  .footer-note{
-    margin-top:18px;
-    color:rgba(234,242,255,.55);
-    font-weight:750;
-    line-height:1.9;
-    font-size:13px;
-  }
+    .hero{
+        position:relative;
+        padding:80px 0 90px;
+        background:radial-gradient(ellipse 900px 500px at 85% -10%, var(--green-soft) 0%, transparent 60%), var(--white);
+        overflow:hidden;
+    }
+    .hero .row{align-items:center;}
+    .eyebrow{
+        display:inline-flex;align-items:center;gap:8px;
+        background:var(--green-soft);color:var(--green-deep);
+        font-size:13px;font-weight:600;padding:7px 14px;border-radius:100px;
+        margin-bottom:22px;opacity:0;animation:riseIn .7s ease forwards;animation-delay:.1s;
+    }
+    .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--amber);animation:pulseDot 2s infinite;}
+    .hero h1{
+        font-size:clamp(36px,5vw,60px);line-height:1.08;color:var(--ink);
+        opacity:0;animation:riseIn .8s ease forwards;animation-delay:.22s;
+    }
+    .hero h1 em{font-style:normal;color:var(--green-deep);}
+    .hero p.lede{
+        margin-top:22px;font-size:17.5px;line-height:1.65;color:var(--ink-soft);max-width:480px;
+        opacity:0;animation:riseIn .8s ease forwards;animation-delay:.34s;
+    }
+    .hero-ctas{margin-top:32px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;
+        opacity:0;animation:riseIn .8s ease forwards;animation-delay:.46s;}
+    .btn-primary-cta{
+        background:var(--green-deep);color:#fff;padding:15px 26px;border-radius:100px;
+        font-weight:600;font-size:15px;display:inline-flex;align-items:center;gap:8px;
+        transition:transform .25s, box-shadow .25s;
+    }
+    .btn-primary-cta:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(14,124,90,0.3);color:#fff;}
+    .btn-ghost-cta{
+        color:var(--ink);font-weight:600;font-size:15px;padding:15px 4px;
+        display:inline-flex;align-items:center;gap:8px;border-bottom:2px solid transparent;
+        transition:border-color .25s;
+    }
+    .btn-ghost-cta:hover{border-color:var(--green-deep);color:var(--ink);}
+    .hero-stats{margin-top:42px;display:flex;gap:36px;flex-wrap:wrap;
+        opacity:0;animation:riseIn .8s ease forwards;animation-delay:.58s;}
+    .stat-num{font-family:'Fraunces',serif;font-size:26px;font-weight:600;color:var(--green-deep);}
+    .stat-label{font-size:12.5px;color:var(--ink-soft);margin-top:2px;}
+
+    .hero-visual{position:relative;height:480px;
+        opacity:0;animation:riseIn 1s ease forwards;animation-delay:.4s;}
+    .pulse-card{
+        position:absolute;inset:0;background:var(--white);border-radius:26px;border:1px solid var(--line);
+        box-shadow:0 30px 80px -20px rgba(14,124,90,0.18);padding:30px;display:flex;flex-direction:column;
+    }
+    .pulse-card-head{display:flex;justify-content:space-between;align-items:center;}
+    .pulse-tag{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--green-deep);}
+    .live-dot{width:8px;height:8px;border-radius:50%;background:var(--green-mid);animation:liveDot 1.8s infinite;}
+    .ecg-wrap{flex:1;display:flex;align-items:center;justify-content:center;}
+    .ecg-line{width:100%;height:130px;}
+    .pulse-foot{display:flex;justify-content:space-between;align-items:flex-end;}
+    .bpm{font-family:'Fraunces',serif;font-size:44px;font-weight:600;color:var(--ink);}
+    .bpm span{font-size:13px;color:var(--ink-soft);font-family:'Inter',sans-serif;font-weight:500;}
+    .float-chip{
+        position:absolute;background:#fff;border:1px solid var(--line);border-radius:16px;
+        padding:13px 16px;box-shadow:0 16px 40px -10px rgba(14,124,90,0.2);
+        display:flex;align-items:center;gap:10px;font-size:12.5px;font-weight:600;color:var(--ink);
+    }
+    .chip-1{top:-14px;right:18px;animation:floatY 5s ease-in-out infinite;}
+    .chip-2{bottom:20px;left:-18px;animation:floatY 6s ease-in-out infinite reverse;}
+    .chip-icon{width:28px;height:28px;border-radius:8px;background:var(--green-soft);display:flex;align-items:center;justify-content:center;}
+
+    @keyframes riseIn{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+    @keyframes pulseDot{0%,100%{opacity:1;}50%{opacity:.3;}}
+    @keyframes liveDot{0%{box-shadow:0 0 0 0 rgba(18,151,104,0.45);}70%{box-shadow:0 0 0 10px rgba(18,151,104,0);}100%{box-shadow:0 0 0 0 rgba(18,151,104,0);}}
+    @keyframes floatY{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+
+    .trust{
+        padding:28px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+        display:flex;justify-content:center;gap:54px;flex-wrap:wrap;background:var(--green-pale);
+    }
+    .trust-item{display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:600;color:var(--ink-soft);}
+    .trust-item i{color:var(--green-deep);font-size:16px;}
+
+    .section-pad{padding:90px 0;}
+    .section-head{max-width:620px;margin:0 auto 56px;text-align:center;}
+    .section-eyebrow{font-size:12.5px;font-weight:700;color:var(--green-deep);letter-spacing:.06em;text-transform:uppercase;}
+    .section-head h2{font-size:clamp(28px,3.4vw,40px);margin-top:12px;line-height:1.15;}
+    .section-head p{margin-top:14px;font-size:16px;color:var(--ink-soft);line-height:1.6;}
+
+    .feature-card{
+        background:var(--white);border:1px solid var(--line);border-radius:22px;padding:32px 28px;height:100%;
+        transition:transform .35s ease, box-shadow .35s ease;
+        opacity:0;transform:translateY(24px);
+    }
+    .feature-card.in-view{opacity:1;transform:translateY(0);}
+    .feature-card:hover{transform:translateY(-8px);box-shadow:0 24px 50px -16px rgba(14,124,90,0.2);}
+    .feature-icon{
+        width:50px;height:50px;border-radius:14px;background:var(--green-soft);
+        display:flex;align-items:center;justify-content:center;margin-bottom:20px;
+        transition:background .35s, transform .35s;font-size:20px;color:var(--green-deep);
+    }
+    .feature-card:hover .feature-icon{background:var(--green-deep);transform:rotate(-6deg) scale(1.05);color:#fff;}
+    .feature-card h3{font-size:18.5px;margin-bottom:10px;}
+    .feature-card p{font-size:14.5px;color:var(--ink-soft);line-height:1.6;margin:0;}
+
+    .how-section{background:var(--green-pale);}
+    .how-step{text-align:center;padding:0 14px;opacity:0;transform:translateY(20px);}
+    .how-step.in-view{opacity:1;transform:translateY(0);}
+    .how-num{
+        width:52px;height:52px;border-radius:50%;background:#fff;border:2px solid var(--green-deep);
+        color:var(--green-deep);font-family:'Fraunces',serif;font-weight:600;font-size:19px;
+        display:flex;align-items:center;justify-content:center;margin:0 auto 18px;
+    }
+    .how-step h3{font-size:16px;margin-bottom:8px;}
+    .how-step p{font-size:13.5px;color:var(--ink-soft);line-height:1.55;margin:0;}
+
+    .signature-section{
+        background:linear-gradient(160deg,#0E7C5A 0%,#0A5C43 100%);color:#fff;
+        padding:90px 0;position:relative;overflow:hidden;
+    }
+    .signature-section::before{
+        content:'';position:absolute;width:560px;height:560px;border-radius:50%;
+        background:radial-gradient(circle,rgba(255,255,255,0.08),transparent 70%);top:-200px;right:-200px;
+    }
+    .sig-inner{max-width:740px;margin:0 auto;text-align:center;position:relative;z-index:2;}
+    .sig-inner .quote-mark{font-family:'Fraunces',serif;font-size:56px;color:rgba(255,255,255,0.35);line-height:1;}
+    .sig-inner h2{color:#fff;font-size:clamp(22px,2.8vw,32px);line-height:1.4;font-weight:500;margin-top:4px;}
+    .sig-author{margin-top:28px;display:flex;align-items:center;justify-content:center;gap:12px;}
+    .sig-avatar{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px;}
+    .sig-author-name{font-size:13.5px;font-weight:600;}
+    .sig-author-role{font-size:12.5px;color:rgba(255,255,255,0.72);}
+
+    .slogan-bar{
+        background:var(--green-soft);border:1px solid var(--line);border-radius:18px;
+        padding:18px 24px;display:flex;align-items:center;gap:14px;margin:0 auto 50px;max-width:640px;
+    }
+    .slogan-bar .icon{font-size:26px;}
+    .slogan-bar .txt{font-size:14.5px;color:var(--ink);font-weight:500;}
+    .slogan-bar .hindi{font-size:13px;color:var(--ink-soft);margin-top:2px;}
+
+    .cta-box{
+        max-width:780px;margin:0 auto;background:var(--green-soft);border-radius:30px;
+        padding:56px 44px;text-align:center;
+    }
+    .cta-box h2{font-size:clamp(26px,3.2vw,36px);}
+    .cta-box p{margin-top:12px;font-size:15.5px;color:var(--ink-soft);}
+    .cta-box .hero-ctas{justify-content:center;margin-top:28px;opacity:1;}
+
+    @media(max-width:991px){
+        .hero-visual{height:380px;margin-top:40px;}
+        .trust{gap:24px;}
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="landing-premium">
-  <div class="bg-grid" aria-hidden="true"></div>
 
-  <div class="particle-layer" aria-hidden="true">
-    <div class="particle" style="left:8%;top:18%;animation-duration:11s"></div>
-    <div class="particle" style="left:22%;top:62%;animation-duration:13s;opacity:.45"></div>
-    <div class="particle" style="left:38%;top:26%;animation-duration:9s;opacity:.42;width:12px;height:12px"></div>
-    <div class="particle" style="left:56%;top:48%;animation-duration:12s;opacity:.38;width:8px;height:8px"></div>
-    <div class="particle" style="left:72%;top:18%;animation-duration:10s;opacity:.50;width:9px;height:9px"></div>
-    <div class="particle" style="left:86%;top:70%;animation-duration:14s;opacity:.35;width:13px;height:13px"></div>
-  </div>
-
-  <!-- SECTION 1 — HERO -->
-  <section class="hero">
-    <div class="container container-padded">
-      <div class="hero-grid">
-        <!-- Left -->
-        <div class="hero-left" data-reveal>
-          <div class="eyebrow">
-            <i class="fas fa-shield-heart" style="color:var(--accent)" aria-hidden="true"></i>
-            AI Powered Healthcare
-          </div>
-
-          <h1 class="display" style="margin:18px 0 14px;">
-            Get calm, structured
-            <span style="color:var(--accent)">AI guidance</span>
-            for real health decisions.
-          </h1>
-
-          <p>
-            Turn symptoms into next steps, connect with trusted doctors, and order medicines with a premium healthcare SaaS experience—built for clarity and confidence.
-          </p>
-
-          <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:22px;">
-            <a class="btn-pill btn-primary" href="/chat/">
-              <i class="fas fa-stethoscope" aria-hidden="true"></i>
-              Start AI Consultation
-            </a>
-            <a class="btn-pill btn-secondary" href="/appointments/">
-              <i class="fas fa-calendar-check" aria-hidden="true"></i>
-              Book a Doctor
-            </a>
-          </div>
-
-          <!-- Trust indicators -->
-          <div class="trust-row">
-            <div class="trust-item">
-              <i class="fas fa-lock" aria-hidden="true"></i>
-              <div>
-                <strong>Privacy-first</strong>
-                <span>Secure-by-design UX</span>
-              </div>
+<section class="hero">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <span class="eyebrow"><span class="dot"></span>Online now — 24x7 AI doctor</span>
+                <h1>Your health,<br><em>answered instantly</em>.</h1>
+                <p class="lede">Symptom checks, doctor bookings and medicines — all in one calm, caring place. Speak in Hindi, English or Hinglish, just like talking to family.</p>
+                <div class="hero-ctas">
+                    <a class="btn-primary-cta" href="/chat/">
+                        Start a consultation
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <a class="btn-ghost-cta" href="/appointments/">Book a doctor →</a>
+                </div>
+                <div class="hero-stats">
+                    <div><div class="stat-num">24/7</div><div class="stat-label">Always available</div></div>
+                    <div><div class="stat-num">120+</div><div class="stat-label">Verified doctors</div></div>
+                    <div><div class="stat-num">98%</div><div class="stat-label">Patient satisfaction</div></div>
+                </div>
             </div>
-            <div class="trust-item">
-              <i class="fas fa-user-check" style="color:var(--accent2)" aria-hidden="true"></i>
-              <div>
-                <strong>Trusted care</strong>
-                <span>Doctor recommendations</span>
-              </div>
-            </div>
-            <div class="trust-item">
-              <i class="fas fa-sparkles" style="color:var(--violet)" aria-hidden="true"></i>
-              <div>
-                <strong>Actionable AI</strong>
-                <span>Guided next steps</span>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <!-- Right -->
-        <div class="dashboard-wrap" data-reveal>
-          <div class="dashboard" role="img" aria-label="AI healthcare dashboard mockup">
-            <div class="dash-inner">
-              <div class="dash-top">
-                <div class="dash-badge">
-                  <span class="pulse-dot" aria-hidden="true"></span>
-                  AI Clinic Dashboard
-                </div>
-                <div style="display:flex;gap:10px;align-items:center;">
-                  <span style="font-size:12px;padding:7px 11px;border-radius:999px;border:1px solid rgba(148,163,184,.18);background:rgba(255,255,255,.05);font-weight:950;color:rgba(234,242,255,.92)">Live guidance</span>
-                </div>
-              </div>
-
-              <div class="dash-kpis">
-                <div class="kpi one">
-                  <div class="big">+4.9★</div>
-                  <div class="small">Patient satisfaction</div>
-                </div>
-                <div class="kpi two">
-                  <div class="big">24/7</div>
-                  <div class="small">AI conversation flow</div>
-                </div>
-                <div class="kpi three">
-                  <div class="big">≤ 2m</div>
-                  <div class="small">From symptoms to next steps</div>
-                </div>
-              </div>
-
-              <div class="dash-bottom">
-                <div class="pane">
-                  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
-                    <b style="font-weight:1000;">Today’s Health Signals</b>
-                    <span style="font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid rgba(94,234,212,.24);background:rgba(6,182,212,.10);font-weight:950;">Optimized</span>
-                  </div>
-                  <div class="mini-list" style="margin-top:12px;">
-                    <div class="mini-row">
-                      <i class="fas fa-wave-square" aria-hidden="true"></i>
-                      <div>
-                        <b>Symptom triage</b>
-                        <small>Urgency hints and safe interim actions</small>
-                      </div>
+            <div class="col-lg-6">
+                <div class="hero-visual">
+                    <div class="pulse-card">
+                        <div class="pulse-card-head">
+                            <span class="pulse-tag"><span class="live-dot"></span>Live vitals</span>
+                            <i class="fas fa-clock" style="color:var(--green-deep);"></i>
+                        </div>
+                        <div class="ecg-wrap">
+                            <svg class="ecg-line" viewBox="0 0 400 140" preserveAspectRatio="none">
+                                <polyline id="ecgPath" points="0,70 40,70 55,70 65,30 75,110 85,70 110,70 130,70 145,40 155,100 165,70 400,70"
+                                    fill="none" stroke="#0E7C5A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="pulse-foot">
+                            <div class="bpm">72<span> bpm</span></div>
+                            <i class="fas fa-heart-pulse" style="font-size:30px;color:var(--amber);"></i>
+                        </div>
                     </div>
-                    <div class="mini-row">
-                      <i class="fas fa-brain" style="color:var(--violet)" aria-hidden="true"></i>
-                      <div>
-                        <b>AI recommendations</b>
-                        <small>Clear steps that reduce uncertainty</small>
-                      </div>
+                    <div class="float-chip chip-1">
+                        <span class="chip-icon"><i class="fas fa-check" style="color:var(--green-deep);font-size:13px;"></i></span>
+                        Prescription ready
                     </div>
-                    <div class="mini-row" style="margin-bottom:0;">
-                      <i class="fas fa-heart-pulse" style="color:var(--accent2)" aria-hidden="true"></i>
-                      <div>
-                        <b>Care routing</b>
-                        <small>Book doctors when it makes sense</small>
-                      </div>
+                    <div class="float-chip chip-2">
+                        <span class="chip-icon"><i class="fas fa-calendar-check" style="color:var(--green-deep);font-size:13px;"></i></span>
+                        Appointment at 4:30 PM
                     </div>
-                  </div>
                 </div>
-
-                <div class="pane">
-                  <b style="font-weight:1000;">AI Widgets</b>
-                  <div class="mini-list" style="margin-top:12px;">
-                    <div class="mini-row">
-                      <i class="fas fa-file-medical" aria-hidden="true"></i>
-                      <div>
-                        <b>Report clarity</b>
-                        <small>Readable explanations for confidence</small>
-                      </div>
-                    </div>
-                    <div class="mini-row" style="margin-bottom:0;">
-                      <i class="fas fa-pills" style="color:var(--warning)" aria-hidden="true"></i>
-                      <div>
-                        <b>Medicine ordering</b>
-                        <small>Clean checkout with fewer clicks</small>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
-          </div>
-
-          <!-- Floating cards -->
-          <div class="float-card float-1">
-            <div class="t"><i class="fas fa-heart-pulse" aria-hidden="true"></i> Triage Pulse</div>
-            <div class="v">A+</div>
-            <div class="s">Calm urgency signals</div>
-          </div>
-          <div class="float-card float-2">
-            <div class="t"><i class="fas fa-brain" aria-hidden="true" style="color:var(--violet)"></i> AI Confidence</div>
-            <div class="v">92%</div>
-            <div class="s">Actionability score</div>
-          </div>
-          <div class="float-card float-3">
-            <div class="t"><i class="fas fa-user-doctor" aria-hidden="true" style="color:var(--accent2)"></i> Doctor Fit</div>
-            <div class="v">1.6x</div>
-            <div class="s">Faster specialist match</div>
-          </div>
-
-          <!-- Animated healthcare widget -->
-          <div class="health-widget">
-            <div class="widget-head">
-              <b>Live Health Metrics</b>
-              <span class="pill">updated</span>
-            </div>
-            <div class="bars" aria-hidden="true">
-              <div class="bar" style="height:64%;animation-delay:.1s"></div>
-              <div class="bar" style="height:82%;animation-delay:.3s; background:linear-gradient(180deg, rgba(124,58,237,.50), rgba(6,182,212,.18))"></div>
-              <div class="bar" style="height:52%;animation-delay:.2s; background:linear-gradient(180deg, rgba(16,185,129,.45), rgba(6,182,212,.14))"></div>
-              <div class="bar" style="height:72%;animation-delay:.35s"></div>
-            </div>
-            <div style="display:flex;justify-content:space-between;gap:12px;margin-top:10px;">
-              <span style="color:var(--muted2);font-weight:850;font-size:12px;">Hydration</span>
-              <span style="color:rgba(234,242,255,.92);font-weight:950;font-size:12px;">Improving</span>
-            </div>
-          </div>
         </div>
-      </div>
     </div>
-  </section>
+</section>
 
-  <!-- SECTION 2 — TRUST BAR -->
-  <section class="trust-bar">
-    <div class="container container-padded">
-      <div class="trust-bar-grid" id="trustBar">
-        <div class="trust-metric" data-count="125000" data-suffix="+">
-          <div class="top"><i class="fas fa-user-injured" aria-hidden="true"></i><div class="lbl">Patients Served</div></div>
-          <div class="num">0</div>
-          <div class="sub">Everyday support, at scale</div>
-        </div>
-        <div class="trust-metric" data-count="2400000" data-suffix="+">
-          <div class="top"><i class="fas fa-comments" aria-hidden="true" style="color:var(--violet)"></i><div class="lbl">AI Conversations</div></div>
-          <div class="num">0</div>
-          <div class="sub">Calm guidance in real time</div>
-        </div>
-        <div class="trust-metric" data-count="920" data-suffix="+">
-          <div class="top"><i class="fas fa-user-md" aria-hidden="true" style="color:var(--accent2)"></i><div class="lbl">Doctors Connected</div></div>
-          <div class="num">0</div>
-          <div class="sub">Specialist matching built in</div>
-        </div>
-        <div class="trust-metric" data-count="98" data-suffix="%">
-          <div class="top"><i class="fas fa-shield-check" aria-hidden="true"></i><div class="lbl">Accuracy Metrics</div></div>
-          <div class="num">0</div>
-          <div class="sub">Actionability + clarity focus</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 3 — FEATURES -->
-  <section class="section-pad">
-    <div class="container container-padded">
-      <div class="section-head" data-reveal>
-        <div class="k">Features</div>
-        <h2>Premium tools for every care moment.</h2>
-        <p>Six core capabilities designed with modern healthcare SaaS patterns—glass, glow, and conversion-friendly UX.</p>
-      </div>
-
-      <div class="feature-grid">
-        <div class="feature-card" data-reveal>
-          <div class="feature-icon"><i class="fas fa-wand-magic-sparkles" aria-hidden="true"></i></div>
-          <h3>AI Health Assistant</h3>
-          <p>Structured symptom understanding with calm, actionable explanations.</p>
-        </div>
-        <div class="feature-card" data-reveal>
-          <div class="feature-icon" style="background:rgba(124,58,237,.10);border-color:rgba(124,58,237,.26)"><i class="fas fa-user-doctor" aria-hidden="true" style="color:rgba(124,58,237,.95)"></i></div>
-          <h3>Doctor Consultation</h3>
-          <p>Guided booking flows that connect you to trusted specialists.</p>
-        </div>
-        <div class="feature-card" data-reveal>
-          <div class="feature-icon" style="background:rgba(245,158,11,.10);border-color:rgba(245,158,11,.26)"><i class="fas fa-pills" aria-hidden="true" style="color:rgba(245,158,11,.98)"></i></div>
-          <h3>Medicine Ordering</h3>
-          <p>Fast selection and clean checkout designed to feel effortless.</p>
-        </div>
-        <div class="feature-card" data-reveal>
-          <div class="feature-icon" style="background:rgba(16,185,129,.10);border-color:rgba(16,185,129,.26)"><i class="fas fa-heart" aria-hidden="true" style="color:rgba(16,185,129,.98)"></i></div>
-          <h3>Health Tracking</h3>
-          <p>Health signals summarized into simple, scannable metrics.</p>
-        </div>
-        <div class="feature-card" data-reveal>
-          <div class="feature-icon" style="background:rgba(59,130,246,.10);border-color:rgba(59,130,246,.22)"><i class="fas fa-file-medical" aria-hidden="true" style="color:rgba(59,130,246,.98)"></i></div>
-          <h3>Medical Reports</h3>
-          <p>Turn medical documents into clarity-focused, next-step insights.</p>
-        </div>
-        <div class="feature-card" data-reveal>
-          <div class="feature-icon" style="background:rgba(236,72,153,.10);border-color:rgba(236,72,153,.22)"><i class="fas fa-route" aria-hidden="true" style="color:rgba(236,72,153,.98)"></i></div>
-          <h3>Smart Recommendations</h3>
-          <p>Premium guidance that routes you to care when it matters most.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 4 — PLATFORM SHOWCASE -->
-  <section class="section-pad">
-    <div class="container container-padded">
-      <div class="section-head" data-reveal>
-        <div class="k">Platform Showcase</div>
-        <h2>Built like Stripe. Feels like healthcare.</h2>
-        <p>Alternating sections that create a premium, modern rhythm—text and “dashboard” visuals in perfect balance.</p>
-      </div>
-
-      <div class="showcase">
-        <!-- A: Text left, Image right -->
-        <div class="show-row" data-reveal>
-          <div class="show-text">
-            <div class="pill"><i class="fas fa-shield-heart" aria-hidden="true" style="color:var(--accent)"></i> Care UX you can trust</div>
-            <h3>From uncertainty to clarity—fast.</h3>
-            <p>
-              AI guidance helps you interpret symptoms and decide safe next steps—without turning the experience into a stressful form.
-            </p>
-            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;">
-              <a class="btn-pill btn-primary" href="/chat/">
-                <i class="fas fa-comment-dots" aria-hidden="true"></i>
-                Try AI Triage
-              </a>
-              <a class="btn-pill btn-ghost" href="/appointments/">
-                <i class="fas fa-calendar-check" aria-hidden="true"></i>
-                Talk to a Doctor
-              </a>
-            </div>
-          </div>
-          <div class="show-image" aria-hidden="true">
-            <div class="gridline"></div>
-            <div class="mock">
-              <div class="barrow">
-                <div class="chip"></div>
-                <div class="chip" style="flex:0 0 160px"></div>
-              </div>
-              <div class="cards">
-                <div class="mc"><div class="h"></div><div class="b"></div><div class="b" style="width:60%"></div></div>
-                <div class="mc"><div class="h" style="width:55%"></div><div class="b" style="width:92%"></div><div class="b" style="width:72%"></div></div>
-                <div class="mc"><div class="h" style="width:74%"></div><div class="b" style="width:86%"></div><div class="b" style="width:64%"></div></div>
-                <div class="mc"><div class="h" style="width:62%"></div><div class="b" style="width:88%"></div><div class="b" style="width:66%"></div></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- B: Image left, Text right -->
-        <div class="show-row reverse" data-reveal>
-          <div class="show-image" aria-hidden="true">
-            <div class="gridline" style="opacity:.18"></div>
-            <div class="mock">
-              <div class="barrow">
-                <div class="chip" style="flex:0 0 180px"></div>
-                <div class="chip"></div>
-              </div>
-              <div class="cards">
-                <div class="mc"><div class="h"></div><div class="b" style="width:86%"></div><div class="b" style="width:74%"></div></div>
-                <div class="mc"><div class="h" style="width:58%"></div><div class="b" style="width:92%"></div><div class="b" style="width:62%"></div></div>
-                <div class="mc"><div class="h" style="width:68%"></div><div class="b" style="width:80%"></div><div class="b" style="width:70%"></div></div>
-                <div class="mc"><div class="h" style="width:62%"></div><div class="b" style="width:88%"></div><div class="b" style="width:66%"></div></div>
-              </div>
-            </div>
-          </div>
-          <div class="show-text">
-            <div class="pill"><i class="fas fa-brain" aria-hidden="true" style="color:var(--violet)"></i> Premium guidance patterns</div>
-            <h3>AI that routes you to the right action.</h3>
-            <p>
-              Recommendations connect symptoms to next steps—doctor booking, medicine ordering, and report clarity.
-            </p>
-            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;">
-              <a class="btn-pill btn-secondary" href="/medicines/">
-                <i class="fas fa-bag-shopping" aria-hidden="true"></i>
-                Order Medicines
-              </a>
-              <a class="btn-pill btn-ghost" href="/chat/">
-                <i class="fas fa-file-circle-check" aria-hidden="true"></i>
-                Analyze Reports
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- C: Text left, Image right -->
-        <div class="show-row" data-reveal>
-          <div class="show-text">
-            <div class="pill"><i class="fas fa-user-check" aria-hidden="true" style="color:var(--accent2)"></i> Trust-building UI</div>
-            <h3>Designed for confidence, not confusion.</h3>
-            <p>
-              Glassmorphism panels, glow accents, and scannable layouts create a calm experience that feels premium.
-            </p>
-            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;">
-              <a class="btn-pill btn-primary" href="/appointments/">
-                <i class="fas fa-user-md" aria-hidden="true"></i>
-                Find a Specialist
-              </a>
-              <a class="btn-pill btn-secondary" href="/chat/">
-                <i class="fas fa-comments" aria-hidden="true"></i>
-                Continue Chat
-              </a>
-            </div>
-          </div>
-          <div class="show-image" aria-hidden="true">
-            <div class="gridline" style="opacity:.22"></div>
-            <div class="mock">
-              <div class="barrow">
-                <div class="chip"></div>
-                <div class="chip" style="flex:0 0 140px"></div>
-              </div>
-              <div class="cards">
-                <div class="mc"><div class="h" style="width:72%"></div><div class="b" style="width:90%"></div><div class="b" style="width:62%"></div></div>
-                <div class="mc"><div class="h" style="width:58%"></div><div class="b" style="width:92%"></div><div class="b" style="width:70%"></div></div>
-                <div class="mc"><div class="h" style="width:66%"></div><div class="b" style="width:86%"></div><div class="b" style="width:64%"></div></div>
-                <div class="mc"><div class="h" style="width:60%"></div><div class="b" style="width:88%"></div><div class="b" style="width:66%"></div></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 5 — SERVICES GRID (8) -->
-  <section class="section-pad">
-    <div class="container container-padded">
-      <div class="section-head" data-reveal>
-        <div class="k">Services</div>
-        <h2>Everything you need, in one premium platform.</h2>
-        <p>Eight services with modern hover lift, spacing, and SaaS-grade card presentation.</p>
-      </div>
-
-      <div class="services-grid">
-        <div class="service-card" data-reveal>
-          <div class="top"><i class="fas fa-stethoscope" aria-hidden="true"></i><span class="badge">AI Triage</span></div>
-          <h3>Symptom Guidance</h3>
-          <p>Clear explanations and safe next steps for everyday concerns.</p>
-        </div>
-        <div class="service-card" data-reveal>
-          <div class="top"><i class="fas fa-user-md" aria-hidden="true"></i><span class="badge">Doctors</span></div>
-          <h3>Specialist Booking</h3>
-          <p>Guided scheduling that matches you to the right specialist.</p>
-        </div>
-        <div class="service-card" data-reveal>
-          <div class="top"><i class="fas fa-pills" aria-hidden="true" style="color:var(--warning)"></i><span class="badge">Medicines</span></div>
-          <h3>Order Medicines</h3>
-          <p>Fast selection and a clean ordering experience.</p>
-        </div>
-        <div class="service-card" data-reveal>
-          <div class="top"><i class="fas fa-file-medical" aria-hidden="true"></i><span class="badge">Reports</span></div>
-          <h3>Report Clarity</h3>
-          <p>Turn documents into readable, confidence-building explanations.</p>
-        </div>
-        <div class="service-card" data-reveal>
-          <div class="top"><i class="fas fa-heart" aria-hidden="true" style="color:var(--accent2)"></i><span class="badge">Tracking</span></div>
-          <h3>Health Tracking</h3>
-          <p>Scannable signals summarized into premium insights.</p>
-        </div>
-        <div class="service-card" data-reveal>
-          <div class="top"><i class="fas fa-clipboard-check" aria-hidden="true"></i><span class="badge">Care Plan</span></div>
-          <h3>Smart Next Steps</h3>
-          <p>Recommendations that guide action without confusion.</p>
-        </div>
-        <div class="service-card" data-reveal>
-          <div class="top"><i class="fas fa-shield-alt" aria-hidden="true" style="color:var(--accent)"></i><span class="badge">Trust</span></div>
-          <h3>Privacy-first UX</h3>
-          <p>Confidence-building design patterns throughout the experience.</p>
-        </div>
-        <div class="service-card" data-reveal>
-          <div class="top"><i class="fas fa-bolt" aria-hidden="true" style="color:var(--violet)"></i><span class="badge">Speed</span></div>
-          <h3>Fast Checkout</h3>
-          <p>Premium flow engineered to reduce friction and save time.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 6 — TESTIMONIALS -->
-  <section class="section-pad" style="padding-top:58px">
-    <div class="container container-padded">
-      <div class="section-head" data-reveal>
-        <div class="k">Testimonials</div>
-        <h2>Premium feedback from real users.</h2>
-        <p>Glassmorphism cards with avatars, names, roles, and reviews—built to feel like a top SaaS landing page.</p>
-      </div>
-
-      <div class="testimonials-grid">
-        <div class="testimonial" data-reveal>
-          <div class="stars">★★★★★</div>
-          <p>“The guidance felt calm and structured. I knew what to do next without panic.”</p>
-          <div class="t-person">
-            <div class="avatar">A</div>
-            <div>
-              <b>Arun S.</b>
-              <span>Symptom clarity</span>
-            </div>
-          </div>
-        </div>
-        <div class="testimonial" data-reveal>
-          <div class="stars">★★★★★</div>
-          <p>“Doctor booking was smooth. The experience looks premium and healthcare-focused.”</p>
-          <div class="t-person">
-            <div class="avatar">R</div>
-            <div>
-              <b>Rekha K.</b>
-              <span>Doctor consultation</span>
-            </div>
-          </div>
-        </div>
-        <div class="testimonial" data-reveal>
-          <div class="stars">★★★★★</div>
-          <p>“Ordering medicines was fast. The checkout flow is clear and easy to follow.”</p>
-          <div class="t-person">
-            <div class="avatar">M</div>
-            <div>
-              <b>Manish P.</b>
-              <span>Medicine ordering</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 7 — FAQ -->
-  <section class="section-pad" style="padding-top:58px">
-    <div class="container container-padded">
-      <div class="section-head" data-reveal>
-        <div class="k">FAQ</div>
-        <h2>Questions, answered with clarity.</h2>
-        <p>Modern accordion UI with animated open/close—no clutter.</p>
-      </div>
-
-      <div class="faq-card" data-reveal>
-        <div class="faq-item">
-          <button class="faq-q" type="button" aria-expanded="false">
-            <span style="display:flex;align-items:center;gap:12px;"><i class="fas fa-user-doctor" aria-hidden="true"></i> Is this a replacement for a doctor?</span>
-            <i class="fas fa-chevron-down" aria-hidden="true"></i>
-          </button>
-          <div class="faq-a" aria-hidden="true">
-            <div class="inner">No. This platform provides AI-assisted guidance for clarity and next steps. For diagnosis and treatment, consult a qualified healthcare professional.</div>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-q" type="button" aria-expanded="false">
-            <span style="display:flex;align-items:center;gap:12px;"><i class="fas fa-brain" aria-hidden="true" style="color:var(--violet)"></i> How does the AI triage work?</span>
-            <i class="fas fa-chevron-down" aria-hidden="true"></i>
-          </button>
-          <div class="faq-a" aria-hidden="true">
-            <div class="inner">You describe symptoms. The AI produces structured guidance (urgency hints and next actions) to help you decide whether to book a doctor or take safe interim steps.</div>
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-q" type="button" aria-expanded="false">
-            <span style="display:flex;align-items:center;gap:12px;"><i class="fas fa-calendar-check" aria-hidden="true" style="color:var(--accent2)"></i> Can I book doctors from the same experience?</span>
-            <i class="fas fa-chevron-down" aria-hidden="true"></i>
-          </button>
-          <div class="faq-a" aria-hidden="true">
-            <div class="inner">Yes. The flow is designed to move from AI guidance to doctor booking seamlessly—so you can act quickly with confidence.</div>
-          </div>
-        </div>
-
-        <div class="faq-item" style="margin-bottom:0;">
-          <button class="faq-q" type="button" aria-expanded="false">
-            <span style="display:flex;align-items:center;gap:12px;"><i class="fas fa-lock" aria-hidden="true"></i> Is my data handled safely?</span>
-            <i class="fas fa-chevron-down" aria-hidden="true"></i>
-          </button>
-          <div class="faq-a" aria-hidden="true">
-            <div class="inner">This UX is built with privacy-first principles. Please follow platform policies and avoid sharing sensitive information beyond what’s necessary.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 8 — FINAL CTA -->
-  <section class="final-cta">
-    <div class="container container-padded">
-      <div class="cta-card" data-reveal>
-        <div class="cta-grid">
-          <div>
-            <div class="eyebrow" style="background:rgba(6,182,212,.08);border-color:rgba(94,234,212,.26);box-shadow:none;">
-              <i class="fas fa-bolt" style="color:var(--accent)" aria-hidden="true"></i>
-              Ready when you are
-            </div>
-            <h2 style="margin-top:16px;">Start with AI guidance—then take the next step.</h2>
-            <p>
-              Book a doctor when needed or order medicines with confidence. Premium guidance for faster clarity—built for modern healthcare experiences.
-            </p>
-          </div>
-          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:14px;">
-            <a class="btn-pill btn-primary" href="/chat/" style="width:fit-content">
-              <i class="fas fa-stethoscope" aria-hidden="true"></i>
-              Consult Now
-            </a>
-            <a class="btn-pill btn-secondary" href="/appointments/" style="width:fit-content">
-              <i class="fas fa-calendar-check" aria-hidden="true"></i>
-              Book Appointment
-            </a>
-            <div style="color:var(--muted2);font-weight:800;font-size:12.5px;line-height:1.7;max-width:420px;text-align:right;">
-              ⚠️ This platform provides general health information only. Always consult a qualified doctor for medical diagnosis and treatment.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 9 — FOOTER (Landing-style multi-column content) -->
-  <footer class="landing-footer" role="contentinfo">
-    <div class="container container-padded">
-      <div class="footer-grid">
-        <div>
-          <div style="font-size:22px;font-weight:1000;font-family:'Plus Jakarta Sans',sans-serif;">
-            🏥 <span style="color:rgba(125,211,252,.95)">AI</span><span style="color:#fff">Health</span>Care
-          </div>
-          <div class="footer-note">
-            A premium AI-powered healthcare platform providing 24/7 symptom guidance, doctor consultations, and medicine ordering—built for clarity and confidence.
-          </div>
-        </div>
-
-        <div>
-          <div class="footer-title">Product</div>
-          <a class="footer-link" href="/chat/">AI Assistant</a>
-          <a class="footer-link" href="/appointments/">Doctors</a>
-          <a class="footer-link" href="/medicines/">Medicines</a>
-          <a class="footer-link" href="/">Home</a>
-        </div>
-
-        <div>
-          <div class="footer-title">Resources</div>
-          <a class="footer-link" href="#faq">FAQ</a>
-          <a class="footer-link" href="#services">Services</a>
-          <a class="footer-link" href="#showcase">Platform</a>
-        </div>
-
-        <div>
-          <div class="footer-title">Trust</div>
-          <div class="footer-note" style="margin-top:0;">
-            Privacy-first UX • Calm guidance • Actionable next steps
-          </div>
-          <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
-            <span style="font-size:12px;padding:8px 12px;border-radius:999px;border:1px solid rgba(94,234,212,.26);background:rgba(6,182,212,.10);font-weight:950;">🔒 Secure UX</span>
-            <span style="font-size:12px;padding:8px 12px;border-radius:999px;border:1px solid rgba(148,163,184,.20);background:rgba(255,255,255,.04);font-weight:950;">🤖 AI Powered</span>
-          </div>
-        </div>
-      </div>
-
-      <div style="margin-top:26px;padding-top:18px;border-top:1px solid rgba(148,163,184,.14);color:rgba(234,242,255,.45);font-weight:760;font-size:12.5px;line-height:1.8;">
-        © 2026 AIHealthCare — General information only. Always consult qualified healthcare professionals for diagnosis and treatment.
-      </div>
-    </div>
-  </footer>
+<div class="trust">
+    <div class="trust-item"><i class="fas fa-shield-halved"></i>Data encrypted end-to-end</div>
+    <div class="trust-item"><i class="fas fa-user-doctor"></i>MCI-registered doctors</div>
+    <div class="trust-item"><i class="fas fa-bolt"></i>Average reply in 4 sec</div>
 </div>
 
+<section class="section-pad" id="services">
+    <div class="container">
+
+        <div class="slogan-bar">
+            <span class="icon">{{ slogan.icon }}</span>
+            <div>
+                <div class="txt">{{ slogan.text }}</div>
+                <div class="hindi">{{ slogan.hindi }}</div>
+            </div>
+        </div>
+
+        <div class="section-head">
+            <span class="section-eyebrow">What we offer</span>
+            <h2>Care that meets you where you are</h2>
+            <p>From a 2 a.m. fever to a routine check-up — one calm place for every step of your care.</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card" data-reveal>
+                    <div class="feature-icon"><i class="fas fa-comment-medical"></i></div>
+                    <h3>AI symptom chat</h3>
+                    <p>Describe how you feel in your own words — get home remedies, medicine guidance and a sense of urgency, instantly.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card" data-reveal>
+                    <div class="feature-icon"><i class="fas fa-calendar-check"></i></div>
+                    <h3>Doctor appointments</h3>
+                    <p>Browse specialists by city and speciality, pick a slot that fits your day, and get instant confirmation.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card" data-reveal>
+                    <div class="feature-icon"><i class="fas fa-pills"></i></div>
+                    <h3>Online pharmacy</h3>
+                    <p>Order genuine medicines with cash on delivery, free shipping above ₹500, and real-time order tracking.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-pad how-section">
+    <div class="container">
+        <div class="section-head">
+            <span class="section-eyebrow">How it works</span>
+            <h2>From symptom to solution in minutes</h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-3 col-6">
+                <div class="how-step" data-reveal>
+                    <div class="how-num">1</div>
+                    <h3>Tell us how you feel</h3>
+                    <p>Type your symptoms in Hindi, English or Hinglish — no forms, just conversation.</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="how-step" data-reveal>
+                    <div class="how-num">2</div>
+                    <h3>Get instant guidance</h3>
+                    <p>Receive home remedies, medicine suggestions and a clear sense of urgency.</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="how-step" data-reveal>
+                    <div class="how-num">3</div>
+                    <h3>Book if needed</h3>
+                    <p>If symptoms need a doctor, book the right specialist in two taps.</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="how-step" data-reveal>
+                    <div class="how-num">4</div>
+                    <h3>Recover, supported</h3>
+                    <p>Order medicines and track your care, all from the same place.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="signature-section" id="reports">
+    <div class="container">
+        <div class="sig-inner">
+            <div class="quote-mark">"</div>
+            <h2>It felt like texting a doctor friend at 11pm — not filling out a form.</h2>
+            <div class="sig-author">
+                <div class="sig-avatar">RP</div>
+                <div style="text-align:left;">
+                    <div class="sig-author-name">Riya Patel</div>
+                    <div class="sig-author-role">Patient, Indore</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-pad" id="contact">
+    <div class="container">
+        <div class="cta-box">
+            <h2>Your health can't wait for office hours.</h2>
+            <p>Start a free conversation with Dr. AI right now — no signup needed to begin.</p>
+            <div class="hero-ctas">
+                <a class="btn-primary-cta" href="/chat/">
+                    Chat with Dr. AI
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
 <script>
-  // Counter animation
-  (function(){
-    const section = document.querySelector('#trustBar');
-    if(!section) return;
-
-    const metrics = Array.from(section.querySelectorAll('[data-count]'));
-    if(metrics.length === 0) return;
-
-    let started = false;
-
-    function animate(el, target, suffix){
-      const duration = 1200;
-      const start = performance.now();
-      const from = 0;
-      function tick(now){
-        const t = Math.min(1, (now - start) / duration);
-        const eased = 1 - Math.pow(1 - t, 3);
-        const val = Math.floor(from + (target - from) * eased);
-        el.textContent = String(val) + (suffix || '');
-        if(t < 1) requestAnimationFrame(tick);
-      }
-      requestAnimationFrame(tick);
+    var ecg = document.getElementById('ecgPath');
+    var basePoints = "0,70 40,70 55,70 65,30 75,110 85,70 110,70 130,70 145,40 155,100 165,70 400,70";
+    var offset = 0;
+    function animateECG(){
+        offset = (offset + 2) % 400;
+        var shifted = basePoints.split(' ').map(function(p){
+            var parts = p.split(',').map(Number);
+            var nx = parts[0] - offset;
+            if(nx < -20) nx += 420;
+            return nx + ',' + parts[1];
+        }).join(' ');
+        if(ecg) ecg.setAttribute('points', shifted);
+        requestAnimationFrame(animateECG);
     }
-
-    const io = new IntersectionObserver((entries)=>{
-      for(const e of entries){
-        if(e.isIntersecting && !started){
-          started = true;
-          metrics.forEach(m=>{
-            const target = parseInt(m.getAttribute('data-count') || '0', 10);
-            const suffix = m.getAttribute('data-suffix') || '';
-            const num = m.querySelector('.num');
-            if(num && Number.isFinite(target)) animate(num, target, suffix);
-          });
-          io.disconnect();
-          break;
-        }
-      }
-    }, { threshold: 0.25 });
-
-    io.observe(section);
-  })();
-
-  // FAQ accordion (animated open/close)
-  (function(){
-    const items = Array.from(document.querySelectorAll('.faq-item'));
-    if(items.length === 0) return;
-
-    function setOpen(item, open){
-      const btn = item.querySelector('.faq-q');
-      const panel = item.querySelector('.faq-a');
-      if(!btn || !panel) return;
-
-      if(open){
-        item.classList.add('open');
-        btn.setAttribute('aria-expanded','true');
-        panel.setAttribute('aria-hidden','false');
-        const inner = panel.querySelector('.inner');
-        const target = inner ? inner.scrollHeight : 160;
-        panel.style.maxHeight = target + 'px';
-      } else {
-        item.classList.remove('open');
-        btn.setAttribute('aria-expanded','false');
-        panel.setAttribute('aria-hidden','true');
-        panel.style.maxHeight = '0px';
-      }
-    }
-
-    items.forEach(item=>{
-      const btn = item.querySelector('.faq-q');
-      const panel = item.querySelector('.faq-a');
-      if(!btn || !panel) return;
-
-      // Ensure closed by default
-      panel.style.maxHeight = '0px';
-      btn.addEventListener('click', ()=>{
-        const isOpen = item.classList.contains('open');
-        // keep single open behavior
-        items.forEach(x=>{ if(x !== item) setOpen(x, false); });
-        setOpen(item, !isOpen);
-      });
-    });
-  })();
-
-  // Scroll reveal
-  (function(){
-    const els = Array.from(document.querySelectorAll('[data-reveal]'));
-    if(els.length === 0) return;
-
-    els.forEach(el=>{ el.style.opacity = '0'; el.style.transform = 'translateY(14px)'; el.style.transition = 'opacity .7s ease, transform .7s ease'; });
-
-    const io = new IntersectionObserver((entries)=>{
-      for(const e of entries){
-        if(e.isIntersecting){
-          e.target.style.opacity = '1';
-          e.target.style.transform = 'translateY(0)';
-          io.unobserve(e.target);
-        }
-      }
-    }, { threshold: 0.18 });
-
-    els.forEach(el=>io.observe(el));
-  })();
+    if(ecg) animateECG();
 </script>
-{% endblock %}
 
+{% endblock %}
