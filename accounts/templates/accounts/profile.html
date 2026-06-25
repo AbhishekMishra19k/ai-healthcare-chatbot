@@ -5,15 +5,15 @@
 <style>
     /* Fallbacks in case global design tokens are missing */
     :root{
-        --black:#020617;
-        --card:#0F172A;
-        --dark:#0B1220;
-        --text:#E5E7EB;
-        --text-muted:rgba(229,231,235,.7);
-        --border:rgba(148,163,184,.18);
-        --accent:#06B6D4;
-        --gold:#38BDF8;
-        --red:#EF4444;
+        --black:#F0FBF6;
+        --card:#FFFFFF;
+        --dark:#E8F5EE;
+        --text:#13231D;
+        --text-muted:rgba(75,95,88,.85);
+        --border:rgba(14,124,90,.16);
+        --accent:#0E7C5A;
+        --gold:#FFB020;
+        --red:#E24B4A;
     }
 
     .dash-wrapper{
@@ -42,10 +42,10 @@
     .page-subtitle{ color: var(--text-muted); margin: 8px 0 0; font-size: 14px; }
 
     .dash-glass{
-        background: rgba(255,255,255,.04);
+        background: #FFFFFF;
         border: 1px solid var(--border);
         border-radius: 22px;
-        box-shadow: 0 20px 60px rgba(2,6,23,.25);
+        box-shadow: 0 20px 60px rgba(14,124,90,.10);
         overflow:hidden;
     }
 
@@ -54,8 +54,8 @@
     }
 
     .profile-hero-card{
-        background: linear-gradient(135deg, rgba(6,182,212,.10), rgba(239,68,68,.06));
-        border: 1px solid rgba(6,182,212,.18);
+        background: linear-gradient(135deg, rgba(14,124,90,.10), rgba(239,68,68,.06));
+        border: 1px solid rgba(14,124,90,.18);
         border-radius: 20px;
         padding: 18px;
         position: relative;
@@ -64,7 +64,7 @@
         content:"";
         position:absolute;
         inset:-2px;
-        background: radial-gradient(800px circle at 10% 10%, rgba(6,182,212,.18), transparent 35%),
+        background: radial-gradient(800px circle at 10% 10%, rgba(14,124,90,.18), transparent 35%),
                     radial-gradient(800px circle at 90% 0%, rgba(239,68,68,.14), transparent 40%);
         pointer-events:none;
     }
@@ -73,14 +73,14 @@
         width: 92px;
         height: 92px;
         border-radius: 50%;
-        background: linear-gradient(135deg, rgba(239,68,68,.95), rgba(6,182,212,.95));
+        background: linear-gradient(135deg, rgba(239,68,68,.95), rgba(14,124,90,.95));
         display:flex;
         align-items:center;
         justify-content:center;
         font-size: 38px;
         font-weight: 900;
         color: white;
-        box-shadow: 0 18px 50px rgba(6,182,212,.15);
+        box-shadow: 0 18px 50px rgba(14,124,90,.15);
         position: relative;
         border: 2px solid rgba(255,255,255,.14);
         margin-right: 14px;
@@ -94,8 +94,8 @@
     .quick-badges{ display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px; }
 
     .badge-pill{
-        background: rgba(6,182,212,.10);
-        border: 1px solid rgba(6,182,212,.22);
+        background: rgba(14,124,90,.10);
+        border: 1px solid rgba(14,124,90,.22);
         color: var(--accent);
         padding: 6px 12px;
         border-radius: 999px;
@@ -111,7 +111,7 @@
     }
 
     .meta-item{
-        background: rgba(15,23,42,.35);
+        background: #FAFEFC;
         border: 1px solid rgba(148,163,184,.16);
         border-radius: 16px;
         padding: 12px 12px;
@@ -119,7 +119,7 @@
         position: relative;
         z-index:1;
     }
-    .meta-item:hover{ transform: translateY(-4px); border-color: rgba(6,182,212,.55); }
+    .meta-item:hover{ transform: translateY(-4px); border-color: rgba(14,124,90,.55); }
     .meta-item .k{ color: var(--text-muted); font-size: 12px; font-weight: 700; display:flex; gap:8px; align-items:center; }
     .meta-item .v{ margin-top: 6px; color: var(--text); font-size: 15px; font-weight: 900; }
 
@@ -143,20 +143,20 @@
     }
 
     .widget{
-        background: rgba(15,23,42,.35);
+        background: #FAFEFC;
         border: 1px solid rgba(148,163,184,.16);
         border-radius: 18px;
         padding: 14px;
         transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
         min-height: 110px;
     }
-    .widget:hover{ transform: translateY(-5px); border-color: rgba(6,182,212,.55); box-shadow: 0 22px 70px rgba(2,6,23,.24); }
+    .widget:hover{ transform: translateY(-5px); border-color: rgba(14,124,90,.55); box-shadow: 0 22px 70px rgba(14,124,90,.14); }
     .widget .whead{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
     .widget .icon{
         width: 38px; height: 38px; border-radius: 14px;
         display:flex; align-items:center; justify-content:center;
-        background: rgba(6,182,212,.12);
-        border: 1px solid rgba(6,182,212,.22);
+        background: rgba(14,124,90,.12);
+        border: 1px solid rgba(14,124,90,.22);
         color: var(--accent);
         font-size: 16px;
     }
@@ -176,9 +176,9 @@
         display:block;
         height:100%;
         width: 0%;
-        background: linear-gradient(90deg, rgba(6,182,212,.95), rgba(239,68,68,.85));
+        background: linear-gradient(90deg, rgba(14,124,90,.95), rgba(239,68,68,.85));
         border-radius: 999px;
-        box-shadow: 0 18px 45px rgba(6,182,212,.18);
+        box-shadow: 0 18px 45px rgba(14,124,90,.18);
         transition: width .6s ease;
     }
 
@@ -199,10 +199,10 @@
     .timeline-dot{
         width: 18px; height: 18px;
         border-radius: 50%;
-        background: rgba(6,182,212,.20);
-        border: 2px solid rgba(6,182,212,.65);
+        background: rgba(14,124,90,.20);
+        border: 2px solid rgba(14,124,90,.65);
         margin-top: 3px;
-        box-shadow: 0 18px 50px rgba(6,182,212,.15);
+        box-shadow: 0 18px 50px rgba(14,124,90,.15);
     }
     .timeline-content .t{ color: var(--text); font-weight: 900; margin:0; font-size: 14px; }
     .timeline-content .d{ color: var(--text-muted); font-size: 12px; margin-top: 4px; line-height:1.35; }
@@ -255,7 +255,7 @@
 
         {% if messages %}
         {% for message in messages %}
-        <div class="mb-3" style="background:rgba(16,185,129,.10);border:1px solid rgba(16,185,129,.25);color:#34d399;padding:12px 16px;border-radius:14px;font-weight:800;">
+        <div class="mb-3" style="background:rgba(18,151,104,.10);border:1px solid rgba(18,151,104,.25);color:#34d399;padding:12px 16px;border-radius:14px;font-weight:800;">
             ✅ {{ message }}
         </div>
         {% endfor %}

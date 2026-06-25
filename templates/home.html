@@ -222,6 +222,101 @@
 
   .bb-cta-row{ display:flex; gap:16px; flex-wrap:wrap; margin-top:20px; }
 
+  /* ===== STATS COUNTER SECTION ===== */
+  .bb-stats-strip{
+    padding: 60px 0;
+    background: rgba(67,160,71,.04);
+  }
+  .bb-stats-strip .stat-icon{
+    width: 52px; height: 52px;
+    border-radius: 16px;
+    background: rgba(67,160,71,.12);
+    border: 1px solid rgba(67,160,71,.22);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 14px;
+    font-size: 20px;
+    color: var(--secondary);
+  }
+  .bb-stats-strip .stat-big-num{
+    font-size: 2.6rem;
+    font-weight: 1000;
+    color: var(--secondary);
+    line-height: 1;
+  }
+  .bb-stats-strip .stat-lbl{
+    font-size: 13px;
+    font-weight: 800;
+    color: rgba(26,26,26,.58);
+    margin-top: 6px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+  }
+  .bb-stats-strip .stat-col{
+    text-align: center;
+    padding: 24px 16px;
+    border-radius: 20px;
+    background: #fff;
+    border: 1px solid rgba(67,160,71,.16);
+    box-shadow: 0 12px 34px rgba(67,160,71,.09);
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .bb-stats-strip .stat-col:hover{
+    transform: translateY(-6px);
+    box-shadow: 0 22px 52px rgba(46,125,50,.15);
+  }
+
+  /* ===== TEAM SECTION ===== */
+  .bb-team-section{
+    padding: 66px 0;
+    background: #fff;
+  }
+  .bb-team-card{
+    border-radius: 22px;
+    background: #fff;
+    border: 1px solid rgba(67,160,71,.18);
+    box-shadow: 0 14px 44px rgba(67,160,71,.09);
+    padding: 28px 20px;
+    text-align: center;
+    height: 100%;
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .bb-team-card:hover{
+    transform: translateY(-8px);
+    box-shadow: 0 28px 65px rgba(46,125,50,.16);
+  }
+  .bb-team-avatar{
+    width: 70px; height: 70px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(67,160,71,.15), rgba(14,124,90,.12));
+    border: 2px solid rgba(67,160,71,.30);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 1.35rem;
+    font-weight: 900;
+    color: var(--secondary);
+    letter-spacing: .04em;
+  }
+  .bb-team-name{
+    font-size: 1rem;
+    font-weight: 1000;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .bb-team-role{
+    font-size: 11.5px;
+    font-weight: 800;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    margin-bottom: 10px;
+  }
+  .bb-team-desc{
+    font-size: 12.5px;
+    color: rgba(26,26,26,.60);
+    font-weight: 700;
+    line-height: 1.6;
+  }
+
 </style>
 {% endblock %}
 
@@ -431,22 +526,7 @@
         </div>
       </div>
 
-      <div class="col-lg-4 col-md-6">
-        <div class="bg-white border" style="border-radius:22px; border:1px solid rgba(67,160,71,.20); box-shadow:0 16px 50px rgba(67,160,71,.10); padding:18px;" data-aos="fade-up" data-aos-delay="260">
-          <div style="width:52px;height:52px;border-radius:18px;display:flex;align-items:center;justify-content:center;background:rgba(67,160,71,.12);border:1px solid rgba(67,160,71,.22);">
-            <i class="fas fa-file-medical" style="color:var(--secondary)" aria-hidden="true"></i>
-          </div>
-          <div style="margin-top:14px;font-weight:1000;">Medical Report Analysis</div>
-          <div style="margin-top:8px;color:rgba(26,26,26,.66);font-weight:800;line-height:1.7;font-size:13px;">Turn reports into understandable insights (UI-first).</div>
-          <div class="mt-3">
-            <a href="/" class="bb-btn bb-btn-ghost bb-ripple-on" style="padding:12px 16px;border-radius:14px;">
-              <i class="fas fa-file-alt" aria-hidden="true"></i> Learn
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-lg-4 col-md-6">
+<div class="col-lg-4 col-md-6">
         <div class="bg-white border" style="border-radius:22px; border:1px solid rgba(67,160,71,.20); box-shadow:0 16px 50px rgba(67,160,71,.10); padding:18px;" data-aos="fade-up" data-aos-delay="320">
           <div style="width:52px;height:52px;border-radius:18px;display:flex;align-items:center;justify-content:center;background:rgba(67,160,71,.12);border:1px solid rgba(67,160,71,.22);">
             <i class="fas fa-truck-medical" style="color:var(--secondary)" aria-hidden="true"></i>
@@ -465,7 +545,7 @@
   </div>
 </section>
 
-<!-- ===================== AI CONSULTATION SHOWCASE (green-theme illustration) ===================== -->
+<!-- ===================== AI CONSULTATION SHOWCASE ===================== -->
 <section class="bb-section" id="ai-showcase" style="padding-top:10px;">
   <div class="container">
     <div class="row align-items-center g-5">
@@ -514,23 +594,15 @@
                 <stop offset="1" stop-color="#0E7C5A"/>
               </linearGradient>
             </defs>
-
-            <!-- room backdrop -->
             <rect x="0" y="0" width="480" height="360" rx="20" fill="#F7FCF8"/>
             <rect x="20" y="20" width="440" height="180" rx="14" fill="#EDF7F0" opacity="0.6"/>
-
-            <!-- patient figure (left) -->
             <circle cx="120" cy="150" r="34" fill="#F2C9A0"/>
             <path d="M70 260 Q70 190 120 190 Q170 190 170 260 Z" fill="#D9D9D9"/>
             <path d="M95 130 Q120 105 145 130 L145 150 Q120 165 95 150 Z" fill="#6B4226"/>
-
-            <!-- doctor figure (right) -->
             <circle cx="330" cy="148" r="34" fill="#C98A5B"/>
             <path d="M280 260 Q280 188 330 188 Q380 188 380 260 Z" fill="url(#docCoat)" stroke="#BFE3CC" stroke-width="2"/>
             <rect x="312" y="205" width="36" height="40" rx="6" fill="#0E7C5A" opacity="0.85"/>
             <path d="M300 128 Q330 100 360 128 L356 145 Q330 158 304 145 Z" fill="#2B1B12"/>
-
-            <!-- floating health dashboard card -->
             <g>
               <rect x="150" y="40" width="200" height="118" rx="16" fill="#FFFFFF" stroke="#BFE3CC" stroke-width="1.5"/>
               <text x="166" y="64" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#0E7C5A">HEALTH OVERVIEW</text>
@@ -545,17 +617,12 @@
               <rect x="226" y="116" width="88" height="8" rx="4" fill="#43A047"/>
               <text x="166" y="140" font-family="Inter, sans-serif" font-size="9.5" font-weight="700" fill="#5B7367">AI DIAGNOSTICS · OPTIMAL OUTCOMES</text>
             </g>
-
-            <!-- small heart pulse chip -->
             <g>
               <rect x="200" y="170" width="80" height="46" rx="14" fill="#0E7C5A" opacity="0.95"/>
               <path d="M212 196 h10 l5 -10 l6 16 l5 -10 h12" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
             </g>
-
-            <!-- desk -->
             <rect x="20" y="280" width="440" height="14" rx="6" fill="#DCEFE3"/>
           </svg>
-
           <div style="position:absolute;top:18px;left:18px;background:rgba(14,124,90,.92);color:#fff;padding:6px 14px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.4px;">
             AI-INTEGRATED HEALTHCARE
           </div>
@@ -603,6 +670,107 @@
   </div>
 </section>
 
+<!-- ===================== STATS STRIP ===================== -->
+<section class="bb-stats-strip" id="stats" aria-label="Platform statistics">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="bb-pill justify-content-center mx-auto" data-aos="fade-up" data-aos-delay="20">
+        <i class="fas fa-chart-line" aria-hidden="true"></i> By the numbers
+      </div>
+      <div class="mt-3" style="font-size:30px;font-weight:1000;color:var(--text);" data-aos="fade-up" data-aos-delay="60">
+        Trusted by thousands, every day
+      </div>
+    </div>
+    <div class="row g-4">
+      <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="0">
+        <div class="stat-col">
+          <div class="stat-icon"><i class="fas fa-users" aria-hidden="true"></i></div>
+          <div class="stat-big-num" data-stripcount="5000">0</div>
+          <div class="stat-lbl">Users Served</div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="80">
+        <div class="stat-col">
+          <div class="stat-icon"><i class="fas fa-user-doctor" aria-hidden="true"></i></div>
+          <div class="stat-big-num" data-stripcount="50">0</div>
+          <div class="stat-lbl">Expert Doctors</div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="160">
+        <div class="stat-col">
+          <div class="stat-icon"><i class="fas fa-pills" aria-hidden="true"></i></div>
+          <div class="stat-big-num" data-stripcount="200">0</div>
+          <div class="stat-lbl">Medicines Available</div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="240">
+        <div class="stat-col">
+          <div class="stat-icon"><i class="fas fa-shield-heart" aria-hidden="true"></i></div>
+          <div class="stat-big-num" data-stripcount="99" data-suffix="%">0</div>
+          <div class="stat-lbl">AI Accuracy</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TEAM SECTION ===================== -->
+<section class="bb-team-section" id="team">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="bb-pill justify-content-center mx-auto" data-aos="fade-up" data-aos-delay="20">
+        <i class="fas fa-people-group" aria-hidden="true"></i> Our Team
+      </div>
+      <div class="mt-3" style="font-size:30px;font-weight:1000;color:var(--text);" data-aos="fade-up" data-aos-delay="60">
+        The minds behind <span style="color:var(--secondary);">AIHealthCare</span>
+      </div>
+      <p class="mt-2" style="color:rgba(26,26,26,.60);font-weight:700;font-size:14.5px;" data-aos="fade-up" data-aos-delay="100">
+        CSE-AI students, Gyan Sagar College of Engineering • RGPV Bhopal
+      </p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+
+      <div class="col-12 col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="0">
+        <div class="bb-team-card">
+          <div class="bb-team-avatar">AM</div>
+          <div class="bb-team-name">Abhishek Mishra</div>
+          <div class="bb-team-role">Project Lead & Backend</div>
+          <div class="bb-team-desc">Django backend, Gemini AI integration & Vercel + Neon DB deployment.</div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="90">
+        <div class="bb-team-card">
+          <div class="bb-team-avatar">AY</div>
+          <div class="bb-team-name">Arpit Yadav</div>
+          <div class="bb-team-role">AI & Data Module</div>
+          <div class="bb-team-desc">Symptom checker engine, Gemini API prompting & model testing.</div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="180">
+        <div class="bb-team-card">
+          <div class="bb-team-avatar">AA</div>
+          <div class="bb-team-name">Arpit Asati</div>
+          <div class="bb-team-role">Frontend Developer</div>
+          <div class="bb-team-desc">UI/UX design, Bootstrap components & responsive page layouts.</div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="270">
+        <div class="bb-team-card">
+          <div class="bb-team-avatar">SM</div>
+          <div class="bb-team-name">Srashti Mishra</div>
+          <div class="bb-team-role">Research & Docs</div>
+          <div class="bb-team-desc">Project research, content writing & RGPV report preparation.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- ===================== TRUST / EMERGENCY BANNER ===================== -->
 <section class="bb-section" id="trust-banner">
   <div class="container">
@@ -626,7 +794,7 @@
 
 <script>
   (function(){
-    // Count up when visible
+    // Count up when visible (hero stats — data-count)
     const statEls = document.querySelectorAll('[data-count]');
     const io = new IntersectionObserver((entries)=>{
       entries.forEach(e=>{
@@ -648,6 +816,29 @@
     },{threshold:0.35});
     statEls.forEach(el=>io.observe(el));
 
+    // Count up for stats strip — data-stripcount
+    const stripEls = document.querySelectorAll('[data-stripcount]');
+    const io4 = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(!e.isIntersecting) return;
+        const el = e.target;
+        const to = parseInt(el.getAttribute('data-stripcount')||'0',10);
+        const suffix = el.getAttribute('data-suffix') || '+';
+        const dur = 1400;
+        const start = performance.now();
+        function tick(now){
+          const t = Math.min(1,(now-start)/dur);
+          const ease = 1 - Math.pow(1-t, 3);
+          const val = Math.round(to * ease);
+          el.textContent = String(val) + (t >= 1 ? suffix : '');
+          if(t<1) requestAnimationFrame(tick);
+          else io4.unobserve(el);
+        }
+        requestAnimationFrame(tick);
+      });
+    },{threshold:0.4});
+    stripEls.forEach(el=>io4.observe(el));
+
     // Antigravity + heartbeat SVG animation + parallax
     const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if(prefersReduced) return;
@@ -667,7 +858,6 @@
         });
       });
 
-      // Heartbeat path stroke-dash
       const hb = document.querySelector('.bb-hb-path');
       if(hb){
         const len = hb.getTotalLength();
@@ -683,7 +873,6 @@
         });
       }
 
-      // Blob morph via scale/translate (approx)
       const blobs = document.querySelectorAll('.bb-blob');
       blobs.forEach((b, i)=>{
         gsap.to(b, {

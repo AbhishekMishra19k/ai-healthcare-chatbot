@@ -1,355 +1,396 @@
-{% extends 'base.html' %}
-{% block title %}Update Profile — AIHealthCare{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>{% block title %}AIHealthCare{% endblock %}</title>
 
-{% block extra_css %}
-<style>
-    :root{
-        --black:#020617;
-        --card:#0F172A;
-        --dark:#0B1220;
-        --text:#E5E7EB;
-        --text-muted:rgba(229,231,235,.7);
-        --border:rgba(148,163,184,.18);
-        --accent:#06B6D4;
-        --gold:#38BDF8;
-        --red:#EF4444;
-    }
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    .edit-wrapper{
-        background: var(--black);
-        min-height: 90vh;
-        padding: 34px 0 70px;
-    }
+    <style>
+        :root{
+            --green-deep:#0E7C5A;
+            --green-mid:#129768;
+            --green-soft:#E8F5EE;
+            --green-pale:#F0FBF6;
+            --ink:#13231D;
+            --ink-soft:#4B5F58;
+            --amber:#FFB020;
+            --white:#FFFFFF;
+            --line:rgba(14,124,90,0.14);
+            --danger:#E24B4A;
 
-    .edit-shell{
-        max-width: 1100px;
-        margin: 0 auto;
-    }
+            /* aliases used across existing templates - kept for compatibility */
+            --primary:#0E7C5A;
+            --secondary:#129768;
+            --accent:#129768;
+            --bg:#FFFFFF;
+            --card:#FFFFFF;
+            --text:#13231D;
+            --text-muted:#4B5F58;
+            --success:#129768;
+            --warning:#FFB020;
+            --border:var(--line);
+            --shadow:rgba(14,124,90,.10);
+            --shadow-strong:rgba(14,124,90,.18);
+            --green-dark:#0E7C5A;
+            --green:#129768;
+            --green-light: rgba(18,151,104,.15);
+            --green-bg:#F0FBF6;
+            --black:#F0FBF6;
+            --dark:#E8F5EE;
+            --red:#E24B4A;
+            --red-dark:#B23130;
 
-    .edit-head{
-        margin-bottom: 18px;
-        display:flex;
-        align-items:flex-start;
-        justify-content:space-between;
-        gap: 16px;
-        flex-wrap:wrap;
-    }
+            --radius-lg:22px;
+            --radius-md:16px;
+            --radius-sm:12px;
+            --container-pad:16px;
+        }
 
-    .edit-title{
-        margin:0;
-        color: var(--text);
-        font-size: 30px;
-        font-weight: 950;
-        font-family: 'Plus Jakarta Sans',sans-serif;
-    }
-    .edit-sub{
-        margin: 8px 0 0;
-        color: var(--text-muted);
-        font-size: 14px;
-    }
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        html{overflow-x:hidden;scroll-behavior:smooth}
+        body{
+            font-family:'Inter','Segoe UI',sans-serif;
+            background:var(--white);
+            color:var(--ink);
+            overflow-x:hidden;
+            min-height:100vh;
+        }
+        img,video,iframe{max-width:100%;height:auto}
+        h1,h2,h3,h4,h5{font-family:'Fraunces',serif;font-weight:600;letter-spacing:-0.01em;color:var(--ink);}
 
-    .cardish{
-        background: rgba(255,255,255,.04);
-        border: 1px solid var(--border);
-        border-radius: 22px;
-        overflow:hidden;
-        box-shadow: 0 20px 60px rgba(2,6,23,.22);
-    }
+        ::-webkit-scrollbar{width:6px}
+        ::-webkit-scrollbar-track{background:var(--green-pale)}
+        ::-webkit-scrollbar-thumb{background:var(--green-deep);border-radius:3px}
 
-    .cardish .inner{ padding: 18px; }
+        .leadish{color:var(--ink-soft)}
 
-    .grid-two{
-        display:grid;
-        grid-template-columns: 1.4fr 0.9fr;
-        gap: 16px;
-    }
-    @media (max-width: 991px){ .grid-two{ grid-template-columns: 1fr; } }
+        .focus-ring:focus{outline:none;box-shadow:0 0 0 4px rgba(14,124,90,.18)}
+        a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible{
+            outline:none;
+            box-shadow:0 0 0 4px rgba(14,124,90,.18);
+        }
 
-    .form-label{ color: var(--text-muted) !important; font-size: 13px; font-weight: 800; letter-spacing: .02em; }
-    .help-text{ color: var(--text-muted); font-size: 12px; margin-top: 6px; }
+        .container-padded{padding-left:var(--container-pad);padding-right:var(--container-pad)}
 
-    .dark-input{ background: var(--card) !important; border: 1.5px solid rgba(148,163,184,.22) !important; color: var(--text) !important; border-radius: 14px !important; padding: 12px 15px !important; width:100%; }
-    .dark-input:focus{ border-color: rgba(6,182,212,.8) !important; box-shadow: 0 0 0 4px rgba(6,182,212,.12) !important; }
+        /* ===== NAVBAR ===== */
+        .main-navbar{
+            background:rgba(255,255,255,0.88);
+            backdrop-filter:blur(12px);
+            border-bottom:1px solid var(--line);
+            padding:14px 0;
+            position:sticky;top:0;z-index:1000;
+            transition:box-shadow .3s ease;
+        }
+        .main-navbar.scrolled{box-shadow:0 8px 30px -10px rgba(14,124,90,.18);}
+        .main-navbar .navbar-brand{
+            font-family:'Fraunces',serif;font-weight:600;font-size:21px;color:var(--ink)!important;
+            display:flex;align-items:center;gap:8px;
+        }
+        .brand-green{color:var(--green-deep);}
+        .brand-dark{color:var(--ink);}
+        .navbar-toggler{border-color:rgba(14,124,90,.35) !important; padding:6px 10px}
+        .navbar-toggler:focus{box-shadow:none !important}
+        .main-navbar .nav-link{
+            color:var(--ink-soft) !important;font-weight:600;font-size:14.5px;
+            padding:10px 14px !important;border-radius:100px;
+            transition:color .25s, background .25s;
+        }
+        .main-navbar .nav-link:hover{color:var(--green-deep) !important;background:var(--green-soft);}
+        .main-navbar .nav-link.active{color:var(--green-deep) !important;background:var(--green-soft);}
+        .nav-cart-badge{
+            background:var(--amber);color:#fff;font-size:10px;font-weight:700;
+            border-radius:100px;padding:1px 6px;margin-left:4px;vertical-align:2px;
+        }
+        .nav-cta{
+            background:var(--green-deep) !important;color:#fff !important;border-radius:100px;
+            padding:10px 20px !important;font-weight:600;
+            transition:transform .25s, box-shadow .25s;
+        }
+        .nav-cta:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(14,124,90,.28);}
 
-    .section-card{
-        border-bottom: 1px solid rgba(148,163,184,.18);
-        padding: 18px;
-    }
-    .section-card:last-child{ border-bottom:none; }
+        @media(max-width:991px){
+            .navbar-collapse{
+                background:#fff;border-radius:18px;margin-top:12px;padding:12px;
+                border:1px solid var(--line);box-shadow:0 18px 40px -16px rgba(14,124,90,.18);
+            }
+            .navbar-nav{gap:4px !important}
+            .main-navbar .nav-link{padding:10px 16px !important}
+        }
 
-    .section-kicker{
-        display:flex;
-        gap: 10px;
-        align-items:center;
-        margin-bottom: 12px;
-    }
-    .section-kicker .chip{
-        width: 40px; height: 40px;
-        border-radius: 16px;
-        display:flex; align-items:center; justify-content:center;
-        background: rgba(6,182,212,.12);
-        border: 1px solid rgba(6,182,212,.22);
-        color: var(--accent);
-        font-size: 16px;
-        font-weight: 900;
-    }
-    .section-kicker h4{ margin:0; font-size:16px; font-weight:950; color: var(--text); }
-    .section-kicker p{ margin: 3px 0 0; color: var(--text-muted); font-size: 13px; }
+        /* ===== BUTTONS (compat classes used elsewhere in templates) ===== */
+        .btn-green, .btn-primary{
+            background:var(--green-deep) !important;border:none !important;color:#fff !important;
+            border-radius:100px !important;font-weight:600 !important;
+            transition:transform .25s, box-shadow .25s !important;
+        }
+        .btn-green:hover, .btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(14,124,90,.28);}
+        .btn-outline-green{
+            background:transparent !important;border:1.5px solid var(--green-deep) !important;color:var(--green-deep) !important;
+            border-radius:100px !important;font-weight:600 !important;
+        }
+        .btn-outline-green:hover{background:var(--green-soft) !important;}
+        .btn-gold{
+            background:var(--amber) !important;border:none !important;color:#3a2400 !important;
+            border-radius:100px !important;font-weight:700 !important;
+        }
+        .btn-red{
+            background:var(--danger) !important;border:none !important;color:#fff !important;
+            border-radius:100px !important;font-weight:600 !important;
+        }
+        .bb-shine{position:relative;overflow:hidden;}
 
-    .row-gap{ row-gap: 12px; }
+        .badge-green{background:var(--green-soft);color:var(--green-deep);padding:6px 12px;border-radius:100px;font-weight:600;}
+        .badge-gold{background:#FFF3DC;color:#8a5a00;padding:6px 12px;border-radius:100px;font-weight:600;}
 
-    .form-actions{
-        display:flex;
-        gap: 10px;
-        flex-wrap:wrap;
-        margin-top: 16px;
-    }
+        .glass{
+            background:rgba(255,255,255,.7);
+            border:1px solid var(--line);
+            backdrop-filter:blur(10px);
+        }
 
-    .btn-primaryish{
-        background: linear-gradient(135deg,var(--secondary, #1E293B), var(--accent));
-        color:#fff;
-        border:none;
-        padding:12px 18px;
-        border-radius:14px;
-        font-weight: 950;
-        cursor:pointer;
-        transition: transform .18s ease, box-shadow .18s ease;
-    }
-    .btn-primaryish:hover{ transform: translateY(-2px); box-shadow: 0 18px 45px rgba(6,182,212,.22); }
+        /* ===== FOOTER ===== */
+        .main-footer{
+            background:linear-gradient(160deg,#0E7C5A 0%,#0A5C43 100%);
+            color:#fff;padding:64px 0 0;margin-top:60px;position:relative;overflow:hidden;
+        }
+        .main-footer::before{
+            content:'';position:absolute;width:500px;height:500px;border-radius:50%;
+            background:radial-gradient(circle,rgba(255,255,255,0.06),transparent 70%);
+            top:-180px;right:-150px;
+        }
+        .footer-brand{font-family:'Fraunces',serif;font-size:22px;font-weight:600;margin-bottom:14px;}
+        .footer-link{display:block;color:rgba(255,255,255,.72);font-size:14px;margin-bottom:12px;text-decoration:none;transition:color .25s;}
+        .footer-link:hover{color:#fff;}
+        .footer-bottom{
+            border-top:1px solid rgba(255,255,255,.14);margin-top:40px;padding:24px 0;text-align:center;
+        }
 
-    .btn-secondaryish{
-        background: transparent;
-        color: var(--accent);
-        border: 2px solid rgba(6,182,212,.55);
-        padding: 10px 18px;
-        border-radius: 14px;
-        font-weight: 950;
-        text-decoration:none;
-        transition: transform .18s ease, background .18s ease;
-    }
-    .btn-secondaryish:hover{ transform: translateY(-2px); background: rgba(6,182,212,.10); color:#fff; }
+        @keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}
+    </style>
 
-    .inline-preview{
-        background: rgba(15,23,42,.35);
-        border: 1px solid rgba(148,163,184,.16);
-        border-radius: 18px;
-        padding: 14px;
-        margin-top: 12px;
-    }
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
 
-    .pv{
-        display:flex;
-        align-items:flex-start;
-        justify-content:space-between;
-        gap: 12px;
-        padding: 10px 0;
-        border-bottom: 1px dashed rgba(148,163,184,.22);
-    }
-    .pv:last-child{ border-bottom:none; }
-    .pv .k{ color: var(--text-muted); font-size: 12px; font-weight: 850; }
-    .pv .v{ color: var(--text); font-size: 14px; font-weight: 950; text-align:right; }
+    <nav class="main-navbar navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:9px;background:var(--green-deep);">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M3 12h4l2 7 4-14 2 7h6"/></svg>
+                </span>
+                <span class="brand-green">AI</span><span class="brand-dark">Health</span>Care
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars" style="color:var(--green-deep);"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav ms-auto gap-1 align-items-lg-center">
+                    <li class="nav-item">
+                        <a class="nav-link focus-ring {% if request.path == '/' %}active{% endif %}" href="/">
+                            <i class="fas fa-home me-1"></i>Home
+                        </a>
+                    </li>
 
-    .field-group-title{
-        color: var(--text);
-        font-weight: 950;
-        margin: 0 0 8px;
-        font-size: 15px;
-    }
+                    <li class="nav-item">
+                        <a class="nav-link focus-ring" href="/#services">
+                            <i class="fas fa-hospital me-1" aria-hidden="true"></i>Services
+                        </a>
+                    </li>
 
-    .warn-box{
-        background: rgba(245,158,11,.08);
-        border: 1px solid rgba(245,158,11,.24);
-        color: rgba(253,186,116,.95);
-        border-radius: 18px;
-        padding: 12px 14px;
-        font-size: 13px;
-        font-weight: 750;
-        margin-top: 12px;
-    }
+                    <li class="nav-item">
+                        <a class="nav-link focus-ring {% if request.path == '/chat/' %}active{% endif %}" href="/chat/">
+                            <i class="fas fa-stethoscope me-1" aria-hidden="true"></i>AI Assistant
+                        </a>
+                    </li>
 
-</style>
-{% endblock %}
+                    <li class="nav-item">
+                        <a class="nav-link focus-ring" href="/medicines/">
+                            <i class="fas fa-pills me-1" aria-hidden="true"></i>Medicine
+                            {% if cart_count %}<span class="nav-cart-badge">{{ cart_count }}</span>{% endif %}
+                        </a>
+                    </li>
 
-{% block content %}
-<div class="edit-wrapper">
-    <div class="container edit-shell">
+                    <li class="nav-item">
+                        <a class="nav-link focus-ring {% if '/appointments/' in request.path %}active{% endif %}" href="/appointments/">
+                            <i class="fas fa-user-md me-1" aria-hidden="true"></i>Doctors
+                        </a>
+                    </li>
 
-        <div class="edit-head">
-            <div>
-                <h1 class="edit-title">🧬 Manage Your Profile</h1>
-                <p class="edit-sub">Update your details so healthcare providers can respond faster.</p>
-            </div>
-            <div class="d-flex gap-2" style="flex-wrap:wrap;">
-                <a href="/accounts/profile/" class="btn-outline-red" style="padding:12px 18px;border-radius:14px;">
-                    ← Back to Profile
-                </a>
-            </div>
-        </div>
+                    <li class="nav-item">
+                        <a class="nav-link focus-ring" href="/appointments/">
+                            <i class="fas fa-calendar-check me-1" aria-hidden="true"></i>Appointments
+                        </a>
+                    </li>
 
-        {% if messages %}
-        {% for message in messages %}
-            <div class="mb-3" style="background:rgba(16,185,129,.10);border:1px solid rgba(16,185,129,.25);color:#34d399;padding:12px 16px;border-radius:14px;font-weight:800;">
-                ✅ {{ message }}
-            </div>
-        {% endfor %}
-        {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link focus-ring" href="/#reports">
+                            <i class="fas fa-file-medical me-1" aria-hidden="true"></i>Reports
+                        </a>
+                    </li>
 
-        <div class="grid-two">
-            <div class="cardish">
-                <div class="section-card">
-                    <div class="section-kicker">
-                        <div class="chip">👤</div>
-                        <div>
-                            <h4>Personal Details</h4>
-                            <p>Used across your account and appointment communications.</p>
-                        </div>
-                    </div>
+                    <li class="nav-item">
+                        <a class="nav-link focus-ring" href="/#contact">
+                            <i class="fas fa-phone-alt me-1" aria-hidden="true"></i>Contact
+                        </a>
+                    </li>
 
-                    <form method="POST" novalidate>
-                        {% csrf_token %}
-
-                        <div class="row row-gap">
-                            <div class="col-md-6 mb-2">
-                                <label class="form-label">FIRST NAME</label>
-                                <input type="text" name="first_name" class="dark-input" value="{{ request.user.first_name }}" placeholder="First name">
-                                <div class="help-text">As shown on your profile.</div>
-                            </div>
-                            <div class="col-md-6 mb-2">
-                                <label class="form-label">LAST NAME</label>
-                                <input type="text" name="last_name" class="dark-input" value="{{ request.user.last_name }}" placeholder="Last name">
-                                <div class="help-text">Helps personalize messages.</div>
-                            </div>
-                        </div>
-
-                        <div class="mb-2">
-                            <label class="form-label">EMAIL</label>
-                            <input type="email" name="email" class="dark-input" value="{{ request.user.email }}" placeholder="you@example.com">
-                            <div class="help-text">Used for account access and notifications.</div>
-                        </div>
-
-                        <div class="help-text" style="margin-top:14px;">
-                            Tip: You can update clinical/contact fields below without affecting your appointment history.
-                        </div>
-                </div>
-
-                <div class="section-card">
-                    <div class="section-kicker">
-                        <div class="chip">🩺</div>
-                        <div>
-                            <h4>Clinical & Contact</h4>
-                            <p>Essential for emergency response and appointment support.</p>
-                        </div>
-                    </div>
-
-                        <div class="row row-gap">
-                            <div class="col-md-6 mb-2">
-                                <label class="form-label">PHONE NUMBER</label>
-                                <input type="tel" name="phone" class="dark-input" value="{{ profile.phone }}" placeholder="Your phone number" inputmode="tel">
-                                <div class="help-text">Keep this reachable.</div>
-                            </div>
-
-                            <div class="col-md-6 mb-2">
-                                <label class="form-label">AGE</label>
-                                <input type="number" name="age" class="dark-input" value="{{ profile.age }}" placeholder="Age" min="0" max="120">
-                                <div class="help-text">Used for symptom guidance.</div>
-                            </div>
-                        </div>
-
-                        <div class="row row-gap">
-                            <div class="col-md-6 mb-2">
-                                <label class="form-label">BLOOD GROUP</label>
-                                <select name="blood_group" class="dark-input">
-                                    <option value="">Select</option>
-                                    <option value="A+" {% if profile.blood_group == "A+" %}selected{% endif %}>A+</option>
-                                    <option value="A-" {% if profile.blood_group == "A-" %}selected{% endif %}>A-</option>
-                                    <option value="B+" {% if profile.blood_group == "B+" %}selected{% endif %}>B+</option>
-                                    <option value="B-" {% if profile.blood_group == "B-" %}selected{% endif %}>B-</option>
-                                    <option value="AB+" {% if profile.blood_group == "AB+" %}selected{% endif %}>AB+</option>
-                                    <option value="AB-" {% if profile.blood_group == "AB-" %}selected{% endif %}>AB-</option>
-                                    <option value="O+" {% if profile.blood_group == "O+" %}selected{% endif %}>O+</option>
-                                    <option value="O-" {% if profile.blood_group == "O-" %}selected{% endif %}>O-</option>
-                                </select>
-                                <div class="help-text">Optional but helpful for emergencies.</div>
-                            </div>
-
-                            <div class="col-md-6 mb-2">
-                                <label class="form-label">USERNAME</label>
-                                <input type="text" class="dark-input" value="{{ request.user.username }}" disabled aria-disabled="true">
-                                <div class="help-text">Username cannot be changed here.</div>
-                            </div>
-                        </div>
-
-                        <div class="mb-2">
-                            <label class="form-label">ADDRESS</label>
-                            <textarea name="address" class="dark-input" rows="3" placeholder="Your address">{{ profile.address }}</textarea>
-                            <div class="help-text">Used for support reminders and logistics.</div>
-                        </div>
-
-                        <div class="form-actions">
-                            <button type="submit" class="btn-primaryish">💾 Save Changes</button>
-                            <a href="/accounts/profile/" class="btn-secondaryish">← Back to Profile</a>
-                        </div>
-
-                    </form>
-                </div>
-            </div>
-
-            <!-- Right panel: Profile summary -->
-            <aside class="cardish">
-                <div class="inner">
-                    <div class="field-group-title">Profile Summary</div>
-                    <div class="help-text" style="margin-top:0;">A quick snapshot of your currently saved details.</div>
-
-                    <div class="inline-preview">
-                        <div class="pv">
-                            <div>
-                                <div class="k">Full Name</div>
-                            </div>
-                            <div class="v">{{ request.user.get_full_name|default:request.user.username }}</div>
-                        </div>
-                        <div class="pv">
-                            <div>
-                                <div class="k">Email</div>
-                            </div>
-                            <div class="v">{{ request.user.email }}</div>
-                        </div>
-                        <div class="pv">
-                            <div>
-                                <div class="k">Phone</div>
-                            </div>
-                            <div class="v">{{ profile.phone|default:"Not set" }}</div>
-                        </div>
-                        <div class="pv">
-                            <div>
-                                <div class="k">Age</div>
-                            </div>
-                            <div class="v">{{ profile.age|default:"—" }}</div>
-                        </div>
-                        <div class="pv">
-                            <div>
-                                <div class="k">Blood Group</div>
-                            </div>
-                            <div class="v">{{ profile.blood_group|default:"—" }}</div>
-                        </div>
-                        <div class="pv">
-                            <div>
-                                <div class="k">Address</div>
-                            </div>
-                            <div class="v" style="max-width: 220px;">{{ profile.address|default:"Not set"|truncatechars:28 }}</div>
-                        </div>
-                    </div>
-
-                    {% if not profile.phone or not profile.age or not profile.blood_group or not profile.address %}
-                        <div class="warn-box">⚠️ Some fields are missing. Fill them to improve clinical readiness.</div>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link focus-ring" href="/accounts/profile/">
+                            <i class="fas fa-user-circle me-1" aria-hidden="true"></i>{{ user.username }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link focus-ring" href="/accounts/logout/" style="color:#E24B4A !important; font-weight:700;">
+                            <i class="fas fa-sign-out-alt me-1" aria-hidden="true"></i>Logout
+                        </a>
+                    </li>
                     {% else %}
-                        <div class="warn-box" style="background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.24);color:rgba(52,211,153,.95);">✅ All key details are set.</div>
+                    <li class="nav-item">
+                        <a class="nav-link focus-ring" href="/accounts/login/">
+                            <i class="fas fa-sign-in-alt me-1" aria-hidden="true"></i>Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-cta focus-ring" href="/accounts/register/">
+                            <i class="fas fa-user-plus me-1" aria-hidden="true"></i>Register
+                        </a>
+                    </li>
                     {% endif %}
-
-                </div>
-            </aside>
+                </ul>
+            </div>
         </div>
+    </nav>
 
+    {% if messages %}
+    <div style="position:fixed;top:75px;right:20px;z-index:9999;max-width:350px;">
+        {% for message in messages %}
+        <div style="background:{% if message.tags == 'error' %}#FCEBEB;border-left:4px solid #E24B4A;color:#791F1F;{% else %}#E8F5EE;border-left:4px solid #0E7C5A;color:#085041;{% endif %};
+            padding:14px 18px;border-radius:12px;margin-bottom:8px;
+            font-size:14px;font-weight:600;box-shadow:0 4px 16px rgba(14,124,90,0.12);
+            animation:slideIn .3s ease;" id="msg-{{ forloop.counter }}">
+            {% if message.tags == 'error' %}<i class="fas fa-circle-exclamation"></i>{% else %}<i class="fas fa-circle-check"></i>{% endif %} {{ message }}
+        </div>
+        {% endfor %}
     </div>
-</div>
-{% endblock %}
+    <script>
+        setTimeout(function(){
+            document.querySelectorAll('[id^="msg-"]').forEach(function(el){
+                el.style.transition='opacity .5s';
+                el.style.opacity='0';
+                setTimeout(function(){el.remove();},500);
+            });
+        },3000);
+    </script>
+    {% endif %}
 
+    <main>{% block content %}{% endblock %}</main>
+
+    <footer class="main-footer" role="contentinfo">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="footer-brand">
+                        <span style="color:#9FE1CB;">AI</span><span style="color:#fff;">Health</span>Care
+                    </div>
+                    <p style="color:rgba(255,255,255,.7);font-size:14px;line-height:1.85;margin-bottom:20px;">
+                        An AI-powered healthcare platform providing 24/7 symptom checking, doctor consultations, and medicine ordering — built for the people of Madhya Pradesh.
+                    </p>
+                    <div style="display:flex;gap:10px;">
+                        <a href="mailto:support@aihealthcare.com"
+                            style="width:38px;height:38px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.85);text-decoration:none;transition:all .3s;"
+                            onmouseover="this.style.background='rgba(255,255,255,.2)'"
+                            onmouseout="this.style.background='rgba(255,255,255,.1)'">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                        <a href="https://github.com/AbhishekMishra19k/ai-healthcare-chatbot" target="_blank" rel="noopener"
+                            style="width:38px;height:38px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.85);text-decoration:none;transition:all .3s;"
+                            onmouseover="this.style.background='rgba(255,255,255,.2)'"
+                            onmouseout="this.style.background='rgba(255,255,255,.1)'">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-3 col-6">
+                    <h6 style="color:#9FE1CB;font-weight:700;margin-bottom:18px;font-size:13px;letter-spacing:1px;font-family:'Inter',sans-serif;">QUICK LINKS</h6>
+                    <a class="footer-link" href="/"><i class="fas fa-home me-2"></i>Home</a>
+                    <a class="footer-link" href="/chat/"><i class="fas fa-robot me-2"></i>AI Chat</a>
+                    <a class="footer-link" href="/appointments/"><i class="fas fa-user-md me-2"></i>Doctors</a>
+                    <a class="footer-link" href="/medicines/"><i class="fas fa-pills me-2"></i>Medicines</a>
+                    <a class="footer-link" href="/accounts/register/"><i class="fas fa-user-plus me-2"></i>Register</a>
+                </div>
+
+                <div class="col-lg-3 col-md-3 col-6">
+                    <h6 style="color:#9FE1CB;font-weight:700;margin-bottom:18px;font-size:13px;letter-spacing:1px;font-family:'Inter',sans-serif;">CONTACT US</h6>
+                    <p style="color:rgba(255,255,255,.7);font-size:14px;line-height:2.2;margin:0;">
+                        <i class="fas fa-envelope me-2" style="color:#9FE1CB;"></i>support@aihealthcare.com<br>
+                        <i class="fas fa-phone me-2" style="color:#9FE1CB;"></i>+91 78980 XXXXX<br>
+                        <i class="fas fa-map-marker-alt me-2" style="color:#9FE1CB;"></i>Sagar, Madhya Pradesh
+                    </p>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <h6 style="color:#9FE1CB;font-weight:700;margin-bottom:18px;font-size:13px;letter-spacing:1px;font-family:'Inter',sans-serif;">EMERGENCY</h6>
+                    <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:16px;">
+                        <p style="color:rgba(255,255,255,.85);font-size:14px;line-height:2.3;margin:0;">
+                            <i class="fas fa-triangle-exclamation" style="color:#F0997B;"></i> Medical Emergency: <strong style="color:#F0997B;">108</strong><br>
+                            <i class="fas fa-truck-medical" style="color:#F0997B;"></i> Ambulance: <strong style="color:#F0997B;">102</strong><br>
+                            <i class="fas fa-phone" style="color:#9FE1CB;"></i> Health Helpline: <strong style="color:#9FE1CB;">104</strong><br>
+                            <i class="fas fa-hospital" style="color:#9FE1CB;"></i> Ayushman Bharat: <strong style="color:#9FE1CB;">14555</strong>
+                        </p>
+                    </div>
+                    <div style="margin-top:14px;">
+                        <span class="badge-green me-2" style="font-size:11px;">HIPAA Compliant</span>
+                        <span class="badge-gold" style="font-size:11px;">AI Powered</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p style="margin:0;font-size:13.5px;">
+                    © 2026 <span style="color:#9FE1CB;">AI</span><span style="color:#fff;">Health</span>Care &nbsp;|&nbsp;
+                    Developed by <span style="color:#9FE1CB;font-weight:700;">Abhishek Mishra</span>,
+                    Arpit Asati, Srashti Mishra, Arpit Yadav &nbsp;|&nbsp;
+                    <span style="color:rgba(255,255,255,.45);">Gyan Sagar College of Engineering, Sagar MP</span>
+                </p>
+                <p style="margin:8px 0 0;font-size:12px;color:rgba(255,255,255,.4);">
+                    This platform provides general health information only. Always consult a qualified doctor for medical diagnosis and treatment.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        (function(){
+            var nav = document.querySelector('.main-navbar');
+            if(!nav) return;
+            var onScroll = function(){
+                if(window.scrollY > 10) nav.classList.add('scrolled');
+                else nav.classList.remove('scrolled');
+            };
+            window.addEventListener('scroll', onScroll, {passive:true});
+            onScroll();
+        })();
+
+        var io = new IntersectionObserver(function(entries){
+            entries.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('in-view'); });
+        }, {threshold:0.12});
+        document.querySelectorAll('[data-reveal]').forEach(function(el,i){
+            el.style.transitionDelay = (i*0.06)+'s';
+            io.observe(el);
+        });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

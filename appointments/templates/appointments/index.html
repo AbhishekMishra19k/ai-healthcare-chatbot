@@ -5,33 +5,33 @@
 <style>
 .docs-section{background:var(--black);min-height:80vh;padding:40px 0}
 .search-bar{background:var(--card);border:1px solid var(--border);border-radius:50px;padding:8px 8px 8px 20px;display:flex;align-items:center;gap:10px;margin-bottom:30px;transition:all .3s}
-.search-bar:focus-within{border-color:var(--red);box-shadow:0 0 0 3px rgba(230,57,70,.15)}
+.search-bar:focus-within{border-color:var(--green-deep);box-shadow:0 0 0 3px rgba(14,124,90,.15)}
 .search-input{background:transparent!important;border:none!important;color:var(--text)!important;font-size:15px;flex:1;outline:none}
 .search-input::placeholder{color:var(--text-muted)!important}
-.search-btn{background:var(--red);border:none;color:white;padding:10px 22px;border-radius:40px;cursor:pointer;font-weight:700;font-size:14px;transition:all .3s}
-.search-btn:hover{background:var(--red-dark);transform:scale(1.03)}
+.search-btn{background:var(--green-deep);border:none;color:white;padding:10px 22px;border-radius:40px;cursor:pointer;font-weight:700;font-size:14px;transition:all .3s}
+.search-btn:hover{background:var(--green-mid);transform:scale(1.03)}
 .filter-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:30px}
 .filter-btn{background:var(--card);border:1px solid var(--border);color:var(--text-muted);padding:7px 16px;border-radius:25px;font-size:12px;cursor:pointer;transition:all .3s;text-decoration:none;white-space:nowrap}
-.filter-btn:hover,.filter-btn.active{background:var(--red);color:white;border-color:var(--red);text-decoration:none;transform:translateY(-2px)}
+.filter-btn:hover,.filter-btn.active{background:var(--green-deep);color:white;border-color:var(--green-deep);text-decoration:none;transform:translateY(-2px)}
 .doctor-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:22px;text-align:center;transition:all .35s cubic-bezier(.175,.885,.32,1.275);height:100%;position:relative;overflow:hidden}
-.doctor-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--red);transform:scaleX(0);transition:transform .3s;transform-origin:left}
+.doctor-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--green-deep);transform:scaleX(0);transition:transform .3s;transform-origin:left}
 .doctor-card:hover::after{transform:scaleX(1)}
-.doctor-card:hover{border-color:var(--red);transform:translateY(-10px);box-shadow:0 20px 50px rgba(230,57,70,.15)}
-.doctor-avatar{width:80px;height:80px;background:linear-gradient(135deg,var(--red-dark),var(--red));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 12px;box-shadow:0 6px 20px rgba(230,57,70,.35);transition:transform .3s}
+.doctor-card:hover{border-color:var(--green-deep);transform:translateY(-10px);box-shadow:0 20px 50px rgba(14,124,90,.15)}
+.doctor-avatar{width:80px;height:80px;background:linear-gradient(135deg,var(--green-mid),var(--green-deep));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 12px;box-shadow:0 6px 20px rgba(14,124,90,.35);transition:transform .3s}
 .doctor-card:hover .doctor-avatar{transform:scale(1.1) rotate(-5deg)}
 .doctor-name{font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px}
-.spec-badge{background:rgba(230,57,70,.15);color:var(--red);border:1px solid rgba(230,57,70,.3);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600}
-.doctor-info{background:var(--dark);border-radius:10px;padding:12px;margin:12px 0;text-align:left}
-.info-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:12px;color:var(--text-muted);border-bottom:1px solid rgba(255,255,255,.04)}
+.spec-badge{background:var(--green-soft);color:var(--green-deep);border:1px solid rgba(14,124,90,.3);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600}
+.doctor-info{background:var(--green-pale);border-radius:10px;padding:12px;margin:12px 0;text-align:left}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:12px;color:var(--text-muted);border-bottom:1px solid rgba(14,124,90,.08)}
 .info-row:last-child{border-bottom:none}
 .info-val{color:var(--text);font-weight:600}
-.fee-val{color:var(--gold);font-weight:700}
-.book-btn{background:var(--red);color:white;border:none;width:100%;padding:10px;border-radius:10px;font-size:13px;font-weight:700;transition:all .3s;text-decoration:none;display:block;text-align:center}
-.book-btn:hover{background:var(--red-dark);color:white;transform:translateY(-2px);box-shadow:0 5px 15px rgba(230,57,70,.4);text-decoration:none}
+.fee-val{color:var(--amber);font-weight:700}
+.book-btn{background:var(--green-deep);color:white;border:none;width:100%;padding:10px;border-radius:10px;font-size:13px;font-weight:700;transition:all .3s;text-decoration:none;display:block;text-align:center}
+.book-btn:hover{background:var(--green-mid);color:white;transform:translateY(-2px);box-shadow:0 5px 15px rgba(14,124,90,.4);text-decoration:none}
 .results-info{color:var(--text-muted);font-size:14px;margin-bottom:20px}
-.results-info span{color:var(--gold);font-weight:700}
+.results-info span{color:var(--amber);font-weight:700}
 .page-btn{background:var(--card);border:1px solid var(--border);color:var(--text-muted);padding:8px 18px;border-radius:10px;text-decoration:none;font-size:14px;font-weight:600;transition:all .3s}
-.page-btn:hover{background:var(--red);color:white;border-color:var(--red);text-decoration:none}
+.page-btn:hover{background:var(--green-deep);color:white;border-color:var(--green-deep);text-decoration:none}
 @keyframes bgp1{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.2);opacity:1}}
 @keyframes bgp2{0%,100%{transform:scale(1);opacity:.4}50%{transform:scale(1.15);opacity:.9}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
@@ -40,32 +40,32 @@
 
 {% block content %}
 
-<div style="background:linear-gradient(135deg,#0d0d0d 0%,#1a0000 40%,#2d0a0a 70%,#0d0d0d 100%);border-bottom:3px solid var(--red);padding:80px 0;text-align:center;position:relative;overflow:hidden;">
-  <div style="position:absolute;width:500px;height:500px;background:radial-gradient(circle,rgba(230,57,70,.15) 0%,transparent 70%);top:-150px;left:-100px;border-radius:50%;animation:bgp1 5s ease-in-out infinite;"></div>
-  <div style="position:absolute;width:400px;height:400px;background:radial-gradient(circle,rgba(255,214,10,.08) 0%,transparent 70%);bottom:-100px;right:-80px;border-radius:50%;animation:bgp2 6s ease-in-out infinite;"></div>
+<div style="background:linear-gradient(160deg,#0E7C5A 0%,#0A5C43 100%);padding:80px 0;text-align:center;position:relative;overflow:hidden;">
+  <div style="position:absolute;width:500px;height:500px;background:radial-gradient(circle,rgba(255,255,255,.08) 0%,transparent 70%);top:-150px;left:-100px;border-radius:50%;animation:bgp1 5s ease-in-out infinite;"></div>
+  <div style="position:absolute;width:400px;height:400px;background:radial-gradient(circle,rgba(255,176,32,.10) 0%,transparent 70%);bottom:-100px;right:-80px;border-radius:50%;animation:bgp2 6s ease-in-out infinite;"></div>
   <div class="container position-relative">
-    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(230,57,70,.2);color:var(--red);border:1px solid rgba(230,57,70,.4);padding:8px 22px;border-radius:30px;font-size:12px;font-weight:800;letter-spacing:2px;margin-bottom:25px;animation:fadeUp .6s ease both;">
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);padding:8px 22px;border-radius:30px;font-size:12px;font-weight:800;letter-spacing:2px;margin-bottom:25px;animation:fadeUp .6s ease both;">
       👨‍⚕️ FIND DOCTORS
     </div>
     <h1 style="font-size:56px;font-weight:900;color:white;line-height:1.1;margin-bottom:16px;animation:fadeUp .6s .1s ease both;">
-      Our <span style="color:var(--red);text-shadow:0 0 30px rgba(230,57,70,.5);">Specialist</span><br>
-      <span style="color:var(--gold);text-shadow:0 0 30px rgba(255,214,10,.4);">Doctors</span>
+      Our <span style="color:#FFE9B8;">Specialist</span><br>
+      <span style="color:#fff;">Doctors</span>
     </h1>
-    <p style="color:rgba(255,255,255,.65);font-size:17px;margin-bottom:30px;animation:fadeUp .6s .2s ease both;">
+    <p style="color:rgba(255,255,255,.78);font-size:17px;margin-bottom:30px;animation:fadeUp .6s .2s ease both;">
       MP ke best doctors — online appointment book karo
     </p>
     <div style="display:flex;justify-content:center;gap:20px;flex-wrap:wrap;animation:fadeUp .6s .3s ease both;">
-      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(230,57,70,.3);border-radius:16px;padding:14px 28px;text-align:center;">
-        <div style="font-size:26px;font-weight:900;color:var(--gold);">{{ total }}+</div>
-        <div style="font-size:12px;color:rgba(255,255,255,.5);font-weight:600;">Doctors</div>
+      <div style="background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.22);border-radius:16px;padding:14px 28px;text-align:center;">
+        <div style="font-size:26px;font-weight:900;color:#FFE9B8;">{{ total }}+</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.75);font-weight:600;">Doctors</div>
       </div>
-      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,214,10,.3);border-radius:16px;padding:14px 28px;text-align:center;">
-        <div style="font-size:26px;font-weight:900;color:var(--red);">24/7</div>
-        <div style="font-size:12px;color:rgba(255,255,255,.5);font-weight:600;">Available</div>
+      <div style="background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.22);border-radius:16px;padding:14px 28px;text-align:center;">
+        <div style="font-size:26px;font-weight:900;color:#fff;">24/7</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.75);font-weight:600;">Available</div>
       </div>
-      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(40,167,69,.3);border-radius:16px;padding:14px 28px;text-align:center;">
-        <div style="font-size:26px;font-weight:900;color:#28a745;">Free</div>
-        <div style="font-size:12px;color:rgba(255,255,255,.5);font-weight:600;">Booking</div>
+      <div style="background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.22);border-radius:16px;padding:14px 28px;text-align:center;">
+        <div style="font-size:26px;font-weight:900;color:#FFE9B8;">Free</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.75);font-weight:600;">Booking</div>
       </div>
     </div>
   </div>
@@ -114,7 +114,7 @@
       <div class="col-12 text-center py-5">
         <div style="font-size:60px;margin-bottom:20px;">🔍</div>
         <h4 style="color:var(--text);">Koi doctor nahi mila</h4>
-        <a href="/appointments/" class="btn-red" style="padding:10px 30px;margin-top:15px;display:inline-block;">All Doctors Dekho</a>
+        <a href="/appointments/" class="btn-green" style="padding:10px 30px;margin-top:15px;display:inline-block;">All Doctors Dekho</a>
       </div>
       {% endfor %}
     </div>
@@ -124,7 +124,7 @@
       {% if doctors.has_previous %}
       <a href="?page={{ doctors.previous_page_number }}{% if search %}&search={{ search }}{% endif %}{% if selected_spec %}&spec={{ selected_spec }}{% endif %}" class="page-btn">← Prev</a>
       {% endif %}
-      <span style="background:var(--red);color:white;padding:8px 22px;border-radius:10px;font-weight:700;font-size:14px;">
+      <span style="background:var(--green-deep);color:white;padding:8px 22px;border-radius:10px;font-weight:700;font-size:14px;">
         Page {{ doctors.number }} of {{ doctors.paginator.num_pages }}
       </span>
       {% if doctors.has_next %}
