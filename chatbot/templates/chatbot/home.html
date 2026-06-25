@@ -222,6 +222,101 @@
 
   .bb-cta-row{ display:flex; gap:16px; flex-wrap:wrap; margin-top:20px; }
 
+  /* ===== STATS COUNTER SECTION ===== */
+  .bb-stats-strip{
+    padding: 60px 0;
+    background: rgba(67,160,71,.04);
+  }
+  .bb-stats-strip .stat-icon{
+    width: 52px; height: 52px;
+    border-radius: 16px;
+    background: rgba(67,160,71,.12);
+    border: 1px solid rgba(67,160,71,.22);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 14px;
+    font-size: 20px;
+    color: var(--secondary);
+  }
+  .bb-stats-strip .stat-big-num{
+    font-size: 2.6rem;
+    font-weight: 1000;
+    color: var(--secondary);
+    line-height: 1;
+  }
+  .bb-stats-strip .stat-lbl{
+    font-size: 13px;
+    font-weight: 800;
+    color: rgba(26,26,26,.58);
+    margin-top: 6px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+  }
+  .bb-stats-strip .stat-col{
+    text-align: center;
+    padding: 24px 16px;
+    border-radius: 20px;
+    background: #fff;
+    border: 1px solid rgba(67,160,71,.16);
+    box-shadow: 0 12px 34px rgba(67,160,71,.09);
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .bb-stats-strip .stat-col:hover{
+    transform: translateY(-6px);
+    box-shadow: 0 22px 52px rgba(46,125,50,.15);
+  }
+
+  /* ===== TEAM SECTION ===== */
+  .bb-team-section{
+    padding: 66px 0;
+    background: #fff;
+  }
+  .bb-team-card{
+    border-radius: 22px;
+    background: #fff;
+    border: 1px solid rgba(67,160,71,.18);
+    box-shadow: 0 14px 44px rgba(67,160,71,.09);
+    padding: 28px 20px;
+    text-align: center;
+    height: 100%;
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .bb-team-card:hover{
+    transform: translateY(-8px);
+    box-shadow: 0 28px 65px rgba(46,125,50,.16);
+  }
+  .bb-team-avatar{
+    width: 70px; height: 70px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(67,160,71,.15), rgba(14,124,90,.12));
+    border: 2px solid rgba(67,160,71,.30);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 1.35rem;
+    font-weight: 900;
+    color: var(--secondary);
+    letter-spacing: .04em;
+  }
+  .bb-team-name{
+    font-size: 1rem;
+    font-weight: 1000;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .bb-team-role{
+    font-size: 11.5px;
+    font-weight: 800;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    margin-bottom: 10px;
+  }
+  .bb-team-desc{
+    font-size: 12.5px;
+    color: rgba(26,26,26,.60);
+    font-weight: 700;
+    line-height: 1.6;
+  }
+
 </style>
 {% endblock %}
 
@@ -431,22 +526,7 @@
         </div>
       </div>
 
-      <div class="col-lg-4 col-md-6">
-        <div class="bg-white border" style="border-radius:22px; border:1px solid rgba(67,160,71,.20); box-shadow:0 16px 50px rgba(67,160,71,.10); padding:18px;" data-aos="fade-up" data-aos-delay="260">
-          <div style="width:52px;height:52px;border-radius:18px;display:flex;align-items:center;justify-content:center;background:rgba(67,160,71,.12);border:1px solid rgba(67,160,71,.22);">
-            <i class="fas fa-file-medical" style="color:var(--secondary)" aria-hidden="true"></i>
-          </div>
-          <div style="margin-top:14px;font-weight:1000;">Medical Report Analysis</div>
-          <div style="margin-top:8px;color:rgba(26,26,26,.66);font-weight:800;line-height:1.7;font-size:13px;">Turn reports into understandable insights (UI-first).</div>
-          <div class="mt-3">
-            <a href="/" class="bb-btn bb-btn-ghost bb-ripple-on" style="padding:12px 16px;border-radius:14px;">
-              <i class="fas fa-file-alt" aria-hidden="true"></i> Learn
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-lg-4 col-md-6">
+<div class="col-lg-4 col-md-6">
         <div class="bg-white border" style="border-radius:22px; border:1px solid rgba(67,160,71,.20); box-shadow:0 16px 50px rgba(67,160,71,.10); padding:18px;" data-aos="fade-up" data-aos-delay="320">
           <div style="width:52px;height:52px;border-radius:18px;display:flex;align-items:center;justify-content:center;background:rgba(67,160,71,.12);border:1px solid rgba(67,160,71,.22);">
             <i class="fas fa-truck-medical" style="color:var(--secondary)" aria-hidden="true"></i>
@@ -465,9 +545,256 @@
   </div>
 </section>
 
+<!-- ===================== AI CONSULTATION SHOWCASE ===================== -->
+<section class="bb-section" id="ai-showcase" style="padding-top:10px;">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6" data-aos="fade-right">
+        <div class="bb-pill" data-aos="fade-up" data-aos-delay="20">
+          <i class="fas fa-microchip" aria-hidden="true"></i> AI-Integrated Healthcare
+        </div>
+        <h2 style="font-size:32px;font-weight:1000;color:var(--text);margin-top:16px;" data-aos="fade-up" data-aos-delay="60">
+          Personalized care,<br/>powered by AI diagnostics
+        </h2>
+        <p style="color:rgba(26,26,26,.66);font-weight:700;font-size:15px;line-height:1.85;margin-top:14px;max-width:480px;" data-aos="fade-up" data-aos-delay="100">
+          Every consultation combines doctor expertise with AI-driven health analytics — giving you clear, optimal outcomes without the wait.
+        </p>
+        <div class="mt-4 d-flex flex-column gap-3" data-aos="fade-up" data-aos-delay="140">
+          <div class="d-flex align-items-center gap-3">
+            <div style="width:40px;height:40px;border-radius:14px;background:rgba(67,160,71,.12);border:1px solid rgba(67,160,71,.25);display:flex;align-items:center;justify-content:center;flex:0 0 auto;">
+              <i class="fas fa-check" style="color:var(--secondary)"></i>
+            </div>
+            <span style="font-weight:800;color:var(--text);font-size:14px;">Real-time AI health analytics dashboard</span>
+          </div>
+          <div class="d-flex align-items-center gap-3">
+            <div style="width:40px;height:40px;border-radius:14px;background:rgba(67,160,71,.12);border:1px solid rgba(67,160,71,.25);display:flex;align-items:center;justify-content:center;flex:0 0 auto;">
+              <i class="fas fa-check" style="color:var(--secondary)"></i>
+            </div>
+            <span style="font-weight:800;color:var(--text);font-size:14px;">Personalized health plans for every patient</span>
+          </div>
+          <div class="d-flex align-items-center gap-3">
+            <div style="width:40px;height:40px;border-radius:14px;background:rgba(67,160,71,.12);border:1px solid rgba(67,160,71,.25);display:flex;align-items:center;justify-content:center;flex:0 0 auto;">
+              <i class="fas fa-check" style="color:var(--secondary)"></i>
+            </div>
+            <span style="font-weight:800;color:var(--text);font-size:14px;">Optimal outcomes through compassionate AI care</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6" data-aos="fade-left" data-aos-delay="60">
+        <div style="position:relative;border-radius:28px;overflow:hidden;background:linear-gradient(160deg,#E8F7EE,#F4FBF6);border:1px solid rgba(67,160,71,.20);box-shadow:0 24px 60px rgba(14,124,90,.14);padding:28px;">
+          <svg viewBox="0 0 480 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AI-integrated healthcare consultation illustration" style="width:100%;height:auto;">
+            <defs>
+              <linearGradient id="docCoat" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#FFFFFF"/>
+                <stop offset="1" stop-color="#EAF6EE"/>
+              </linearGradient>
+              <linearGradient id="heartGlow" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#43A047"/>
+                <stop offset="1" stop-color="#0E7C5A"/>
+              </linearGradient>
+            </defs>
+            <rect x="0" y="0" width="480" height="360" rx="20" fill="#F7FCF8"/>
+            <rect x="20" y="20" width="440" height="180" rx="14" fill="#EDF7F0" opacity="0.6"/>
+            <circle cx="120" cy="150" r="34" fill="#F2C9A0"/>
+            <path d="M70 260 Q70 190 120 190 Q170 190 170 260 Z" fill="#D9D9D9"/>
+            <path d="M95 130 Q120 105 145 130 L145 150 Q120 165 95 150 Z" fill="#6B4226"/>
+            <circle cx="330" cy="148" r="34" fill="#C98A5B"/>
+            <path d="M280 260 Q280 188 330 188 Q380 188 380 260 Z" fill="url(#docCoat)" stroke="#BFE3CC" stroke-width="2"/>
+            <rect x="312" y="205" width="36" height="40" rx="6" fill="#0E7C5A" opacity="0.85"/>
+            <path d="M300 128 Q330 100 360 128 L356 145 Q330 158 304 145 Z" fill="#2B1B12"/>
+            <g>
+              <rect x="150" y="40" width="200" height="118" rx="16" fill="#FFFFFF" stroke="#BFE3CC" stroke-width="1.5"/>
+              <text x="166" y="64" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#0E7C5A">HEALTH OVERVIEW</text>
+              <circle cx="190" cy="100" r="22" fill="none" stroke="#D7EFDF" stroke-width="6"/>
+              <circle cx="190" cy="100" r="22" fill="none" stroke="url(#heartGlow)" stroke-width="6" stroke-dasharray="94" stroke-dashoffset="18" stroke-linecap="round" transform="rotate(-90 190 100)"/>
+              <text x="190" y="104" font-family="Inter, sans-serif" font-size="11" font-weight="800" fill="#0E7C5A" text-anchor="middle">94%</text>
+              <rect x="226" y="84" width="100" height="8" rx="4" fill="#E3F4E8"/>
+              <rect x="226" y="84" width="78" height="8" rx="4" fill="#43A047"/>
+              <rect x="226" y="100" width="100" height="8" rx="4" fill="#E3F4E8"/>
+              <rect x="226" y="100" width="58" height="8" rx="4" fill="#0E7C5A"/>
+              <rect x="226" y="116" width="100" height="8" rx="4" fill="#E3F4E8"/>
+              <rect x="226" y="116" width="88" height="8" rx="4" fill="#43A047"/>
+              <text x="166" y="140" font-family="Inter, sans-serif" font-size="9.5" font-weight="700" fill="#5B7367">AI DIAGNOSTICS · OPTIMAL OUTCOMES</text>
+            </g>
+            <g>
+              <rect x="200" y="170" width="80" height="46" rx="14" fill="#0E7C5A" opacity="0.95"/>
+              <path d="M212 196 h10 l5 -10 l6 16 l5 -10 h12" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+            <rect x="20" y="280" width="440" height="14" rx="6" fill="#DCEFE3"/>
+          </svg>
+          <div style="position:absolute;top:18px;left:18px;background:rgba(14,124,90,.92);color:#fff;padding:6px 14px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.4px;">
+            AI-INTEGRATED HEALTHCARE
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== HOW IT WORKS ===================== -->
+<section class="bb-section" id="how-it-works" style="background:rgba(67,160,71,.04);">
+  <div class="container">
+    <div class="text-center">
+      <div class="bb-pill justify-content-center mx-auto" data-aos="fade-up" data-aos-delay="20">
+        <i class="fas fa-route" aria-hidden="true"></i> How it works
+      </div>
+      <div class="section-title2 mt-3" style="font-size:32px;font-weight:1000;color:var(--text);" data-aos="fade-up" data-aos-delay="60">
+        Get care in three simple steps
+      </div>
+    </div>
+
+    <div class="row g-4 mt-4">
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="0">
+        <div class="bg-white" style="border-radius:22px;border:1px solid rgba(67,160,71,.20);box-shadow:0 16px 50px rgba(67,160,71,.10);padding:28px;height:100%;">
+          <div style="width:48px;height:48px;border-radius:16px;background:linear-gradient(135deg,#0E7C5A,#43A047);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:18px;">1</div>
+          <div style="margin-top:16px;font-weight:1000;font-size:16px;">Describe symptoms</div>
+          <div style="margin-top:8px;color:rgba(26,26,26,.66);font-weight:700;font-size:13.5px;line-height:1.8;">Tell our AI assistant what you're feeling — in your own words.</div>
+        </div>
+      </div>
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="bg-white" style="border-radius:22px;border:1px solid rgba(67,160,71,.20);box-shadow:0 16px 50px rgba(67,160,71,.10);padding:28px;height:100%;">
+          <div style="width:48px;height:48px;border-radius:16px;background:linear-gradient(135deg,#0E7C5A,#43A047);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:18px;">2</div>
+          <div style="margin-top:16px;font-weight:1000;font-size:16px;">Get instant guidance</div>
+          <div style="margin-top:8px;color:rgba(26,26,26,.66);font-weight:700;font-size:13.5px;line-height:1.8;">Receive AI-backed insight, remedies, and recommended next steps.</div>
+        </div>
+      </div>
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="bg-white" style="border-radius:22px;border:1px solid rgba(67,160,71,.20);box-shadow:0 16px 50px rgba(67,160,71,.10);padding:28px;height:100%;">
+          <div style="width:48px;height:48px;border-radius:16px;background:linear-gradient(135deg,#0E7C5A,#43A047);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:18px;">3</div>
+          <div style="margin-top:16px;font-weight:1000;font-size:16px;">Book or order</div>
+          <div style="margin-top:8px;color:rgba(26,26,26,.66);font-weight:700;font-size:13.5px;line-height:1.8;">Schedule a doctor visit or get medicines delivered — all in one place.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== STATS STRIP ===================== -->
+<section class="bb-stats-strip" id="stats" aria-label="Platform statistics">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="bb-pill justify-content-center mx-auto" data-aos="fade-up" data-aos-delay="20">
+        <i class="fas fa-chart-line" aria-hidden="true"></i> By the numbers
+      </div>
+      <div class="mt-3" style="font-size:30px;font-weight:1000;color:var(--text);" data-aos="fade-up" data-aos-delay="60">
+        Trusted by thousands, every day
+      </div>
+    </div>
+    <div class="row g-4">
+      <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="0">
+        <div class="stat-col">
+          <div class="stat-icon"><i class="fas fa-users" aria-hidden="true"></i></div>
+          <div class="stat-big-num" data-stripcount="5000">0</div>
+          <div class="stat-lbl">Users Served</div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="80">
+        <div class="stat-col">
+          <div class="stat-icon"><i class="fas fa-user-doctor" aria-hidden="true"></i></div>
+          <div class="stat-big-num" data-stripcount="50">0</div>
+          <div class="stat-lbl">Expert Doctors</div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="160">
+        <div class="stat-col">
+          <div class="stat-icon"><i class="fas fa-pills" aria-hidden="true"></i></div>
+          <div class="stat-big-num" data-stripcount="200">0</div>
+          <div class="stat-lbl">Medicines Available</div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="240">
+        <div class="stat-col">
+          <div class="stat-icon"><i class="fas fa-shield-heart" aria-hidden="true"></i></div>
+          <div class="stat-big-num" data-stripcount="99" data-suffix="%">0</div>
+          <div class="stat-lbl">AI Accuracy</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TEAM SECTION ===================== -->
+<section class="bb-team-section" id="team">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="bb-pill justify-content-center mx-auto" data-aos="fade-up" data-aos-delay="20">
+        <i class="fas fa-people-group" aria-hidden="true"></i> Our Team
+      </div>
+      <div class="mt-3" style="font-size:30px;font-weight:1000;color:var(--text);" data-aos="fade-up" data-aos-delay="60">
+        The minds behind <span style="color:var(--secondary);">AIHealthCare</span>
+      </div>
+      <p class="mt-2" style="color:rgba(26,26,26,.60);font-weight:700;font-size:14.5px;" data-aos="fade-up" data-aos-delay="100">
+        CSE-AI students, Gyan Sagar College of Engineering • RGPV Bhopal
+      </p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+
+      <div class="col-12 col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="0">
+        <div class="bb-team-card">
+          <div class="bb-team-avatar">AM</div>
+          <div class="bb-team-name">Abhishek Mishra</div>
+          <div class="bb-team-role">Project Lead & Backend</div>
+          <div class="bb-team-desc">Django backend, Gemini AI integration & Vercel + Neon DB deployment.</div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="90">
+        <div class="bb-team-card">
+          <div class="bb-team-avatar">AY</div>
+          <div class="bb-team-name">Arpit Yadav</div>
+          <div class="bb-team-role">AI & Data Module</div>
+          <div class="bb-team-desc">Symptom checker engine, Gemini API prompting & model testing.</div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="180">
+        <div class="bb-team-card">
+          <div class="bb-team-avatar">AA</div>
+          <div class="bb-team-name">Arpit Asati</div>
+          <div class="bb-team-role">Frontend Developer</div>
+          <div class="bb-team-desc">UI/UX design, Bootstrap components & responsive page layouts.</div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="270">
+        <div class="bb-team-card">
+          <div class="bb-team-avatar">SM</div>
+          <div class="bb-team-name">Srashti Mishra</div>
+          <div class="bb-team-role">Research & Docs</div>
+          <div class="bb-team-desc">Project research, content writing & RGPV report preparation.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TRUST / EMERGENCY BANNER ===================== -->
+<section class="bb-section" id="trust-banner">
+  <div class="container">
+    <div style="background:linear-gradient(135deg,#0E7C5A,#0A5C43);border-radius:28px;padding:42px;position:relative;overflow:hidden;" data-aos="zoom-in">
+      <div style="position:absolute;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,0.06);top:-100px;right:-60px;"></div>
+      <div class="row align-items-center g-4" style="position:relative;z-index:1;">
+        <div class="col-lg-8">
+          <div style="color:#fff;font-weight:1000;font-size:24px;">In a medical emergency?</div>
+          <div style="color:rgba(255,255,255,.82);font-weight:700;font-size:14.5px;margin-top:8px;">Call immediately — every second matters. Our platform supports you, but always seek direct emergency help first.</div>
+        </div>
+        <div class="col-lg-4 text-lg-end">
+          <a href="tel:108" style="background:#fff;color:#0A5C43;padding:14px 28px;border-radius:14px;font-weight:1000;text-decoration:none;display:inline-flex;align-items:center;gap:10px;font-size:15px;">
+            <i class="fas fa-phone-volume"></i> Call 108 Now
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 <script>
   (function(){
-    // Count up when visible
+    // Count up when visible (hero stats — data-count)
     const statEls = document.querySelectorAll('[data-count]');
     const io = new IntersectionObserver((entries)=>{
       entries.forEach(e=>{
@@ -489,6 +816,29 @@
     },{threshold:0.35});
     statEls.forEach(el=>io.observe(el));
 
+    // Count up for stats strip — data-stripcount
+    const stripEls = document.querySelectorAll('[data-stripcount]');
+    const io4 = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(!e.isIntersecting) return;
+        const el = e.target;
+        const to = parseInt(el.getAttribute('data-stripcount')||'0',10);
+        const suffix = el.getAttribute('data-suffix') || '+';
+        const dur = 1400;
+        const start = performance.now();
+        function tick(now){
+          const t = Math.min(1,(now-start)/dur);
+          const ease = 1 - Math.pow(1-t, 3);
+          const val = Math.round(to * ease);
+          el.textContent = String(val) + (t >= 1 ? suffix : '');
+          if(t<1) requestAnimationFrame(tick);
+          else io4.unobserve(el);
+        }
+        requestAnimationFrame(tick);
+      });
+    },{threshold:0.4});
+    stripEls.forEach(el=>io4.observe(el));
+
     // Antigravity + heartbeat SVG animation + parallax
     const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if(prefersReduced) return;
@@ -508,7 +858,6 @@
         });
       });
 
-      // Heartbeat path stroke-dash
       const hb = document.querySelector('.bb-hb-path');
       if(hb){
         const len = hb.getTotalLength();
@@ -524,7 +873,6 @@
         });
       }
 
-      // Blob morph via scale/translate (approx)
       const blobs = document.querySelectorAll('.bb-blob');
       blobs.forEach((b, i)=>{
         gsap.to(b, {
@@ -649,4 +997,3 @@
   })();
 </script>
 {% endblock %}
-
