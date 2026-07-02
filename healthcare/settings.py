@@ -1,6 +1,9 @@
 import os
 from pathlib import Path
-import dj_database_url  # pip install dj-database-url
+from dotenv import load_dotenv    # ← ye line add karo
+import dj_database_url
+
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
